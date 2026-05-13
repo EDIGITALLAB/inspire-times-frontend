@@ -1,0 +1,84 @@
+.admin-login-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-panel {
+  width: 100%;
+  max-width: 450px;
+  background: white;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+}
+
+.header-banner {
+  background: #111;
+  color: white;
+  padding: 50px 30px;
+  text-align: center;
+  position: relative;
+}
+
+.shield-icon {
+  width: 70px;
+  height: 70px;
+  background: #D28A23;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(210, 138, 35, 0.4);
+}
+
+.custom-group {
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.custom-group .input-group-text {
+  background: transparent;
+  border: none;
+  color: #D28A23;
+}
+
+.custom-group .form-control {
+  border: none;
+  background: transparent;
+  padding: 15px 10px;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background: #111;
+  border: none;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #D28A23;
+  transform: translateY(-2px);
+}
+
+.error-toast {
+  background: #fff5f5;
+  color: #c53030;
+  padding: 12px;
+  border-radius: 15px;
+  font-size: 13px;
+  border-left: 4px solid #c53030;
+}
+
+.x-small { font-size: 11px; }
+.letter-spacing-1 { letter-spacing: 1px; }
+
+.hover-link:hover {
+  color: #111 !important;
+  text-decoration: underline !important;
+}

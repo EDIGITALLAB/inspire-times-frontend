@@ -1,0 +1,69 @@
+<div class="category-container py-5 bg-white min-vh-100">
+  <div class="container">
+    <!-- Category Header -->
+    <div class="category-header mb-5 pb-3 border-bottom d-flex align-items-center justify-content-between">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-1">
+            <li class="breadcrumb-item"><a routerLink="/" class="text-decoration-none text-muted small">Home</a></li>
+            <li class="breadcrumb-item active small" aria-current="page">Topics</li>
+          </ol>
+        </nav>
+        <h1 class="display-5 fw-bold text-dark text-uppercase letter-spacing-tight">{{categoryName}}</h1>
+        <p class="text-muted">{{articles.length}} stories discovered in this topic</p>
+      </div>
+    </div>
+
+    <!-- Articles Grid -->
+    <div class="row g-4" *ngIf="!isLoading">
+      <div class="col-md-6 col-lg-4" *ngFor="let art of articles">
+        <article class="article-card h-100 border-0 bg-transparent" [routerLink]="['/article', art.slug]">
+          <div class="position-relative overflow-hidden rounded-4 mb-3" style="aspect-ratio: 16/10;">
+            <img [src]="getImageUrl(art.imageUrl)" class="w-100 h-100 object-fit-cover transition-transform" [alt]="art.title" loading="lazy">
+            <div class="badge-overlay position-absolute top-0 start-0 p-3">
+              <span class="badge bg-dark rounded-pill px-3">{{art.category}}</span>
+            </div>
+          </div>
+          <div class="content px-1">
+            <h4 class="fw-bold text-dark mb-2 line-clamp-2 hover-theme-text">{{art.title}}</h4>
+            <p class="text-muted small line-clamp-3 mb-3">{{art.subtitle}}</p>
+            <div class="d-flex align-items-center justify-content-between mt-auto pt-2 border-top border-light">
+              <span class="small fw-bold text-dark">{{art.author}}</span>
+              <span class="small text-muted">{{art.createdAt | date:'mediumDate'}}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Empty State -->
+      <div class="col-12 text-center py-5 mt-5" *ngIf="articles.length === 0">
+        <div class="empty-state p-5">
+          <div class="empty-state-icon">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+          <h3 class="empty-state-title">No Stories Found</h3>
+          <p class="empty-state-text mb-4">We haven't published anything in this category yet. Stay tuned for inspiring content!</p>
+          <button class="btn btn-dark rounded-pill px-4" routerLink="/">Return Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Skeletons -->
+    <div class="row g-4" *ngIf="isLoading">
+      <div class="col-md-6 col-lg-4" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="card border-0 bg-transparent h-100">
+          <div class="skeleton rounded-4 mb-3" style="aspect-ratio: 16/10; width: 100%;"></div>
+          <div class="px-1">
+            <div class="skeleton skeleton-title" style="height: 24px; width: 90%;"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text" style="width: 70%;"></div>
+            <div class="d-flex justify-content-between mt-3 pt-2 border-top border-light">
+              <div class="skeleton skeleton-text" style="width: 80px; height: 12px; margin-bottom: 0;"></div>
+              <div class="skeleton skeleton-text" style="width: 60px; height: 12px; margin-bottom: 0;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<footer class="footer mt-auto py-5 bg-dark text-light">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Brand & Description -->
+      <div class="col-lg-4">
+        <h4 class="footer-logo fw-bold mb-0">INSPIRE TIMES</h4>
+        <p class="mb-4 text-muted" style="font-size: 10px; letter-spacing: 1px; font-weight: 600;">STORIES THAT INSPIRE THE WORLD</p>
+        <p class="text-muted pe-lg-5" style="line-height: 1.8;">
+          Spreading positivity and wisdom through stories that inspire the world. Join our journey to make the internet a better place.
+        </p>
+        <!-- <div class="social-icons d-flex gap-3 mt-4">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div> -->
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-6 col-lg-2">
+        <h6 class="fw-bold text-white mb-4">EXPLORE</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Stories</a></li>
+          <li><a href="#">Topics</a></li>
+          <li><a href="#">Trending</a></li>
+        </ul>
+      </div>
+
+      <!-- Company Links -->
+      <div class="col-6 col-lg-2">
+        <h6 class="fw-bold text-white mb-4">COMPANY</h6>
+        <ul class="list-unstyled footer-links">
+          <li><a routerLink="/about">About Us</a></li>
+          <li><a routerLink="/contact">Contact Us</a></li>
+          <li><a routerLink="/contact">Support</a></li>
+          <li><a routerLink="/privacy">Privacy Policy</a></li>
+          <li><a routerLink="/terms">Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="col-lg-4">
+        <h6 class="fw-bold text-white mb-4">NEWSLETTER</h6>
+        <p class="text-muted small mb-4">Get our weekly top stories directly in your inbox.</p>
+        
+        <div *ngIf="subscribed" class="alert alert-success py-2 rounded-3 border-0 small mb-4 animate__animated animate__fadeIn">
+          <i class="fa-solid fa-check-circle me-2"></i> Thanks for subscribing!
+        </div>
+
+        <div class="newsletter-form position-relative" *ngIf="!subscribed">
+          <input type="email" class="form-control bg-transparent text-white border-secondary pe-5 py-3" 
+                 placeholder="Enter your email" style="border-radius: 12px;" [(ngModel)]="email">
+          <button class="btn btn-primary position-absolute end-0 top-0 h-100 px-4 rounded-end-custom" 
+                  style="background: #D28A23; border: none; border-radius: 0 12px 12px 0;" (click)="subscribe()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom mt-5 pt-4 border-top border-secondary text-center">
+      <p class="text-muted small mb-0">
+        &copy; 2026 Inspire Times. All rights reserved. 
+        <span class="mx-2">|</span> 
+        <a routerLink="/privacy" class="text-muted text-decoration-none">Privacy Policy</a>
+        <span class="mx-2">|</span> 
+        <a routerLink="/terms" class="text-muted text-decoration-none">Terms & Conditions</a>
+      </p>
+    </div>
+  </div>
+</footer>

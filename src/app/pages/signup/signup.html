@@ -1,0 +1,46 @@
+<div class="signup-container">
+  <div class="signup-card shadow-lg p-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold mb-0" style="letter-spacing: 2px;">JOIN US</h2>
+      <p class="text-muted small">Become an author at Inspire Times</p>
+      <div class="mx-auto" style="height: 3px; width: 40px; background: #D28A23; margin-top: 10px;"></div>
+    </div>
+
+    <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-muted">FULL NAME</label>
+        <input type="text" class="form-control premium-input" [(ngModel)]="userData.fullName" name="fullName" required placeholder="John Doe">
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-muted">USERNAME</label>
+        <input type="text" class="form-control premium-input" [(ngModel)]="userData.username" name="username" required placeholder="johndoe123">
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-muted">EMAIL ADDRESS</label>
+        <input type="email" class="form-control premium-input" [(ngModel)]="userData.email" name="email" required placeholder="john@example.com">
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label small fw-bold text-muted">PASSWORD</label>
+        <input type="password" class="form-control premium-input" [(ngModel)]="userData.password" name="password" required placeholder="••••••••">
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger small py-2 mb-4">
+        {{ error }}
+      </div>
+
+      <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill mb-4" [disabled]="!signupForm.valid || isLoading">
+        <span *ngIf="!isLoading">CREATE ACCOUNT</span>
+        <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
+      </button>
+
+      <div class="text-center">
+        <p class="small text-muted mb-0">Already have an account? 
+          <a routerLink="/login" class="text-dark fw-bold text-decoration-none border-bottom border-dark border-2 pb-1">Login here</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="trending-container p-4">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h5 class="section-title mb-0">TRENDING NOW</h5>
+    <div class="trending-dot"></div>
+  </div>
+
+  <div class="trending-list" *ngIf="!isLoading">
+    <div class="trending-item d-flex gap-3 mb-4 align-items-start" *ngFor="let article of trendingArticles; let i = index" [routerLink]="['/article', article.slug || article.id]" style="cursor: pointer;">
+      <div class="ranking-number">{{ i + 1 }}</div>
+      <div class="content-wrapper flex-grow-1">
+        <span class="category-badge mb-1 d-inline-block">{{ article.category }}</span>
+        <h6 class="article-title fw-bold line-clamp-2">
+          {{ article.title }}
+        </h6>
+        <p class="author-name text-muted small mb-0">By {{ article.author }}</p>
+      </div>
+      <div class="image-wrapper">
+        <img [src]="getImageUrl(article.imageUrl)" class="rounded-2" alt="Trending thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+      </div>
+    </div>
+    
+    <div *ngIf="trendingArticles.length === 0" class="empty-state p-4">
+      <div class="empty-state-icon" style="width: 48px; height: 48px; font-size: 20px;">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+      <p class="empty-state-text small">No trending stories yet.</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading">
+    <div class="trending-item d-flex gap-3 mb-4 align-items-start" *ngFor="let i of [1,2,3,4,5]">
+      <div class="skeleton rounded-circle" style="width: 24px; height: 24px;"></div>
+      <div class="content-wrapper flex-grow-1">
+        <div class="skeleton skeleton-badge mb-1"></div>
+        <div class="skeleton skeleton-title" style="height: 14px;"></div>
+        <div class="skeleton skeleton-text" style="width: 40%; height: 10px;"></div>
+      </div>
+      <div class="skeleton rounded-2" style="width: 60px; height: 60px;"></div>
+    </div>
+  </div>
+</div>
+

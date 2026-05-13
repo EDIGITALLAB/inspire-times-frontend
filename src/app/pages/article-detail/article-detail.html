@@ -1,0 +1,175 @@
+<!-- Loading Skeleton -->
+<div class="container py-5 mt-5" *ngIf="isLoading">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="skeleton rounded-4 mb-5" style="height: 450px; width: 100%;"></div>
+      <div class="skeleton skeleton-badge mb-3" style="width: 120px; height: 24px;"></div>
+      <div class="skeleton skeleton-title mb-4" style="height: 60px; width: 95%;"></div>
+
+      <div class="d-flex align-items-center gap-3 mb-5 pb-4 border-bottom">
+        <div class="skeleton rounded-circle" style="width: 55px; height: 55px;"></div>
+        <div class="flex-grow-1">
+          <div class="skeleton skeleton-text mb-2" style="width: 200px; height: 24px;"></div>
+          <div class="skeleton skeleton-text" style="width: 300px; height: 14px;"></div>
+        </div>
+      </div>
+
+      <div class="article-skeleton-body">
+        <div class="skeleton skeleton-text mb-3" *ngFor="let i of [1,2,3,4,5]"></div>
+        <div class="skeleton skeleton-title mt-5 mb-4" style="width: 70%; height: 32px;"></div>
+        <div class="skeleton skeleton-text mb-3" *ngFor="let i of [1,2,3,4]"></div>
+        <div class="skeleton rounded-4 my-5" style="height: 350px;"></div>
+        <div class="skeleton skeleton-text mb-3" *ngFor="let i of [1,2,3]"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="skeleton rounded-4 mb-4" style="height: 220px;"></div>
+      <div class="mt-5">
+        <div class="skeleton skeleton-title mb-4" style="width: 180px; height: 28px;"></div>
+        <div class="skeleton rounded-3 mb-4" style="height: 100px;" *ngFor="let i of [1,2,3,4]"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error/Not Found State -->
+<div class="container py-5 mt-5" *ngIf="!isLoading && !article">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <div class="empty-state p-5">
+        <div class="empty-state-icon mb-4" style="width: 80px; height: 80px; font-size: 32px;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h2 class="fw-bold mb-3">Story Not Found</h2>
+        <p class="empty-state-text mb-4 fs-5">We couldn't find the story you're looking for. It might have been moved or
+          deleted.</p>
+        <div class="d-flex gap-3 justify-content-center">
+          <a routerLink="/" class="btn btn-dark btn-lg rounded-pill px-4">Go Home</a>
+          <button (click)="goBack()" class="btn btn-outline-dark btn-lg rounded-pill px-4">Go Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="reading-progress-bar theme-bg" id="progressBar" *ngIf="article"></div>
+
+<div class="article-detail-container pb-5" *ngIf="!isLoading && article">
+  <!-- Article Header -->
+  <div class="article-header-wrapper position-relative overflow-hidden mb-5">
+    <img [src]="getImageUrl(article.imageUrl)" class="w-100 article-hero-img" [alt]="article.title" loading="lazy">
+    <div class="header-overlay d-flex align-items-end p-4 p-md-5">
+      <div class="container">
+        <span class="category-tag mb-2 d-inline-block text-uppercase">{{ article.category }}</span>
+        <h1 class="article-main-title text-white fw-bold">{{ article.title }}</h1>
+        <p class="article-subtitle text-white-50 fs-4 mb-0" *ngIf="article.subtitle">{{ article.subtitle }}</p>
+        <p class="article-image-caption text-white-50 small mt-2 mb-0" *ngIf="article.imageCaption">
+          <i class="fa-solid fa-camera me-1"></i> {{ article.imageCaption }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- Social Share Sticky -->
+  <div class="social-share-sticky d-none d-xl-flex flex-column gap-3 shadow-sm p-2 rounded-pill bg-white">
+    <a href="#" class="share-btn facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" class="share-btn twitter"><i class="fa-brands fa-x-twitter"></i></a>
+    <a href="#" class="share-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="#" class="share-btn link"><i class="fa-solid fa-link"></i></a>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <!-- Main Content -->
+      <article class="col-lg-8">
+        <header class="article-meta d-flex align-items-center gap-3 mb-5 pb-4 border-bottom">
+          <div class="author-info d-flex align-items-center gap-3">
+            <div
+              class="author-avatar theme-bg text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm"
+              style="width: 55px; height: 55px; font-size: 1.4rem;">
+              {{ article.author ? article.author.charAt(0).toUpperCase() : 'A' }}
+            </div>
+            <div>
+              <p class="author-name mb-0 fw-bold fs-5 text-dark">{{ article.author || 'Anonymous' }}</p>
+              <div class="meta-details d-flex align-items-center gap-2 text-muted small">
+                <span><i class="fa-regular fa-calendar-days me-1"></i> {{ article.publishedAt | date:'longDate'
+                  }}</span>
+                <span class="dot-separator">•</span>
+                <span><i class="fa-regular fa-eye me-1"></i> {{ article.viewCount || 0 }} views</span>
+                <span class="dot-separator">•</span>
+                <span><i class="fa-regular fa-clock me-1"></i> 5 min read</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="article-body">
+          <h2 class="fw-bold mb-3" *ngIf="article.heading1">{{ article.heading1 }}</h2>
+          <div class="article-content" [innerHTML]="article.content"></div>
+          <!-- Secondary Image -->
+          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image2Url">
+            <img [src]="getImageUrl(article.image2Url)" class="w-100" [alt]="article.heading2 || 'Secondary Image'"
+              loading="lazy">
+          </div>
+
+
+          <!-- Section 2 -->
+          <div class="mt-5" *ngIf="article.heading2 || article.content2">
+            <h2 class="fw-bold mb-3" *ngIf="article.heading2">{{ article.heading2 }}</h2>
+            <div class="article-content" *ngIf="article.content2" [innerHTML]="article.content2"></div>
+          </div>
+
+
+
+          <!-- Highlight Quote -->
+          <blockquote class="article-highlight-quote my-5 p-4 border-start border-5 theme-border"
+            *ngIf="article.highlightQuote">
+            <i class="fa-solid fa-quote-left fs-2 mb-3 theme-text opacity-50"></i>
+            <p class="fs-4 fw-bold fst-italic mb-0">{{ article.highlightQuote }}</p>
+          </blockquote>
+
+          <!-- Section 3 -->
+          <div class="mt-5" *ngIf="article.heading3 || article.content3">
+            <h3 class="fw-bold mb-3" *ngIf="article.heading3">{{ article.heading3 }}</h3>
+            <div class="article-content" *ngIf="article.content3" [innerHTML]="article.content3"></div>
+          </div>
+
+          <!-- Image 3 -->
+          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image3Url">
+            <img [src]="getImageUrl(article.image3Url)" class="w-100" alt="Additional Image" loading="lazy">
+          </div>
+
+          <!-- Image 4 (Hidden for now)
+          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image4Url">
+            <img [src]="getImageUrl(article.image4Url)" class="w-100" alt="Gallery Image" loading="lazy">
+          </div> -->
+
+          <footer class="source-link-container mt-5 p-3 rounded-3 bg-light border-start border-4 border-dark"
+            *ngIf="article.sourceLink">
+            <span class="fw-bold text-uppercase small">Source:</span>
+            <a [href]="article.sourceLink" target="_blank" rel="noopener noreferrer"
+              class="ms-2 text-decoration-none theme-text fw-medium">
+              View Original Source <i class="fa-solid fa-arrow-up-right-from-square small ms-1"></i>
+            </a>
+          </footer>
+        </section>
+      </article>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4 mt-5 mt-lg-0">
+        <div class="sidebar-box p-4 rounded-4 mb-4" style="background: #f8f9fa;">
+          <h5 class="fw-bold mb-3">Newsletter</h5>
+          <p class="small text-muted">Get the best of Inspire Times delivered to your inbox.</p>
+          <input type="email" class="form-control mb-2" placeholder="Your email">
+          <button class="btn btn-dark w-100 fw-bold">SUBSCRIBE</button>
+        </div>
+
+        <!-- Related/Trending Stories -->
+        <div class="sidebar-trending mt-5">
+          <h5 class="fw-bold mb-4 ps-2 border-start border-4 theme-border">Related Stories</h5>
+          <app-trending-articles></app-trending-articles>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="contact-page-wrapper py-5">
+  <div class="container py-5">
+    <div class="row justify-content-center text-center mb-5">
+      <div class="col-lg-7">
+        <h6 class="theme-text fw-bold text-uppercase ls-2 mb-3">Get In Touch</h6>
+        <h1 class="display-4 fw-bold mb-4">We'd love to hear <br> from you.</h1>
+        <p class="text-secondary fs-5">Whether you have a question about our stories, want to become an author, or just want to say hello, we're here to listen.</p>
+      </div>
+    </div>
+
+    <div class="row g-5">
+      <!-- Contact Info -->
+      <div class="col-lg-4">
+        <div class="contact-info-card p-5 rounded-5 shadow-sm bg-white h-100">
+          <div class="info-item mb-5">
+            <div class="icon-box mb-3">
+              <i class="fa-solid fa-envelope theme-text fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Email Us</h5>
+            <p class="text-muted mb-0">hello@inspiretimes.com</p>
+            <p class="text-muted">support@inspiretimes.com</p>
+          </div>
+
+          <div class="info-item mb-5">
+            <div class="icon-box mb-3">
+              <i class="fa-solid fa-location-dot theme-text fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Our Office</h5>
+            <p class="text-muted mb-0">123 Inspiration Way</p>
+            <p class="text-muted">New York, NY 10001</p>
+          </div>
+
+          <div class="info-item">
+            <h5 class="fw-bold mb-3">Follow Us</h5>
+            <div class="d-flex gap-3">
+              <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="col-lg-8">
+        <div class="contact-form-card p-5 rounded-5 shadow-sm bg-white">
+          <div *ngIf="submitted" class="alert alert-success rounded-4 p-4 border-0 mb-4 animate__animated animate__fadeIn">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-circle-check fs-3 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-1">Message Sent!</h5>
+                <p class="mb-0">Thank you for reaching out. We'll get back to you shortly.</p>
+              </div>
+            </div>
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="name" placeholder="Name" name="name" [(ngModel)]="contactData.name" required>
+                  <label for="name">Your Name</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input type="email" class="form-control" id="email" placeholder="Email" name="email" [(ngModel)]="contactData.email" required email>
+                  <label for="email">Email Address</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="subject" placeholder="Subject" name="subject" [(ngModel)]="contactData.subject" required>
+                  <label for="subject">Subject</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control" placeholder="Message" id="message" style="height: 200px" name="message" [(ngModel)]="contactData.message" required></textarea>
+                  <label for="message">Your Message</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-dark btn-lg rounded-pill px-5 py-3 fw-bold w-100" [disabled]="!contactForm.form.valid">
+                  Send Message <i class="fa-solid fa-paper-plane ms-2"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

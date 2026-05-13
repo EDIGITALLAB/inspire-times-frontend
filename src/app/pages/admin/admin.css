@@ -1,0 +1,168 @@
+.theme-bg {
+  background: #D28A23;
+}
+
+.theme-text {
+  color: #D28A23;
+}
+
+.theme-light-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-container {
+  background: #f4f7f6;
+  min-height: 100vh;
+}
+
+.custom-input {
+  border: 1px solid #e1e1e1;
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.custom-input:focus {
+  border-color: #D28A23;
+  box-shadow: 0 0 0 4px rgba(210, 138, 35, 0.1);
+}
+
+.upload-box {
+  background: #fafafa;
+  border: 2px dashed #e1e1e1;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-box:hover {
+  border-color: #D28A23;
+  background: #fffefb;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.publish-btn {
+  border: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.publish-btn:hover {
+  background: #b5761d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(210, 138, 35, 0.4);
+}
+
+.btn-outline-secondary {
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+}
+
+.card-header {
+  border-bottom: none;
+}
+
+.card-header h3 {
+  letter-spacing: 1px;
+}
+
+.form-label {
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.x-small {
+  font-size: 11px;
+}
+
+.seo-section {
+  border-left: 4px solid #D28A23;
+}
+
+.quote-input {
+  border-left: 4px solid #D28A23;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* New Styles for Full Screen Admin */
+.admin-header {
+  z-index: 1020;
+}
+
+.admin-header h3 {
+  letter-spacing: -0.5px;
+}
+
+.title-input {
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-bottom: 2px solid #eee;
+  border-radius: 0;
+  padding-left: 0;
+}
+
+.title-input:focus {
+  box-shadow: none;
+  border-color: #D28A23;
+}
+
+.small-upload {
+  padding: 1.5rem !important;
+}
+
+.mini-upload {
+  padding: 0.5rem !important;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card {
+  transition: transform 0.2s ease;
+}
+
+.section-box {
+  background: #fff;
+  border-radius: 12px;
+}
+
+textarea.custom-input {
+  resize: vertical;
+}
+
+.bg-dark {
+  background-color: #1a1a1a !important;
+}
+
+/* Mobile Optimizations for Admin */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 10px 15px !important;
+  }
+  .admin-header h3 {
+    font-size: 1.1rem;
+  }
+  .admin-header p {
+    display: none;
+  }
+  .admin-header .btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  .title-input {
+    font-size: 1.2rem;
+  }
+  .card-body {
+    padding: 15px !important;
+  }
+  .container-fluid {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}

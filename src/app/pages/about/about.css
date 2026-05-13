@@ -1,0 +1,85 @@
+.about-hero {
+  height: 60vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1493612276216-ee3925520721?auto=format&fit=crop&q=80&w=1500');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.ls-2 { letter-spacing: 2px; }
+.ls-3 { letter-spacing: 3px; }
+
+.about-img-wrapper {
+  height: 500px;
+  position: relative;
+}
+
+.about-img-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 15px solid rgba(210, 138, 35, 0.1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.value-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: default;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1) !important;
+}
+
+.value-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(210, 138, 35, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  transition: all 0.4s ease;
+}
+
+.value-card:hover .value-icon {
+  background: #D28A23;
+  color: white !important;
+}
+
+.value-card:hover .value-icon i {
+  color: white !important;
+}
+
+.impact-section {
+  background-color: #D28A23;
+}
+
+.cta-bg-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(210, 138, 35, 0.15) 0%, transparent 70%);
+  animation: rotateGlow 20s linear infinite;
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.z-index-2 { position: relative; z-index: 2; }
+
+@media (max-width: 991px) {
+  .about-hero { height: 50vh; }
+  .about-hero h1 { font-size: 2.5rem; }
+  .about-img-wrapper { height: 350px; margin-top: 30px; }
+  .impact-section .border-start { border-left: none !important; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+}

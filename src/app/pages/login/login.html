@@ -1,0 +1,52 @@
+<div class="login-page min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <div class="login-card shadow-lg p-5 rounded-5 bg-white position-relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+
+    <div class="position-relative">
+      <div class="text-center mb-5">
+        <div class="logo-wrapper mb-3">
+          <i class="fa-solid fa-pen-nib fs-1 theme-text"></i>
+        </div>
+        <h2 class="fw-bold text-dark mb-1">Author Access</h2>
+        <p class="text-muted small">Share your stories with the world</p>
+      </div>
+
+      <form (submit)="onLogin()">
+        <div class="mb-4">
+          <label class="form-label small fw-bold text-uppercase text-muted">Username</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0 rounded-start-4"><i class="fa-solid fa-user"></i></span>
+            <input type="text" class="form-control bg-light border-0 rounded-end-4 py-3" 
+                   name="username" [(ngModel)]="credentials.username" placeholder="Enter your username" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small fw-bold text-uppercase text-muted">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0 rounded-start-4"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" class="form-control bg-light border-0 rounded-end-4 py-3" 
+                   name="password" [(ngModel)]="credentials.password" placeholder="••••••••" required>
+          </div>
+          <div *ngIf="error" class="text-danger x-small mt-2 ps-1">
+            <i class="fa-solid fa-circle-exclamation me-1"></i> {{error}}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100 py-3 rounded-4 fw-bold shadow-sm hover-up" [disabled]="isLoading">
+          <span *ngIf="!isLoading">ENTER DASHBOARD</span>
+          <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
+        </button>
+
+        <div class="text-center mt-4">
+          <p class="small text-muted">Don't have an account? <a routerLink="/signup" class="text-dark fw-bold">Signup</a></p>
+          <a routerLink="/" class="text-decoration-none text-muted small">
+            <i class="fa-solid fa-arrow-left-long me-2"></i> Back to Portal
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

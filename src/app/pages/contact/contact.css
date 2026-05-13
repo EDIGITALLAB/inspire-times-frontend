@@ -1,0 +1,61 @@
+.contact-page-wrapper {
+  background-color: #fcfcfc;
+  min-vh: 100vh;
+}
+
+.ls-2 { letter-spacing: 2px; }
+
+.contact-info-card, .contact-form-card {
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
+}
+
+.icon-box {
+  width: 60px;
+  height: 60px;
+  background: rgba(210, 138, 35, 0.05);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: #D28A23;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.form-floating > .form-control {
+  border: 1px solid #eee;
+  border-radius: 15px;
+  background-color: #fbfbfb;
+}
+
+.form-floating > .form-control:focus {
+  border-color: #D28A23;
+  box-shadow: 0 5px 15px rgba(210, 138, 35, 0.05);
+  background-color: #fff;
+}
+
+.form-floating > label {
+  padding-left: 1.2rem;
+  color: #888;
+}
+
+@media (max-width: 991px) {
+  .contact-info-card { margin-bottom: 30px; }
+}

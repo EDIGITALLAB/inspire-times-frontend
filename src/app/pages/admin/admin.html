@@ -1,0 +1,252 @@
+<div class="admin-container min-vh-100 bg-light">
+  <!-- Top Navbar/Header -->
+  <header class="admin-header theme-bg text-white shadow-sm sticky-top py-3 px-4 mb-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <div>
+        <h3 class="mb-0 fw-bold"><i class="fa-solid fa-gauge-high me-2"></i>ARTICLE EDITOR</h3>
+        <p class="theme-light-text small mb-0">Craft your inspiring story for Inspire Times</p>
+      </div>
+      <div class="d-flex gap-3">
+        <button type="button" class="btn btn-outline-light fw-bold" routerLink="/admin/articles">
+          <i class="fa-solid fa-list-check me-2"></i>MANAGE ALL
+        </button>
+        <button type="button" class="btn btn-light fw-bold" (click)="resetForm()">
+          <i class="fa-solid fa-rotate-left me-2"></i>RESET
+        </button>
+        <button type="button" class="btn btn-dark fw-bold px-4" (click)="onSubmit()" [disabled]="isPublishing">
+          <i class="fa-solid fa-paper-plane me-2"></i>
+          {{ isPublishing ? 'SAVING...' : (isEditing ? 'UPDATE ARTICLE' : 'PUBLISH NOW') }}
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid px-4">
+    <form (submit)="onSubmit()" class="row g-4 mb-5">
+
+      <!-- Main Content Area (Left) -->
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 text-dark border-bottom pb-2">MAIN CONTENT</h5>
+
+            <!-- Article Title -->
+            <div class="mb-4">
+              <label class="form-label fw-bold small text-uppercase">Article Title</label>
+              <input type="text" class="form-control form-control-lg custom-input title-input" name="title"
+                [(ngModel)]="article.title" required (input)="onTitleChange()" placeholder="Enter a catchy headline...">
+            </div>
+
+            <!-- Article Subtitle -->
+            <div class="mb-4">
+              <label class="form-label fw-bold small text-uppercase">Article Subtitle</label>
+              <textarea class="form-control custom-input" rows="2" name="subtitle" [(ngModel)]="article.subtitle"
+                placeholder="Enter a brief summary or sub-headline..."></textarea>
+            </div>
+
+            <hr class="my-4 opacity-50">
+
+            <!-- Content Editor Sections -->
+            <div class="content-sections">
+              <!-- Section 1 -->
+              <div class="section-box mb-4">
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Heading 1 (Optional)</label>
+                  <input type="text" class="form-control custom-input" name="heading1" [(ngModel)]="article.heading1"
+                    placeholder="First section heading...">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Content Section 1</label>
+                  <textarea class="form-control custom-input" rows="10" name="content" [(ngModel)]="article.content"
+                    required placeholder="Tell your inspiring story here..."></textarea>
+                </div>
+              </div>
+
+              <!-- Highlight Quote -->
+              <div class="highlight-quote-box p-4 bg-light rounded-4 mb-5 border-start border-4 border-warning">
+                <label class="form-label fw-bold small text-uppercase text-warning"><i
+                    class="fa-solid fa-quote-left me-2"></i>Highlight Quote</label>
+                <textarea class="form-control custom-input quote-input border-0 bg-transparent" rows="2"
+                  name="highlightQuote" [(ngModel)]="article.highlightQuote"
+                  placeholder="Pull out a key quote from the article..."></textarea>
+              </div>
+
+              <!-- Section 2 -->
+              <div class="section-box mb-4">
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Heading 2 (Optional)</label>
+                  <input type="text" class="form-control custom-input" name="heading2" [(ngModel)]="article.heading2"
+                    placeholder="Second section heading...">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Content Section 2</label>
+                  <textarea class="form-control custom-input" rows="8" name="content2" [(ngModel)]="article.content2"
+                    placeholder="Continue your story..."></textarea>
+                </div>
+              </div>
+
+              <!-- Section 3 -->
+              <div class="section-box mb-4">
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Heading 3 (Optional)</label>
+                  <input type="text" class="form-control custom-input" name="heading3" [(ngModel)]="article.heading3"
+                    placeholder="Final section heading...">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-bold small text-uppercase">Content Section 3</label>
+                  <textarea class="form-control custom-input" rows="8" name="content3" [(ngModel)]="article.content3"
+                    placeholder="Final part of your story..."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar (Right) -->
+      <div class="col-lg-4">
+
+        <!-- Metadata Box -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Organization & Meta</h6>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase">Category</label>
+              <input type="text" class="form-control " name="category" [(ngModel)]="article.category"
+                list="categoryOptions" placeholder="Select category...">
+              <datalist id="categoryOptions">
+
+                <option value="INSPIRATION">
+                <option value="HEALTH & FITNESS">
+                <option value="SPIRITUAL">
+                <option value="TRAVEL">
+                <option value="RELATIONSHIP">
+                <option value="LIFESTYLE">
+                <option value="FASHION & BEAUTY">
+                <option value="PETS & ANIMALS">
+                <option value="ENVIRONMENT">
+                <option value="INNOVATION">
+                <option value="TECHNOLOGY">
+                <option value="EDUCATION">
+                <option value="FOOD & NUTRITION">
+                <option value="HEALTHY RECIPES">
+                <option value="CULTURE & HERITAGE">
+                <option value="SOCIAL IMPACT">
+
+              </datalist>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase">Author Name</label>
+              <input type="text" class="form-control custom-input" name="author" [(ngModel)]="article.author"
+                placeholder="e.g., Riya Kumari">
+            </div>
+
+            <div class="mb-0" *ngIf="currentUser?.role === 'ADMIN'">
+              <label class="form-label fw-bold small text-uppercase">Placement / Section</label>
+              <select class="form-select custom-input" name="sectionType" [(ngModel)]="article.sectionType">
+                <option value="">None (Standard)</option>
+                <option value="FEATURED">FEATURED HERO</option>
+                <option value="LEFT_SECTION">LEFT COLUMN</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media Box -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Media & Gallery</h6>
+
+            <!-- Hero Image -->
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase">Featured Image</label>
+              <div class="upload-box small-upload border-dashed rounded-4 p-4 text-center position-relative mb-2">
+                <input type="file" (change)="onFileSelected($event)"
+                  class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+                <i class="fa-solid fa-camera fs-3 mb-2 text-muted"></i>
+                <p class="mb-0 small" *ngIf="!selectedFile">Click to upload hero</p>
+                <p class="mb-0 text-success fw-bold small" *ngIf="selectedFile">{{selectedFile.name}}</p>
+              </div>
+              <input type="text" class="form-control custom-input form-control-sm" name="imageCaption"
+                [(ngModel)]="article.imageCaption" placeholder="Hero image caption...">
+            </div>
+
+            <hr class="my-3 opacity-50">
+
+            <!-- Secondary Images -->
+            <label class="form-label fw-bold small text-uppercase mb-2">Gallery Images</label>
+            <div class="row g-2">
+              <div class="col-4">
+                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
+                  <input type="file" (change)="onFileSelected2($event)"
+                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+                  <i class="fa-solid fa-image mb-1 text-muted"></i>
+                  <p class="x-small mb-0">{{selectedFile2 ? 'OK' : 'Img 2'}}</p>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
+                  <input type="file" (change)="onFileSelected3($event)"
+                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+                  <i class="fa-solid fa-image mb-1 text-muted"></i>
+                  <p class="x-small mb-0">{{selectedFile3 ? 'OK' : 'Img 3'}}</p>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
+                  <input type="file" (change)="onFileSelected4($event)"
+                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+                  <i class="fa-solid fa-image mb-1 text-muted"></i>
+                  <p class="x-small mb-0">{{selectedFile4 ? 'OK' : 'Img 4'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Box -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0 text-uppercase small text-muted">Search Engine (SEO)</h6>
+              <i class="fa-solid fa-magnifying-glass text-muted small"></i>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase">Meta Title</label>
+              <input type="text" class="form-control custom-input" name="metaTitle" [(ngModel)]="article.metaTitle"
+                placeholder="SEO title...">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase">Meta Description</label>
+              <textarea class="form-control custom-input" rows="3" name="metaDescription"
+                [(ngModel)]="article.metaDescription" placeholder="SEO description..."></textarea>
+            </div>
+
+            <div class="mb-0">
+              <label class="form-label fw-bold small text-uppercase">Meta Keywords</label>
+              <input type="text" class="form-control custom-input" name="metaKeywords"
+                [(ngModel)]="article.metaKeywords" placeholder="keywords, comma, separated">
+            </div>
+          </div>
+        </div>
+
+        <!-- Source Box -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-dark text-white">
+          <div class="card-body p-4">
+            <h6 class="fw-bold mb-3 text-uppercase small">Verification Source</h6>
+            <div class="mb-0">
+              <input type="url" class="form-control bg-transparent border-secondary text-white" name="sourceLink"
+                [(ngModel)]="article.sourceLink" placeholder="Original source URL...">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+</div>

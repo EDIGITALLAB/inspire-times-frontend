@@ -1,0 +1,91 @@
+<div class="admin-container min-vh-100 bg-light">
+  <!-- Top Header -->
+  <header class="admin-header theme-bg text-white shadow-sm sticky-top py-3 px-4 mb-4">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <div>
+        <h3 class="mb-0 fw-bold"><i class="fa-solid fa-list-check me-2"></i>CONTENT MANAGER</h3>
+        <p class="theme-light-text small mb-0">Manage and moderate all published stories</p>
+      </div>
+      <div class="d-flex gap-3">
+        <button type="button" class="btn btn-dark fw-bold px-4" routerLink="/admin">
+          <i class="fa-solid fa-plus me-2"></i>CREATE NEW ARTICLE
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid px-4">
+    <!-- Articles List Section -->
+    <div class="row g-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-4 mb-5">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+              <div>
+                <h5 class="fw-bold mb-0 text-dark text-uppercase">PUBLISHED ARTICLES</h5>
+                <p class="text-muted small mb-0">Total stories live on the portal</p>
+              </div>
+              <div class="badge bg-primary rounded-pill px-3 py-2">
+                Total: {{articles.length}}
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th class="ps-3 small fw-bold text-uppercase">Article</th>
+                    <th class="small fw-bold text-uppercase text-center">Category</th>
+                    <th class="small fw-bold text-uppercase text-center">Author</th>
+                    <th class="small fw-bold text-uppercase text-center">Date</th>
+                    <th class="small fw-bold text-uppercase text-end pe-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let art of articles">
+                    <td class="ps-3">
+                      <div class="d-flex align-items-center">
+                        <img [src]="articleService.getImageUrl(art.imageUrl)" class="rounded-3 me-3 object-fit-cover"
+                          style="width: 50px; height: 50px;" alt="thumbnail">
+                        <div>
+                          <div class="fw-bold text-dark small mb-0 line-clamp-1">{{art.title}}</div>
+                          <div class="text-muted x-small line-clamp-1">{{art.subtitle}}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <span class="badge bg-light text-dark border small fw-normal">{{art.category}}</span>
+                    </td>
+                    <td class="text-center small text-muted">
+                      {{art.author}}
+                    </td>
+                    <td class="text-center small text-muted">
+                      {{art.publishedAt | date:'MMM d, y'}}
+                    </td>
+                    <td class="text-end pe-3">
+                      <div class="btn-group">
+                        <button class="btn btn-outline-primary btn-sm rounded-pill px-3 me-2" [routerLink]="['/admin']"
+                          [queryParams]="{edit: art.id}">
+                          <i class="fa-solid fa-pen-to-square me-1"></i> Edit
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3" (click)="deleteArticle(art.id)">
+                          <i class="fa-solid fa-trash-can me-1"></i> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="articles.length === 0">
+                    <td colspan="5" class="text-center py-5 text-muted">
+                      <i class="fa-solid fa-folder-open fs-2 mb-3 d-block opacity-25"></i>
+                      No articles found.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

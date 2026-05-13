@@ -1,0 +1,40 @@
+.theme-bg {
+  background: #D28A23;
+}
+
+.theme-text {
+  color: #D28A23;
+}
+
+.theme-light-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-container {
+  background: #f4f7f6;
+  min-height: 100vh;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.x-small {
+  font-size: 11px;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(210, 138, 35, 0.02);
+}
+
+.btn-group .btn {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.badge {
+  font-weight: 500;
+}

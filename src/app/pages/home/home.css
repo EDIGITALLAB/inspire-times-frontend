@@ -1,0 +1,126 @@
+.story-card {
+  transition: all 0.3s ease;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.story-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.story-card .card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.story-card .card-body h5 {
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  min-height: 2.8em; /* Force consistent height for 2 lines */
+}
+
+.story-card .card-body p {
+  margin-bottom: 0;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carousel-controls .btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.carousel-controls .btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.latest-stories-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.latest-stories-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.story-item {
+  flex: 0 0 auto;
+  width: calc(33.333% - 1.05rem); /* Exactly 3 cards with gaps */
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 992px) {
+  .story-item {
+    width: calc(50% - 0.75rem); /* 2 cards on tablets */
+  }
+}
+
+@media (max-width: 576px) {
+  .story-item {
+    width: calc(85% - 0.5rem); /* 1.2 cards on mobile for peek effect */
+  }
+}
+
+.latest-stories-section {
+  margin-bottom: 80px;
+}
+
+/* Quote Banner Styles */
+.quote-banner {
+  background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  border: 1px solid rgba(210, 138, 35, 0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.quote-text {
+  font-family: 'Playfair Display', serif;
+  color: #2c3e50;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.letter-spacing-2 {
+  letter-spacing: 2px;
+}
+
+.quote-bg-glow {
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 150%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(210, 138, 35, 0.1) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}

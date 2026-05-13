@@ -1,0 +1,235 @@
+<nav class="navbar navbar-light bg-white modern-nav" data-bs-theme="light">
+  <div class="container d-flex justify-content-between align-items-center position-relative">
+
+    <!-- Left: Search Toggle -->
+    <div class="d-flex align-items-center">
+      <button class="btn btn-link text-dark p-0 border-0" (click)="toggleSearch()"
+        style="font-size:18px; position: relative; z-index: 1100;">
+        <i class="fa-solid" [class.fa-magnifying-glass]="!isSearchOpen" [class.fa-xmark]="isSearchOpen"></i>
+      </button>
+
+      <!-- Animated Search Input (Premium Mobile Overlay) -->
+      <div class="search-overlay-container" [class.active]="isSearchOpen">
+        <div class="d-flex align-items-center w-100 position-relative">
+          <input type="text" class="form-control mobile-search-input" placeholder="Search stories..."
+            [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" autofocus />
+          <button class="btn btn-dark rounded-pill px-3 py-1 ms-2" (click)="onSearch()"
+            style="font-size: 10px; font-weight: 700; letter-spacing: 1px;">
+            SEARCH
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: Brand Text (Mobile Only, Shows on Scroll) -->
+    <div class="d-lg-none position-absolute start-50 translate-middle-x" [style.opacity]="isScrolled ? '1' : '0'"
+      [style.transform]="isScrolled ? 'translate(-50%, 0)' : 'translate(-50%, 10px)'"
+      style="transition: all 0.4s ease; pointer-events: none;">
+      <span class="fw-bold text-dark cursor-pointer" style="font-size: 13px; letter-spacing: 2px;"
+        routerLink="/">INSPIRE TIMES</span>
+    </div>
+
+    <!-- Center: Main Links (desktop) -->
+    <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+      <div class="d-flex align-items-center gap-4">
+        <div *ngFor="let cat of categories.slice(0, 7)">
+          <a class="nav-link p-0 text-secondary fw-semibold small" [routerLink]="['/category', cat]"
+            style="text-decoration: none;">{{cat}}</a>
+        </div>
+        <!-- Premium More Dropdown -->
+        <div class="dropdown more-nav-dropdown">
+          <button class="btn btn-more-pill dropdown-toggle hide-caret" type="button" id="moreDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Discover</span>
+            <i class="fa-solid fa-chevron-down ms-2" style="font-size: 10px;"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end premium-mega-dropdown border-0 shadow-lg mt-3"
+            aria-labelledby="moreDropdown">
+            <div class="dropdown-header-custom mb-3 px-3 pt-2">
+              <h6 class="text-uppercase fw-bold text-dark small mb-0" style="letter-spacing: 2px;">All Topics</h6>
+              <div class="header-line"></div>
+            </div>
+            <div class="mega-grid p-2">
+              <div class="grid-item" *ngFor="let cat of categories">
+                <a class="nav-mega-link px-3 py-2 rounded-3" [routerLink]="['/category', cat]">
+                  <i class="fa-solid fa-hashtag me-2 text-muted small"></i>
+                  <span>{{cat}}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Profile Dropdown & Menu Toggle -->
+    <div class="d-flex align-items-center gap-3" style="position: relative; z-index: 1100;">
+      
+      <!-- User Profile Dropdown (Only if logged in) -->
+      <div class="dropdown" *ngIf="authService.isLoggedIn()">
+        <button class="btn p-0 border-0 d-flex align-items-center dropdown-toggle hide-caret" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="avatar-circle-sm">{{(currentUser?.fullName || currentUser?.username || 'U').charAt(0).toUpperCase()}}</div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-3 py-2 animate slideIn" aria-labelledby="userDropdown" style="min-width: 200px;">
+          <li class="px-3 py-2 border-bottom mb-2">
+            <div class="fw-bold small text-dark">{{currentUser?.fullName || currentUser?.username}}</div>
+            <div class="x-small text-muted">{{currentUser?.role}}</div>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center py-2" routerLink="/admin">
+              <i class="fa-solid fa-gauge me-3 text-muted"></i> Dashboard
+            </a>
+          </li>
+          <li *ngIf="currentUser?.role === 'ADMIN'">
+            <a class="dropdown-item d-flex align-items-center py-2" routerLink="/admin/users">
+              <i class="fa-solid fa-users-gear me-3 text-muted"></i> Manage Users
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center py-2" routerLink="/profile">
+              <i class="fa-solid fa-user-gear me-3 text-muted"></i> My Profile
+            </a>
+          </li>
+          <li><hr class="dropdown-divider opacity-50"></li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center py-2 text-danger" (click)="logout()" href="javascript:void(0)">
+              <i class="fa-solid fa-power-off me-3"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Hamburger Menu -->
+      <div class="menu-icon-wrapper" (click)="toggleMenu()" [class.active]="isMenuOpen">
+        <span class="line line-1"></span>
+        <span class="line line-2"></span>
+        <span class="line line-3"></span>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+
+
+
+<!-- Premium Sidebar -->
+<div class="premium-sidebar" [class.active]="isMenuOpen">
+  <!-- Sidebar Header -->
+  <div class="sidebar-top-header d-flex justify-content-between align-items-center p-4">
+    <div class="sidebar-brand" routerLink="/" (click)="toggleMenu()">
+      <h5 class="mb-0 fw-bold" style="letter-spacing: 2px; font-size: 16px;">INSPIRE TIMES</h5>
+      <p class="mb-0 text-muted" style="font-size: 9px; letter-spacing: 1px; font-weight: 600;">STORIES THAT INSPIRE THE
+        WORLD</p>
+    </div>
+    <button class="btn-close-sidebar" (click)="toggleMenu()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- Premium Account Links -->
+  <div class="mb-4 px-2 mt-3">
+    <div *ngIf="!authService.isLoggedIn()" class="d-flex flex-column gap-2">
+      <a routerLink="/login" class="btn btn-outline-dark rounded-pill fw-bold" (click)="toggleMenu()">LOGIN</a>
+      <a routerLink="/signup" class="btn btn-dark rounded-pill fw-bold" (click)="toggleMenu()">BECOME AN AUTHOR</a>
+    </div>
+    <!-- Profile Info (Brief version for Sidebar) -->
+    <div *ngIf="authService.isLoggedIn()" class="user-profile-box p-3 rounded-4 mb-3 d-flex align-items-center shadow-sm">
+      <div class="avatar-circle me-3">{{(currentUser?.fullName || currentUser?.username || 'U').charAt(0).toUpperCase()}}</div>
+      <div class="overflow-hidden">
+        <div class="text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">Logged in as</div>
+        <div class="fw-bold text-dark text-truncate" style="font-size: 14px;">{{currentUser?.fullName || currentUser?.username}}</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="sidebar-content px-4 mt-3">
+    <!-- Search Bar -->
+    <div class="search-container mb-4">
+      <div class="input-group premium-search-group">
+        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="text" #sidebarSearch class="form-control" placeholder="Search stories..."
+          (keyup.enter)="onSidebarSearch(sidebarSearch.value)" />
+        <button class="btn btn-dark rounded-pill px-3 py-1 ms-2" (click)="onSidebarSearch(sidebarSearch.value)"
+          style="font-size: 10px; font-weight: 700; letter-spacing: 1px;">
+          SEARCH
+        </button>
+      </div>
+    </div>
+
+
+
+    <!-- Quick Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section mb-4">
+        <ul class="list-unstyled">
+          <li class="nav-item-wrapper">
+            <a routerLink="/" (click)="toggleMenu()" class="nav-link-sidebar">
+              <i class="fa-solid fa-house-chimney icon"></i>
+              <span>Home</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Topics Section -->
+      <div class="nav-section mb-4">
+        <h6 class="section-title">EXPLORE TOPICS</h6>
+        <div class="category-grid">
+          <div *ngFor="let cat of categories" class="category-item">
+            <a [routerLink]="['/category', cat]" (click)="toggleMenu()" class="category-link">
+              <span class="dot"></span>
+              <span>{{cat}}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin/Other Section -->
+      <div class="nav-section mb-4">
+        <h6 class="section-title">RESOURCES</h6>
+        <ul class="list-unstyled">
+          <li class="nav-item-wrapper">
+            <a routerLink="/admin/articles" (click)="toggleMenu()" class="nav-link-sidebar">
+              <i class="fa-solid fa-pen-to-square icon"></i>
+              <span>Manage Articles</span>
+            </a>
+          </li>
+          <li class="nav-item-wrapper">
+            <a routerLink="/about" (click)="toggleMenu()" class="nav-link-sidebar">
+              <i class="fa-solid fa-circle-info icon"></i>
+              <span>About Us</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer mt-auto p-3 bg-light bg-opacity-10 text-center">
+    <div class="mb-3 d-flex justify-content-center gap-3">
+      <a routerLink="/contact" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
+        style="font-size: 10px; letter-spacing: 1px;">CONTACT</a>
+      <span class="text-muted opacity-25">|</span>
+      <a routerLink="/privacy" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
+        style="font-size: 10px; letter-spacing: 1px;">PRIVACY</a>
+      <span class="text-muted opacity-25">|</span>
+      <a routerLink="/terms" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
+        style="font-size: 10px; letter-spacing: 1px;">TERMS</a>
+    </div>
+    <div class="pt-2 border-top">
+      <p class="text-muted mb-0" style="font-size: 9px;">&copy; 2026 INSPIRE TIMES. ALL RIGHTS RESERVED.</p>
+    </div>
+    <!-- Admin Access Link -->
+    <div class="pt-2 pb-1 text-center border-top border-light">
+      <a routerLink="/admin-login" class="text-muted text-decoration-none x-small fw-bold letter-spacing-1 hover-gold"
+        (click)="toggleMenu()">
+        <i class="fa-solid fa-lock me-1"></i> STAFF ONLY
+      </a>
+    </div>
+  </div>
+</div>

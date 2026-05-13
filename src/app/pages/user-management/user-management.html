@@ -1,0 +1,63 @@
+<div class="container-fluid py-5 px-lg-5">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h2 class="fw-bold mb-1">User Management</h2>
+      <p class="text-muted small">Manage authors, admins, and permissions</p>
+    </div>
+    <div class="badge bg-dark px-3 py-2 rounded-pill">
+      TOTAL USERS: {{users.length}}
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border theme-text" role="status"></div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden" *ngIf="!isLoading">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th class="ps-4 py-3 text-muted small fw-bold">USER</th>
+            <th class="py-3 text-muted small fw-bold">EMAIL</th>
+            <th class="py-3 text-muted small fw-bold">ROLE</th>
+            <th class="py-3 text-muted small fw-bold text-end pe-4">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td class="ps-4 py-3">
+              <div class="d-flex align-items-center">
+                <div class="user-avatar me-3">{{user.username.charAt(0).toUpperCase()}}</div>
+                <div>
+                  <div class="fw-bold">{{user.fullName || user.username}}</div>
+                  <div class="text-muted x-small">@{{user.username}}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 small">{{user.email}}</td>
+            <td class="py-3">
+              <span class="badge rounded-pill px-3" 
+                    [ngClass]="user.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
+                {{user.role}}
+              </span>
+            </td>
+            <td class="py-3 text-end pe-4">
+              <ng-container *ngIf="user.username !== 'admin'">
+                <button class="btn btn-sm btn-outline-dark rounded-pill me-2" (click)="changeRole(user.id, user.role)">
+                  Toggle Role
+                </button>
+                <button class="btn btn-sm btn-outline-danger rounded-circle p-2" (click)="onDelete(user.id)">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </ng-container>
+              <span *ngIf="user.username === 'admin'" class="text-muted small fst-italic">System Protected</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

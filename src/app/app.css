@@ -1,0 +1,37 @@
+/* You can add global styles to this file */
+
+.tagline-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tagline-line {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #D28A23, transparent);
+  flex-grow: 1;
+  opacity: 0.5;
+}
+
+.tagline-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tagline-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #555;
+  text-transform: uppercase;
+}
+
+.tagline-diamond {
+  font-size: 8px;
+  color: #D28A23;
+}

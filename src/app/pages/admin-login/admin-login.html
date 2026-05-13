@@ -1,0 +1,45 @@
+<div class="admin-login-wrapper">
+  <div class="login-panel shadow-2xl">
+    <div class="header-banner">
+      <div class="shield-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2 class="fw-bold mt-3">CONTROL PANEL</h2>
+      <p class="small opacity-75">Secure Administrative Access</p>
+    </div>
+
+    <div class="p-5">
+      <form (submit)="onLogin()">
+        <div class="mb-4">
+          <label class="form-label text-muted x-small fw-bold letter-spacing-1">ADMIN USERNAME</label>
+          <div class="input-group custom-group">
+            <span class="input-group-text"><i class="fa-solid fa-user-shield"></i></span>
+            <input type="text" class="form-control" name="username" [(ngModel)]="credentials.username" placeholder="Username" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label text-muted x-small fw-bold letter-spacing-1">KEY PHRASE</label>
+          <div class="input-group custom-group">
+            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+            <input type="password" class="form-control" name="password" [(ngModel)]="credentials.password" placeholder="••••••••" required>
+          </div>
+          <div *ngIf="error" class="error-toast mt-3 animate__animated animate__shakeX">
+            <i class="fa-solid fa-circle-exclamation me-2"></i> {{error}}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold mt-2" [disabled]="isLoading">
+          <span *ngIf="!isLoading">AUTHORIZE ACCESS</span>
+          <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
+        </button>
+
+        <div class="text-center mt-5">
+          <a routerLink="/" class="text-decoration-none text-muted small hover-link">
+            <i class="fa-solid fa-arrow-left me-2"></i> Exit to Main Portal
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

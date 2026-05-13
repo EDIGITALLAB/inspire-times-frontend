@@ -1,0 +1,160 @@
+<div class="container py-4">
+  <app-trending-ticker></app-trending-ticker>
+
+  <div class="row g-4">
+    <!-- Left Column: Side Stories -->
+    <div class="col-lg-3 order-2 order-lg-1">
+      <ng-container *ngIf="!isLoading">
+        <div class="card border-0 mb-4 side-story-card" *ngFor="let article of leftSectionArticles"
+          [routerLink]="['/article', article.slug || article.id]">
+          <img [src]="getImageUrl(article.imageUrl)" class="card-img-top rounded-3" 
+               style="height: 150px; object-fit: cover;" [alt]="article.title" loading="lazy">
+          <div class="card-body p-2">
+            <p class="text-muted small mb-1">By {{ article.author }}</p>
+            <h6 class="fw-bold mb-0 line-clamp-2">
+              {{ article.title }}
+            </h6>
+          </div>
+        </div>
+
+        <!-- Empty state if no left section articles -->
+        <div *ngIf="leftSectionArticles.length === 0" class="empty-state p-3">
+          <div class="empty-state-icon" style="width: 40px; height: 40px; font-size: 16px;">
+            <i class="fa-regular fa-newspaper"></i>
+          </div>
+          <p class="empty-state-text small">Assign articles to "LEFT_SECTION" in admin.</p>
+        </div>
+      </ng-container>
+
+      <!-- Skeleton for left column -->
+      <ng-container *ngIf="isLoading">
+        <div class="card border-0 mb-4" *ngFor="let i of [1,2,3]">
+          <div class="skeleton skeleton-image rounded-3" style="height: 150px;"></div>
+          <div class="card-body p-2">
+            <div class="skeleton skeleton-text" style="width: 40%;"></div>
+            <div class="skeleton skeleton-title" style="height: 16px;"></div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Center Column: Featured Story -->
+    <div class="col-lg-6 order-1 order-lg-2">
+      <ng-container *ngIf="!isLoading">
+        <div class="card border-0 shadow-sm overflow-hidden h-100 featured-card" *ngIf="featuredArticle"
+          [routerLink]="['/article', featuredArticle.slug || featuredArticle.id]">
+          <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100"
+            style="height: 400px; object-fit: cover;" [alt]="featuredArticle.title">
+          <div class="card-body">
+            <p class="text-muted small mb-2">By {{ featuredArticle.author }}</p>
+            <h2 class="fw-bold mb-3">{{ featuredArticle.title }}</h2>
+            <p class="text-secondary mb-2" *ngIf="featuredArticle.subtitle"><strong>{{ featuredArticle.subtitle
+                }}</strong></p>
+            <p class="text-secondary small line-clamp-3">
+              {{ featuredArticle.content }}
+            </p>
+          </div>
+        </div>
+        
+        <div *ngIf="!featuredArticle" class="empty-state h-100 d-flex flex-column align-items-center justify-content-center">
+          <div class="empty-state-icon">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <h5 class="empty-state-title">No Featured Story</h5>
+          <p class="empty-state-text">Highlight a story to see it here.</p>
+        </div>
+      </ng-container>
+
+      <!-- Skeleton for featured story -->
+      <div class="card border-0 shadow-sm h-100" *ngIf="isLoading">
+        <div class="skeleton skeleton-image" style="height: 400px;"></div>
+        <div class="card-body">
+          <div class="skeleton skeleton-text" style="width: 30%;"></div>
+          <div class="skeleton skeleton-title" style="height: 40px; width: 90%;"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text" style="width: 70%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Sidebar -->
+    <div class="col-lg-3 order-0 order-lg-3">
+      <!-- Trending Articles Component -->
+      <app-trending-articles class="mb-4 d-block"></app-trending-articles>
+    </div>
+  </div>
+
+  <!-- Latest Stories Section -->
+  <div class="mt-5 pt-3 latest-stories-section">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h4 class="fw-bold mb-0">LATEST STORIES</h4>
+      <div class="carousel-controls d-flex gap-2">
+        <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button"
+          (click)="scrollStories(-1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button"
+          (click)="scrollStories(1)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="latest-stories-scroll-wrapper position-relative" 
+         (mouseenter)="stopAutoScroll()" (mouseleave)="startAutoScroll()">
+      <div id="latestStoriesContainer" class="latest-stories-container d-flex gap-4 overflow-auto pb-4 pt-2">
+        <!-- Latest Stories Loop -->
+        <ng-container *ngIf="!isLoading">
+          <div class="story-item" *ngFor="let item of latestStories">
+            <div class="card border-0 shadow-sm h-100 story-card" [routerLink]="['/article', item.slug || item.id]">
+              <div class="overflow-hidden rounded-top">
+                <img [src]="getImageUrl(item.imageUrl)" class="card-img-top" style="height: 180px; object-fit: cover;"
+                  [alt]="item.title" loading="lazy">
+              </div>
+              <div class="card-body">
+                <span class="category-tag mb-1 d-inline-block small text-uppercase fw-bold text-muted" 
+                      style="font-size: 0.65rem; letter-spacing: 1px;">{{ item.category }}</span>
+                <h5 class="fw-bold h6 mb-2 text-dark line-clamp-2" style="height: 40px;">{{ item.title }}</h5>
+                <p class="text-secondary small mb-2 line-clamp-2" *ngIf="item.subtitle" style="height: 36px; font-size: 0.75rem;">
+                  {{ item.subtitle }}
+                </p>
+                <div class="mt-auto pt-2 border-top">
+                  <p class="text-muted mb-0" style="font-size: 0.7rem;">By {{ item.author }} • {{ item.publishedAt | date:'MMM d' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center py-5 w-100" *ngIf="latestStories.length === 0">
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <i class="fa-solid fa-folder-open"></i>
+              </div>
+              <h5 class="empty-state-title">No stories found</h5>
+              <p class="empty-state-text mb-3">Be the first to share something amazing with the world!</p>
+              <a routerLink="/admin" class="btn btn-dark btn-sm rounded-pill px-4">Publish Story</a>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Skeletons for latest stories -->
+        <ng-container *ngIf="isLoading">
+          <div class="story-item" *ngFor="let i of [1,2,3,4]">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="skeleton skeleton-image rounded-top" style="height: 180px;"></div>
+              <div class="card-body">
+                <div class="skeleton skeleton-badge mb-2"></div>
+                <div class="skeleton skeleton-title" style="height: 20px;"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="mt-auto pt-2 border-top">
+                  <div class="skeleton skeleton-text" style="width: 60%; height: 10px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+.legal-page-wrapper {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.ls-2 { letter-spacing: 2px; }
+
+.legal-content {
+  border: 1px solid rgba(0,0,0,0.03);
+  line-height: 1.8;
+}
+
+.legal-content h4 {
+  margin-top: 40px;
+}
+
+.content-body ul {
+  padding-left: 20px;
+  color: #666;
+}
+
+.content-body ul li {
+  margin-bottom: 10px;
+}
+
+.content-body p {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .legal-content { padding: 30px !important; }
+  .display-5 { font-size: 2rem; }
+}

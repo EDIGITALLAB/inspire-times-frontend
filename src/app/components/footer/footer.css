@@ -1,0 +1,60 @@
+.footer {
+  background: #111111 !important;
+  color: #eeeeee;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 2px;
+  color: #D28A23;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: #888;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.footer-links a:hover {
+  color: #D28A23;
+  padding-left: 5px;
+}
+
+.social-link {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  color: #ccc;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: #D28A23;
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.newsletter-form .form-control:focus {
+  border-color: #D28A23;
+  box-shadow: none;
+}
+
+.border-secondary {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Custom rounded corner for button inside input */
+.rounded-end-custom {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}

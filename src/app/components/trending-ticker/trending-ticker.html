@@ -1,0 +1,27 @@
+<div class="trending-ticker-wrapper" *ngIf="!isLoading && trendingArticles.length > 0">
+  <div class="ticker-badge">
+    <i class="fa-solid fa-bolt-lightning me-2"></i>
+    <span>TRENDING</span>
+  </div>
+  <div class="ticker-content">
+    <div class="ticker-track">
+      <div class="ticker-item" *ngFor="let article of trendingArticles" [routerLink]="['/article', article.slug || article.id]">
+        <span class="article-category">{{ article.category }}:</span>
+        <span class="article-title">{{ article.title }}</span>
+      </div>
+      <!-- Duplicate for seamless loop if needed -->
+      <div class="ticker-item" *ngFor="let article of trendingArticles" [routerLink]="['/article', article.slug || article.id]">
+        <span class="article-category">{{ article.category }}:</span>
+        <span class="article-title">{{ article.title }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="trending-ticker-wrapper border-0" *ngIf="isLoading" style="background: #f8f9fa;">
+  <div class="ticker-badge skeleton border-0" style="background: #eee; width: 100px;"></div>
+  <div class="ticker-content px-3 flex-grow-1">
+    <div class="skeleton" style="height: 14px; width: 60%; opacity: 0.5;"></div>
+  </div>
+</div>
+
