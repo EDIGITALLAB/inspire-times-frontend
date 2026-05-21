@@ -89,3 +89,17 @@
   background-color: #D28A23 !important;
 }
 
+app-root {
+  display: block;
+}
+
+html,
+body {
+  overflow-x: clip !important;
+}
+
+app-navbar {
+  display: block !important;
+  position: relative !important;
+  z-index: 2000 !important;
+}
