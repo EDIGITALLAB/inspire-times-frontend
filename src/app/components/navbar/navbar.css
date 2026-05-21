@@ -272,11 +272,15 @@
   visibility: hidden;
   background: #fff;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 0 105px 0 50px;
+  padding: 0 50px 0 50px;
   z-index: 1050;
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+.search-overlay-container.logged-in {
+  padding-right: 105px;
 }
 
 .search-overlay-container.active {

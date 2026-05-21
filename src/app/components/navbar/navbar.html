@@ -9,7 +9,7 @@
       </button>
 
       <!-- Animated Search Input (Premium Mobile Overlay) -->
-      <div class="search-overlay-container" [class.active]="isSearchOpen">
+      <div class="search-overlay-container" [class.active]="isSearchOpen" [class.logged-in]="authService.isLoggedIn()">
         <div class="d-flex align-items-center w-100 position-relative">
           <input type="text" class="form-control mobile-search-input" placeholder="Search stories..."
             [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" autofocus />
@@ -64,13 +64,16 @@
 
     <!-- Right: Profile Dropdown & Menu Toggle -->
     <div class="d-flex align-items-center gap-3" style="position: relative; z-index: 1100;">
-      
+
       <!-- User Profile Dropdown (Only if logged in) -->
       <div class="dropdown" *ngIf="authService.isLoggedIn()">
-        <button class="btn p-0 border-0 d-flex align-items-center dropdown-toggle hide-caret" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          <div class="avatar-circle-sm">{{(currentUser?.fullName || currentUser?.username || 'U').charAt(0).toUpperCase()}}</div>
+        <button class="btn p-0 border-0 d-flex align-items-center dropdown-toggle hide-caret" type="button"
+          id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="avatar-circle-sm">{{(currentUser?.fullName || currentUser?.username ||
+            'U').charAt(0).toUpperCase()}}</div>
         </button>
-        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-3 py-2 animate slideIn" aria-labelledby="userDropdown" style="min-width: 200px;">
+        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-3 py-2 animate slideIn"
+          aria-labelledby="userDropdown" style="min-width: 200px;">
           <li class="px-3 py-2 border-bottom mb-2">
             <div class="fw-bold small text-dark">{{currentUser?.fullName || currentUser?.username}}</div>
             <div class="x-small text-muted">{{currentUser?.role}}</div>
@@ -90,9 +93,12 @@
               <i class="fa-solid fa-user-gear me-3 text-muted"></i> My Profile
             </a>
           </li>
-          <li><hr class="dropdown-divider opacity-50"></li>
           <li>
-            <a class="dropdown-item d-flex align-items-center py-2 text-danger" (click)="logout()" href="javascript:void(0)">
+            <hr class="dropdown-divider opacity-50">
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center py-2 text-danger" (click)="logout()"
+              href="javascript:void(0)">
               <i class="fa-solid fa-power-off me-3"></i> Logout
             </a>
           </li>
@@ -136,11 +142,14 @@
       <a routerLink="/signup" class="btn btn-dark rounded-pill fw-bold" (click)="toggleMenu()">BECOME AN AUTHOR</a>
     </div>
     <!-- Profile Info (Brief version for Sidebar) -->
-    <div *ngIf="authService.isLoggedIn()" class="user-profile-box p-3 rounded-4 mb-3 d-flex align-items-center shadow-sm">
-      <div class="avatar-circle me-3">{{(currentUser?.fullName || currentUser?.username || 'U').charAt(0).toUpperCase()}}</div>
+    <div *ngIf="authService.isLoggedIn()"
+      class="user-profile-box p-3 rounded-4 mb-3 d-flex align-items-center shadow-sm">
+      <div class="avatar-circle me-3">{{(currentUser?.fullName || currentUser?.username ||
+        'U').charAt(0).toUpperCase()}}</div>
       <div class="overflow-hidden">
         <div class="text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">Logged in as</div>
-        <div class="fw-bold text-dark text-truncate" style="font-size: 14px;">{{currentUser?.fullName || currentUser?.username}}</div>
+        <div class="fw-bold text-dark text-truncate" style="font-size: 14px;">{{currentUser?.fullName ||
+          currentUser?.username}}</div>
       </div>
     </div>
   </div>
