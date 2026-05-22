@@ -32,6 +32,7 @@
   from {
     transform: translateY(-100%);
   }
+
   to {
     transform: translateY(0);
   }
@@ -311,7 +312,7 @@
 }
 
 .search-overlay-container.logged-in {
-  padding-right: 105px;
+  padding-right: 88px;
 }
 
 .search-overlay-container.active {

@@ -41,7 +41,7 @@
             <div class="mb-4">
               <label class="form-label fw-bold small text-uppercase">Article Subtitle</label>
               <textarea class="form-control custom-input" rows="2" name="subtitle" [(ngModel)]="article.subtitle"
-                placeholder="Enter a brief summary or sub-headline..."></textarea>
+                (input)="onSubtitleChange()" placeholder="Enter a brief summary or sub-headline..."></textarea>
             </div>
 
             <hr class="my-4 opacity-50">
@@ -58,7 +58,7 @@
                 <div class="mb-3">
                   <label class="form-label fw-bold small text-uppercase">Content Section 1</label>
                   <textarea class="form-control custom-input" rows="10" name="content" [(ngModel)]="article.content"
-                    required placeholder="Tell your inspiring story here..."></textarea>
+                    required (input)="onContentChange()" placeholder="Tell your inspiring story here..."></textarea>
                 </div>
               </div>
 
@@ -113,8 +113,8 @@
 
             <div class="mb-3">
               <label class="form-label fw-bold small text-uppercase">Category</label>
-              <input type="text" class="form-control " name="category" [(ngModel)]="article.category"
-                list="categoryOptions" placeholder="Select category...">
+              <input type="text" class="form-control" name="category" [(ngModel)]="article.category"
+                (ngModelChange)="onCategoryChange()" list="categoryOptions" placeholder="Select category...">
               <datalist id="categoryOptions">
 
                 <option value="INSPIRATION">
@@ -217,19 +217,19 @@
             <div class="mb-3">
               <label class="form-label fw-bold small text-uppercase">Meta Title</label>
               <input type="text" class="form-control custom-input" name="metaTitle" [(ngModel)]="article.metaTitle"
-                placeholder="SEO title...">
+                (input)="isMetaTitleCustomized = true" placeholder="SEO title...">
             </div>
 
             <div class="mb-3">
               <label class="form-label fw-bold small text-uppercase">Meta Description</label>
               <textarea class="form-control custom-input" rows="3" name="metaDescription"
-                [(ngModel)]="article.metaDescription" placeholder="SEO description..."></textarea>
+                [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true" placeholder="SEO description..."></textarea>
             </div>
 
             <div class="mb-0">
               <label class="form-label fw-bold small text-uppercase">Meta Keywords</label>
               <input type="text" class="form-control custom-input" name="metaKeywords"
-                [(ngModel)]="article.metaKeywords" placeholder="keywords, comma, separated">
+                [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true" placeholder="keywords, comma, separated">
             </div>
           </div>
         </div>

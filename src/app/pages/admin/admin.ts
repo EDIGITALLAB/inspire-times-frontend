@@ -43,6 +43,9 @@ export class Admin {
   selectedFile3: File | null = null;
   selectedFile4: File | null = null;
   isPublishing = false;
+  isMetaTitleCustomized = false;
+  isMetaDescriptionCustomized = false;
+  isMetaKeywordsCustomized = false;
 
   constructor(
     public articleService: ArticleService, 
@@ -154,6 +157,14 @@ export class Admin {
     this.isEditing = true;
     this.currentArticleId = art.id;
     this.article = { ...art };
+    
+    // Set customization flags based on existing data
+    this.isMetaTitleCustomized = !!art.metaTitle && art.metaTitle !== art.title;
+    this.isMetaDescriptionCustomized = !!art.metaDescription && 
+      art.metaDescription !== art.subtitle && 
+      art.metaDescription !== (art.content ? art.content.substring(0, 150) + (art.content.length > 150 ? '...' : '') : '');
+    this.isMetaKeywordsCustomized = !!art.metaKeywords;
+    
     // Scroll to top of form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -171,14 +182,57 @@ export class Admin {
   }
 
   onTitleChange() {
-    if (!this.article.metaTitle) {
+    if (!this.isMetaTitleCustomized) {
       this.article.metaTitle = this.article.title;
+    }
+    this.generateKeywords();
+  }
+
+  onSubtitleChange() {
+    if (!this.isMetaDescriptionCustomized) {
+      this.article.metaDescription = this.article.subtitle;
+    }
+  }
+
+  onContentChange() {
+    if (!this.isMetaDescriptionCustomized && !this.article.subtitle) {
+      const cleanContent = (this.article.content || '').replace(/<[^>]*>/g, '');
+      this.article.metaDescription = cleanContent.substring(0, 150) + (cleanContent.length > 150 ? '...' : '');
+    }
+  }
+
+  onCategoryChange() {
+    this.generateKeywords();
+  }
+
+  generateKeywords() {
+    if (!this.isMetaKeywordsCustomized) {
+      const titleText = this.article.title || '';
+      const words = titleText
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9\s]/g, '')
+        .split(/\s+/)
+        .filter(w => w.length > 3);
+      
+      const keywords: string[] = [];
+      if (this.article.category) {
+        keywords.push(this.article.category.toLowerCase());
+      }
+      words.forEach(w => {
+        if (w && !keywords.includes(w)) {
+          keywords.push(w);
+        }
+      });
+      this.article.metaKeywords = keywords.join(', ');
     }
   }
 
   resetForm() {
     this.isEditing = false;
     this.currentArticleId = null;
+    this.isMetaTitleCustomized = false;
+    this.isMetaDescriptionCustomized = false;
+    this.isMetaKeywordsCustomized = false;
     this.article = {
       title: '',
       subtitle: '',
