@@ -38,7 +38,7 @@ export class AdminLoginPage {
         }
       },
       error: (err) => {
-        this.error = 'Invalid credentials';
+        this.error = err.error?.error || err.error?.message || 'Invalid credentials';
         this.isLoading = false;
       }
     });

@@ -91,6 +91,7 @@
 /* New Styles for Full Screen Admin */
 .admin-header {
   z-index: 1020;
+  top: 50px !important;
 }
 
 .admin-header h3 {
@@ -144,16 +145,32 @@ textarea.custom-input {
 @media (max-width: 768px) {
   .admin-header {
     padding: 10px 15px !important;
+    top: 50px !important;
+  }
+  .admin-header .container-fluid {
+    flex-direction: column !important;
+    gap: 12px;
+    align-items: center !important;
   }
   .admin-header h3 {
     font-size: 1.1rem;
+    text-align: center;
   }
   .admin-header p {
     display: none;
   }
+  .admin-header .d-flex.gap-3 {
+    width: 100%;
+    justify-content: center;
+    gap: 8px !important;
+  }
   .admin-header .btn {
-    padding: 5px 10px;
-    font-size: 0.8rem;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    flex-grow: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .title-input {
     font-size: 1.2rem;

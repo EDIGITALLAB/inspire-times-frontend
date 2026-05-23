@@ -11,11 +11,7 @@ export class ArticleService {
   constructor(private http: HttpClient) { }
 
   private getHeaders() {
-    return {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-      }
-    };
+    return {};
   }
 
   getAllArticles(): Observable<any[]> {

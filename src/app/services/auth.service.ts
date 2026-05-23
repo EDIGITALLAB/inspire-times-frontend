@@ -25,9 +25,8 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((user: any) => {
-        if (user && user.token) {
+        if (user && user.username) {
           localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('auth_token', user.token);
           this.currentUserSubject.next(user);
           this.resetInactivityTimer();
         }
@@ -47,6 +46,10 @@ export class AuthService {
   }
 
   logout() {
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+      next: () => console.log('Cookie cleared successfully'),
+      error: (err) => console.error('Error clearing cookie', err)
+    });
     localStorage.removeItem('currentUser');
     localStorage.removeItem('auth_token');
     this.currentUserSubject.next({});
@@ -57,20 +60,20 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const user = this.currentUserSubject.value;
-    return !!(user && user.token);
+    return !!(user && user.username);
   }
 
   getCurrentUser() {
     return this.currentUserSubject.value;
   }
 
+  refreshToken(): Observable<any> {
+    return this.http.post(`http://localhost:8080/api/auth/refresh`, {});
+  }
+
   // User Management (Admin Only)
   private getHeaders() {
-    return {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-      }
-    };
+    return {};
   }
 
   getAllUsers(): Observable<any[]> {

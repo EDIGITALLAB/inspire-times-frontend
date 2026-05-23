@@ -22,7 +22,9 @@ export class App {
     ).subscribe((event: any) => {
       this.isAuthPage = event.url.includes('/login') ||
         event.url.includes('/signup') ||
-        event.url.includes('/admin-login');
+        event.url.includes('/admin-login') ||
+        event.url.includes('/forgot-password') ||
+        event.url.includes('/reset-password');
     });
   }
 

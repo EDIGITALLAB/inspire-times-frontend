@@ -42,7 +42,7 @@ export class LoginPage {
         }
       },
       error: (err) => {
-        this.error = 'Invalid username or password';
+        this.error = err.error?.error || err.error?.message || 'Invalid username or password';
         this.isLoading = false;
       }
     });

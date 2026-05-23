@@ -14,12 +14,16 @@ import { AboutPage } from './pages/about/about';
 import { ContactPage } from './pages/contact/contact';
 import { PrivacyPage } from './pages/privacy/privacy';
 import { TermsPage } from './pages/terms/terms';
+import { ForgotPasswordPage } from './pages/forgot-password/forgot-password';
+import { ResetPasswordPage } from './pages/reset-password/reset-password';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'article/:slug', component: ArticleDetail },
   { path: 'login', component: LoginPage },
+  { path: 'forgot-password', component: ForgotPasswordPage },
+  { path: 'reset-password', component: ResetPasswordPage },
   { path: 'admin-login', component: AdminLoginPage },
   { path: 'signup', component: SignupPage },
   { path: 'search', component: SearchPage },
