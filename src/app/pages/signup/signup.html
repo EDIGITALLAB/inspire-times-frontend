@@ -9,36 +9,42 @@
     <form (ngSubmit)="onSignup()" #signupForm="ngForm">
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">FULL NAME</label>
-        <input type="text" class="form-control premium-input" [(ngModel)]="userData.fullName" name="fullName" required placeholder="John Doe">
+        <input type="text" class="form-control premium-input" [(ngModel)]="userData.fullName" name="fullName" required
+          placeholder="John Doe">
       </div>
 
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">USERNAME</label>
-        <input type="text" class="form-control premium-input" [(ngModel)]="userData.username" name="username" required placeholder="johndoe123">
+        <input type="text" class="form-control premium-input" [(ngModel)]="userData.username" name="username" required
+          placeholder="johndoe123">
       </div>
 
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">EMAIL ADDRESS</label>
-        <input type="email" class="form-control premium-input" [(ngModel)]="userData.email" name="email" required placeholder="john@example.com">
+        <input type="email" class="form-control premium-input" [(ngModel)]="userData.email" name="email" required
+          placeholder="john@example.com">
       </div>
 
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">PASSWORD</label>
-        <input type="password" class="form-control premium-input" [(ngModel)]="userData.password" name="password" required placeholder="••••••••">
+        <input type="password" class="form-control premium-input" [(ngModel)]="userData.password" name="password"
+          required placeholder="••••••••">
       </div>
 
       <div *ngIf="error" class="alert alert-danger small py-2 mb-4">
         {{ error }}
       </div>
 
-      <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill mb-4" [disabled]="!signupForm.valid || isLoading">
+      <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill mb-4"
+        [disabled]="!signupForm.valid || isLoading">
         <span *ngIf="!isLoading">CREATE ACCOUNT</span>
         <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
       </button>
 
       <div class="text-center">
-        <p class="small text-muted mb-0">Already have an account? 
-          <a routerLink="/login" class="text-dark fw-bold text-decoration-none border-bottom border-dark border-2 pb-1">Login here</a>
+        <p class="small text-muted mb-0">Already have an account?
+          <a [routerLink]="['/login']" [queryParams]="{ returnUrl: returnUrl }"
+            class="text-dark fw-bold text-decoration-none border-bottom border-dark border-2 pb-1">Login here</a>
         </p>
       </div>
     </form>

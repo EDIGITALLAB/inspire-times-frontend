@@ -1,6 +1,6 @@
 <div class="container py-5">
   <div class="search-header mb-5">
-    <h2 class="fw-bold mb-2">Search Results</h2>
+    <h2 class="fw-bold mb-2">{{ searchQuery ? 'Search Results' : 'All Stories' }}</h2>
     <p class="text-muted" *ngIf="searchQuery">Showing results for: <span
         class="text-dark fw-bold">"{{searchQuery}}"</span></p>
     <div class="search-line"></div>

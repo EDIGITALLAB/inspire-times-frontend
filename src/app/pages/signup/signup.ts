@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './signup.html',
   styleUrl: './signup.css'
 })
-export class SignupPage {
+export class SignupPage implements OnInit {
   userData = {
     username: '',
     email: '',
@@ -21,8 +21,17 @@ export class SignupPage {
   };
   error = '';
   isLoading = false;
+  returnUrl = '/admin';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin';
+  }
 
   onSignup() {
     this.isLoading = true;
@@ -30,7 +39,7 @@ export class SignupPage {
     this.authService.signup(this.userData).subscribe({
       next: () => {
         alert('Registration successful! Please login.');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login'], { queryParams: { returnUrl: this.returnUrl } });
       },
       error: (err) => {
         this.error = err.error || 'Failed to register. Please try again.';

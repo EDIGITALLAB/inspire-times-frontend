@@ -1,0 +1,189 @@
+.comments-section-container {
+  margin-top: 4rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+}
+
+/* User Avatars */
+.user-avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D28A23 0%, #a66d1b 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(210, 138, 35, 0.2);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.user-avatar-circle-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #777 0%, #555 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Textareas & Inputs */
+.comment-textarea, .reply-textarea {
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 15px;
+  resize: vertical;
+  background: #fdfdfd;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.comment-textarea:focus, .reply-textarea:focus {
+  border-color: #D28A23;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(210, 138, 35, 0.1);
+  outline: none;
+}
+
+/* Buttons */
+.btn-submit-comment {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-submit-comment:hover:not(:disabled) {
+  background: #D28A23 !important;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(210, 138, 35, 0.3);
+}
+
+/* Login Prompt */
+.login-prompt-box {
+  background: linear-gradient(135deg, rgba(210, 138, 35, 0.05) 0%, rgba(210, 138, 35, 0.01) 100%);
+  border: 1px solid rgba(210, 138, 35, 0.1);
+  border-radius: 20px;
+}
+
+.login-prompt-box h5 {
+  color: #111;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Comment Cards */
+.comment-item-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment-item-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.comment-author-name {
+  font-size: 15px;
+  color: #111;
+}
+
+.comment-date {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+.comment-body-text {
+  font-size: 15.5px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* Action Bar */
+.btn-action-reply {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-action-reply:hover {
+  background: rgba(210, 138, 35, 0.08);
+  color: #D28A23 !important;
+}
+
+/* Delete Comment Button */
+.btn-delete-comment {
+  font-size: 14px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-delete-comment:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Reply Forms */
+.reply-form-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+/* Nested Replies styling */
+.replies-container {
+  border-left: 2px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.reply-item-card {
+  padding-left: 5px;
+}
+
+.border-bottom-dashed {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+}
+
+.reply-item-card:last-child {
+  border-bottom: none;
+}
+
+/* No comments placeholder */
+.no-comments-box {
+  border: 1.5px dashed rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+}
+
+/* Animation */
+.animate-fade-in {
+  animation: fadeInComment 0.3s ease-out;
+}
+
+@keyframes fadeInComment {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

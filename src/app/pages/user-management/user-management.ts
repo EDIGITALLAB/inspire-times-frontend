@@ -23,8 +23,10 @@ export class UserManagement implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers() {
-    this.isLoading = true;
+  loadUsers(showSpinner = true) {
+    if (showSpinner) {
+      this.isLoading = true;
+    }
     this.error = '';
     this.authService.getAllUsers().subscribe({
       next: (data) => {
@@ -42,8 +44,27 @@ export class UserManagement implements OnInit {
 
   onDelete(id: number) {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.authService.deleteUser(id).subscribe(() => {
-        this.loadUsers();
+      // Optimistic delete: remove from UI immediately
+      const deletedUserIndex = this.users.findIndex(u => u.id === id);
+      let deletedUser: any = null;
+      if (deletedUserIndex > -1) {
+        deletedUser = this.users[deletedUserIndex];
+        this.users.splice(deletedUserIndex, 1);
+        this.cdr.detectChanges();
+      }
+
+      this.authService.deleteUser(id).subscribe({
+        next: () => {
+          this.loadUsers(false); // Quietly sync with server
+        },
+        error: (err) => {
+          // Revert delete on error
+          if (deletedUserIndex > -1 && deletedUser) {
+            this.users.splice(deletedUserIndex, 0, deletedUser);
+            this.cdr.detectChanges();
+          }
+          alert("Failed to delete user on the server.");
+        }
       });
     }
   }
@@ -58,8 +79,26 @@ export class UserManagement implements OnInit {
     }
 
     const newRole = currentRole === 'ADMIN' ? 'AUTHOR' : 'ADMIN';
-    this.authService.updateUserRole(id, newRole).subscribe(() => {
-      this.loadUsers();
+    
+    // Optimistic UI Update: update the local user role immediately
+    const userToUpdate = this.users.find(u => u.id === id);
+    if (userToUpdate) {
+      userToUpdate.role = newRole;
+      this.cdr.detectChanges();
+    }
+
+    this.authService.updateUserRole(id, newRole).subscribe({
+      next: () => {
+        this.loadUsers(false); // Quietly sync with server
+      },
+      error: (err) => {
+        // Revert local changes on failure
+        if (userToUpdate) {
+          userToUpdate.role = currentRole;
+          this.cdr.detectChanges();
+        }
+        alert("Failed to update user role on the server.");
+      }
     });
   }
 }

@@ -17,7 +17,7 @@ export class Navbar {
   searchQuery = '';
   currentUser: any = null;
 
-  constructor(private router: Router, public authService: AuthService) {
+  constructor(public router: Router, public authService: AuthService) {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });

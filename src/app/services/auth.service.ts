@@ -63,6 +63,23 @@ export class AuthService {
     return !!(user && user.username);
   }
 
+  checkSession() {
+    if (this.isLoggedIn()) {
+      this.http.get('http://localhost:8080/api/users/profile').subscribe({
+        next: (user: any) => {
+          if (user && user.username) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+          }
+        },
+        error: (err) => {
+          console.error('Session verification failed or backend is down. Logging out.', err);
+          this.logout();
+        }
+      });
+    }
+  }
+
   getCurrentUser() {
     return this.currentUserSubject.value;
   }

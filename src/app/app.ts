@@ -1,4 +1,4 @@
-import { Component, signal, HostListener } from '@angular/core';
+import { Component, signal, HostListener, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('inspire-times');
   isAuthPage = false;
 
@@ -26,6 +26,10 @@ export class App {
         event.url.includes('/forgot-password') ||
         event.url.includes('/reset-password');
     });
+  }
+
+  ngOnInit() {
+    this.authService.checkSession();
   }
 
   @HostListener('window:mousemove')

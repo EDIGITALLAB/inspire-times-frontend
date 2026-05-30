@@ -149,6 +149,7 @@
                 <option value="">None (Standard)</option>
                 <option value="FEATURED">FEATURED HERO</option>
                 <option value="LEFT_SECTION">LEFT COLUMN</option>
+                <option value="EDITORS_PICK">EDITOR'S PICK (BOTTOM FEATURED)</option>
               </select>
             </div>
           </div>
@@ -223,13 +224,15 @@
             <div class="mb-3">
               <label class="form-label fw-bold small text-uppercase">Meta Description</label>
               <textarea class="form-control custom-input" rows="3" name="metaDescription"
-                [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true" placeholder="SEO description..."></textarea>
+                [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true"
+                placeholder="SEO description..."></textarea>
             </div>
 
             <div class="mb-0">
               <label class="form-label fw-bold small text-uppercase">Meta Keywords</label>
               <input type="text" class="form-control custom-input" name="metaKeywords"
-                [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true" placeholder="keywords, comma, separated">
+                [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true"
+                placeholder="keywords, comma, separated">
             </div>
           </div>
         </div>

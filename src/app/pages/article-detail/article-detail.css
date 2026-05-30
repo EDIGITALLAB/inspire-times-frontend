@@ -124,6 +124,14 @@
   color: #444;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+button.share-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
 }
 
 .share-btn:hover {
@@ -139,16 +147,31 @@
 /* Mobile Optimizations */
 @media (max-width: 768px) {
   .article-header-wrapper {
-    height: 45vh;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem !important;
   }
   .article-hero-img {
-    max-height: 45vh;
+    height: auto !important;
+    max-height: 250px !important;
+    object-fit: cover !important;
+    filter: none !important;
+  }
+  .header-overlay {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #111111 !important;
+    padding: 1.5rem 1rem !important;
   }
   .article-main-title {
-    font-size: 2.2rem;
+    font-size: 1.75rem !important;
   }
   .article-subtitle {
-    font-size: 1.1rem !important;
+    font-size: 1.05rem !important;
   }
   .article-body {
     font-size: 18px;
@@ -188,6 +211,7 @@
   background: linear-gradient(135deg, #D28A23 0%, #a66d1b 100%);
   transition: transform 0.3s ease;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .author-avatar:hover {
@@ -209,4 +233,98 @@
 
 .sidebar-trending {
   margin-top: 3rem;
+}
+
+/* Smaller share buttons for the bottom bar */
+.share-btn.btn-sm {
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+/* Link copied toast fade-in animation */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Custom premium floating toast message */
+.custom-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%, 100px);
+  background: rgba(17, 17, 17, 0.95);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  z-index: 9999;
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+.custom-toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* Sidebar Box Styles */
+.sidebar-box {
+  background: #fdfcfb;
+  border: 1px solid rgba(210, 138, 35, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.sidebar-box h5 {
+  font-family: 'Playfair Display', serif;
+  color: #111;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(210, 138, 35, 0.1);
+  padding-bottom: 8px;
+  margin-bottom: 12px !important;
+}
+
+.sidebar-box input.form-control {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.sidebar-box input.form-control:focus {
+  border-color: #D28A23;
+  box-shadow: 0 0 0 0.2rem rgba(210, 138, 35, 0.1);
+}
+
+.sidebar-box button.btn-dark {
+  background-color: #111;
+  border-color: #111;
+  padding: 10px;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-box button.btn-dark:hover {
+  background-color: #D28A23;
+  border-color: #D28A23;
 }

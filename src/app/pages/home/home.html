@@ -7,8 +7,8 @@
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 mb-4 side-story-card" *ngFor="let article of leftSectionArticles"
           [routerLink]="['/article', article.slug || article.id]">
-          <img [src]="getImageUrl(article.imageUrl)" class="card-img-top rounded-3" 
-               style="height: 150px; object-fit: cover;" [alt]="article.title" loading="lazy">
+          <img [src]="getImageUrl(article.imageUrl)" class="card-img-top rounded-3"
+            style="height: 150px; object-fit: cover;" [alt]="article.title" loading="lazy">
           <div class="card-body p-2">
             <p class="text-muted small mb-1">By {{ article.author }}</p>
             <h6 class="fw-bold mb-0 line-clamp-2">
@@ -43,8 +43,8 @@
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 shadow-sm overflow-hidden h-100 featured-card" *ngIf="featuredArticle"
           [routerLink]="['/article', featuredArticle.slug || featuredArticle.id]">
-          <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100"
-            style="height: 400px; object-fit: cover;" [alt]="featuredArticle.title">
+          <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100 featured-img"
+            [alt]="featuredArticle.title">
           <div class="card-body">
             <p class="text-muted small mb-2">By {{ featuredArticle.author }}</p>
             <h2 class="fw-bold mb-3">{{ featuredArticle.title }}</h2>
@@ -55,8 +55,9 @@
             </p>
           </div>
         </div>
-        
-        <div *ngIf="!featuredArticle" class="empty-state h-100 d-flex flex-column align-items-center justify-content-center">
+
+        <div *ngIf="!featuredArticle"
+          class="empty-state h-100 d-flex flex-column align-items-center justify-content-center">
           <div class="empty-state-icon">
             <i class="fa-solid fa-star"></i>
           </div>
@@ -67,7 +68,7 @@
 
       <!-- Skeleton for featured story -->
       <div class="card border-0 shadow-sm h-100" *ngIf="isLoading">
-        <div class="skeleton skeleton-image" style="height: 400px;"></div>
+        <div class="skeleton skeleton-image featured-skeleton-img"></div>
         <div class="card-body">
           <div class="skeleton skeleton-text" style="width: 30%;"></div>
           <div class="skeleton skeleton-title" style="height: 40px; width: 90%;"></div>
@@ -89,20 +90,25 @@
   <div class="mt-5 pt-3 latest-stories-section">
     <div class="d-flex align-items-center justify-content-between mb-4">
       <h4 class="fw-bold mb-0">LATEST STORIES</h4>
-      <div class="carousel-controls d-flex gap-2">
-        <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button"
-          (click)="scrollStories(-1)">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button"
-          (click)="scrollStories(1)">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
+      <div class="d-flex align-items-center gap-3">
+        <a routerLink="/stories" class="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold text-nowrap"
+          style="font-size: 0.75rem; letter-spacing: 0.5px; white-space: nowrap;">
+          View All <i class="fa-solid fa-arrow-right ms-1" style="font-size: 0.7rem;"></i>
+        </a>
+        <div class="carousel-controls d-flex gap-2">
+          <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button"
+            (click)="scrollStories(-1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button class="btn btn-outline-dark btn-sm rounded-circle shadow-sm" type="button" (click)="scrollStories(1)">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="latest-stories-scroll-wrapper position-relative" 
-         (mouseenter)="stopAutoScroll()" (mouseleave)="startAutoScroll()">
+    <div class="latest-stories-scroll-wrapper position-relative" (mouseenter)="stopAutoScroll()"
+      (mouseleave)="startAutoScroll()">
       <div id="latestStoriesContainer" class="latest-stories-container d-flex gap-4 overflow-auto pb-4 pt-2">
         <!-- Latest Stories Loop -->
         <ng-container *ngIf="!isLoading">
@@ -113,19 +119,21 @@
                   [alt]="item.title" loading="lazy">
               </div>
               <div class="card-body">
-                <span class="category-tag mb-1 d-inline-block small text-uppercase fw-bold text-muted" 
-                      style="font-size: 0.65rem; letter-spacing: 1px;">{{ item.category }}</span>
+                <span class="category-tag mb-1 d-inline-block small text-uppercase fw-bold text-muted"
+                  style="font-size: 0.65rem; letter-spacing: 1px;">{{ item.category }}</span>
                 <h5 class="fw-bold h6 mb-2 text-dark line-clamp-2" style="height: 40px;">{{ item.title }}</h5>
-                <p class="text-secondary small mb-2 line-clamp-2" *ngIf="item.subtitle" style="height: 36px; font-size: 0.75rem;">
+                <p class="text-secondary small mb-2 line-clamp-2" *ngIf="item.subtitle"
+                  style="height: 36px; font-size: 0.75rem;">
                   {{ item.subtitle }}
                 </p>
                 <div class="mt-auto pt-2 border-top">
-                  <p class="text-muted mb-0" style="font-size: 0.7rem;">By {{ item.author }} • {{ item.publishedAt | date:'MMM d' }}</p>
+                  <p class="text-muted mb-0" style="font-size: 0.7rem;">By {{ item.author }} • {{ item.publishedAt |
+                    date:'MMM d' }}</p>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="text-center py-5 w-100" *ngIf="latestStories.length === 0">
             <div class="empty-state">
               <div class="empty-state-icon">
@@ -155,6 +163,110 @@
           </div>
         </ng-container>
       </div>
+    </div>
+  </div>
+
+  <!-- Editor's Pick Featured Section -->
+  <div class="editors-pick-section mb-4 pb-4" *ngIf="!isLoading && editorsPickArticle">
+    <div class="card border-0 shadow-sm overflow-hidden editors-pick-card rounded-4"
+      [routerLink]="['/article', editorsPickArticle.slug || editorsPickArticle.id]" style="cursor: pointer;">
+      <div class="row g-0 align-items-stretch">
+        <!-- Big image left -->
+        <div class="col-lg-5 position-relative editors-pick-img-col">
+          <div class="img-wrapper position-relative">
+            <img [src]="getImageUrl(editorsPickArticle.imageUrl)"
+              class="img-fluid w-100 h-100 object-fit-cover editors-pick-img" [alt]="editorsPickArticle.title">
+            <div class="image-overlay"></div>
+            <span class="badge bg-dark text-white position-absolute px-3 py-2 rounded-pill text-uppercase fw-bold"
+              style="font-size: 0.75rem; letter-spacing: 1px; z-index: 10; top: 20px; left: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+              {{ editorsPickArticle.sectionType === 'EDITORS_PICK' ? "Editor's Pick" : 'Most Viewed' }}
+            </span>
+          </div>
+        </div>
+        <!-- Content right -->
+        <div class="col-lg-7 d-flex flex-column justify-content-center p-4 p-md-5 editors-pick-content-col">
+          <span class="category-tag mb-2 d-inline-block small text-uppercase fw-bold text-muted"
+            style="letter-spacing: 1.5px; font-size: 0.75rem;">
+            {{ editorsPickArticle.category }}
+          </span>
+          <h2 class="fw-bold mb-3 text-dark editors-pick-title">{{ editorsPickArticle.title }}</h2>
+          <p class="text-secondary mb-3 fs-6 fw-semibold" *ngIf="editorsPickArticle.subtitle">
+            {{ editorsPickArticle.subtitle }}
+          </p>
+          <p class="text-secondary small line-clamp-3 mb-4 d-none d-md-block">
+            {{ editorsPickArticle.content || editorsPickArticle.subtitle || 'Discover the full inspiring story,
+            insights, and key takeaways in this featured article. Click below to read more.' }}
+          </p>
+          <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-4">
+            <span class="text-muted small">
+              By <strong>{{ editorsPickArticle.author }}</strong> • {{ editorsPickArticle.publishedAt | date:'MMMM d,
+              yyyy' }}
+            </span>
+            <button
+              class="btn btn-dark btn-sm px-3 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2 hover-btn text-nowrap"
+              style="font-size: 0.8rem; white-space: nowrap;">
+              Read More <i class="fa-solid fa-arrow-right" style="font-size: 0.75rem;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton for Editor's Pick -->
+  <div class="editors-pick-section mb-4 pb-4" *ngIf="isLoading">
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="row g-0 align-items-stretch">
+        <div class="col-lg-5 position-relative editors-pick-img-col">
+          <div class="img-wrapper">
+            <div class="skeleton h-100 editors-pick-skeleton-img" style="min-height: 450px;"></div>
+          </div>
+        </div>
+        <div class="col-lg-7 d-flex flex-column justify-content-center p-4 p-md-5 editors-pick-content-col">
+          <div class="skeleton skeleton-badge mb-2" style="width: 80px;"></div>
+          <div class="skeleton skeleton-title mb-3" style="height: 40px; width: 90%;"></div>
+          <div class="skeleton skeleton-text mb-2" style="height: 20px; width: 70%;"></div>
+          <div class="skeleton skeleton-text mb-2"></div>
+          <div class="skeleton skeleton-text mb-4" style="width: 80%;"></div>
+          <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-4">
+            <div class="skeleton skeleton-text" style="width: 40%; height: 15px;"></div>
+            <div class="skeleton skeleton-button" style="width: 100px; height: 32px; border-radius: 20px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Categories Section -->
+  <div class="popular-categories-section mb-5 mt-4" *ngIf="!isLoading">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h4 class="fw-bold mb-0">POPULAR CATEGORIES</h4>
+    </div>
+
+    <div class="position-relative categories-slider-wrapper">
+      <!-- Left Navigation Button -->
+      <button class="btn rounded-circle shadow slider-btn prev-btn" type="button" (click)="scrollCategories(-1)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <div id="categoriesContainer" class="categories-container d-flex gap-3 overflow-auto pb-3 pt-1">
+        <div class="category-item" *ngFor="let cat of popularCategories">
+          <div class="card border-0 shadow-sm category-card text-center p-4 rounded-4 cursor-pointer h-100"
+            [routerLink]="['/category', cat.name]">
+            <div class="category-icon mb-3">
+              <i class="fa-solid" [ngClass]="cat.icon"></i>
+            </div>
+            <h6 class="fw-bold mb-1 text-dark">{{cat.displayName}}</h6>
+            <span class="text-muted small" *ngIf="cat.count > 0">{{cat.count}} stories</span>
+            <span class="text-muted small" *ngIf="cat.count === 0">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Navigation Button -->
+      <button class="btn rounded-circle shadow slider-btn next-btn" type="button" (click)="scrollCategories(1)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
     </div>
   </div>
 </div>

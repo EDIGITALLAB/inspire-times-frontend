@@ -1,0 +1,168 @@
+<div class="comments-section-container mt-5 pt-4 border-top">
+  <!-- Comments Count -->
+  <h3 class="section-title mb-4">
+    <i class="fa-regular fa-comments me-2 theme-text"></i>
+    <span>{{ comments.length }} Comments</span>
+  </h3>
+
+  <!-- Add Comment Form -->
+  <div class="add-comment-wrapper mb-5" *ngIf="currentUser; else loginPrompt">
+    <div class="d-flex gap-3">
+      <div class="user-avatar-circle">
+        {{ getAvatarLetter(currentUser.fullName || currentUser.username) }}
+      </div>
+      <div class="flex-grow-1">
+        <div class="comment-author-name mb-2 text-dark fw-bold">
+          {{ currentUser.fullName || currentUser.username }}
+        </div>
+        <div class="position-relative">
+          <textarea
+            class="form-control comment-textarea"
+            rows="3"
+            placeholder="Join the discussion..."
+            [(ngModel)]="newCommentText"
+            maxLength="1000"
+          ></textarea>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+          <button
+            class="btn btn-dark rounded-pill px-4 py-2 fw-bold btn-submit-comment"
+            [disabled]="!newCommentText.trim()"
+            (click)="submitComment()"
+          >
+            Post Comment
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Prompt Call-to-Action -->
+  <ng-template #loginPrompt>
+    <div class="login-prompt-box text-center p-4 rounded-4 mb-5 shadow-sm">
+      <h5 class="fw-bold mb-2">Want to join the discussion?</h5>
+      <p class="text-muted small mb-3">Log in to leave a comment or reply to others.</p>
+      <a [routerLink]="['/login']" [queryParams]="{ returnUrl: router.url }" class="btn btn-outline-dark rounded-pill px-4 fw-bold">Log In</a>
+    </div>
+  </ng-template>
+
+  <!-- Comments List -->
+  <div class="comments-list" *ngIf="comments.length > 0; else noComments">
+    <div class="comment-item-card mb-4" *ngFor="let comment of comments">
+      <!-- Main Comment -->
+      <div class="d-flex gap-3">
+        <div class="user-avatar-circle">
+          {{ getAvatarLetter(comment.user.fullName || comment.user.username) }}
+        </div>
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <span class="comment-author-name fw-bold text-dark me-2">
+                {{ comment.user.fullName || comment.user.username }}
+              </span>
+              <span class="comment-date text-muted x-small">
+                {{ comment.createdAt | date:'mediumDate' }}
+              </span>
+            </div>
+            <!-- Delete Button -->
+            <button
+              class="btn-delete-comment text-danger border-0 bg-transparent"
+              *ngIf="canDelete(comment)"
+              (click)="deleteComment(comment.id)"
+              title="Delete Comment"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+          <div class="comment-body-text mt-2 text-secondary">
+            {{ comment.content }}
+          </div>
+          <!-- Action Bar -->
+          <div class="comment-action-bar mt-2 d-flex align-items-center gap-3">
+            <button
+              class="btn-action-reply border-0 bg-transparent text-muted small fw-semibold"
+              *ngIf="currentUser"
+              (click)="toggleReplyForm(comment.id)"
+            >
+              <i class="fa-solid fa-reply me-1"></i> Reply
+            </button>
+          </div>
+
+          <!-- Nested Reply Form -->
+          <div class="reply-form-wrapper mt-3 p-3 bg-light rounded-4 animate-fade-in" *ngIf="activeReplyId === comment.id">
+            <div class="d-flex gap-2">
+              <textarea
+                class="form-control reply-textarea"
+                rows="2"
+                placeholder="Write a reply..."
+                [(ngModel)]="replyText"
+                maxLength="500"
+              ></textarea>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-2">
+              <button
+                class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                (click)="toggleReplyForm(comment.id)"
+              >
+                Cancel
+              </button>
+              <button
+                class="btn btn-sm btn-dark rounded-pill px-3"
+                [disabled]="!replyText.trim()"
+                (click)="submitReply(comment.id)"
+              >
+                Reply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nested Replies -->
+      <div class="replies-container ms-5 mt-3 ps-3 border-start" *ngIf="comment.replies && comment.replies.length > 0">
+        <div class="reply-item-card py-3 border-bottom-dashed" *ngFor="let reply of comment.replies">
+          <div class="d-flex gap-3">
+            <div class="user-avatar-circle-sm">
+              {{ getAvatarLetter(reply.user.fullName || reply.user.username) }}
+            </div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <span class="comment-author-name fw-bold text-dark me-2 small">
+                    {{ reply.user.fullName || reply.user.username }}
+                  </span>
+                  <span class="comment-date text-muted x-small">
+                    {{ reply.createdAt | date:'mediumDate' }}
+                  </span>
+                </div>
+                <!-- Delete Reply Button -->
+                <button
+                  class="btn-delete-comment text-danger border-0 bg-transparent btn-sm"
+                  *ngIf="canDelete(reply)"
+                  (click)="deleteComment(reply.id, true, comment.id)"
+                  title="Delete Reply"
+                >
+                  <i class="fa-solid fa-trash-can" style="font-size: 11px;"></i>
+                </button>
+              </div>
+              <div class="comment-body-text mt-1 text-secondary small">
+                {{ reply.content }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Comments Placeholder -->
+  <ng-template #noComments>
+    <div class="no-comments-box text-center py-5 rounded-4 bg-light">
+      <div class="no-comments-icon mb-3">
+        <i class="fa-regular fa-comment-dots fs-1 text-muted opacity-50"></i>
+      </div>
+      <h6 class="fw-bold text-muted">No comments yet</h6>
+      <p class="text-muted small mb-0">Be the first to share your thoughts!</p>
+    </div>
+  </ng-template>
+</div>

@@ -140,7 +140,7 @@
   <!-- Premium Account Links -->
   <div class="mb-4 px-2 mt-3">
     <div *ngIf="!authService.isLoggedIn()" class="d-flex flex-column gap-2">
-      <a routerLink="/login" class="btn btn-outline-dark rounded-pill fw-bold" (click)="toggleMenu()">LOGIN</a>
+      <a [routerLink]="['/login']" [queryParams]="{ returnUrl: router.url }" class="btn btn-outline-dark rounded-pill fw-bold" (click)="toggleMenu()">LOGIN</a>
       <a routerLink="/signup" class="btn btn-dark rounded-pill fw-bold" (click)="toggleMenu()">BECOME AN AUTHOR</a>
     </div>
     <!-- Profile Info (Brief version for Sidebar) -->

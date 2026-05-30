@@ -27,7 +27,21 @@ export class SearchPage implements OnInit {
       if (this.searchQuery) {
         this.performSearch();
       } else {
-        this.articles = [];
+        this.loadAllArticles();
+      }
+    });
+  }
+
+  loadAllArticles() {
+    this.isLoading = true;
+    this.articleService.getAllArticles().subscribe({
+      next: (data) => {
+        this.articles = [...data].sort((a, b) => b.id - a.id);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading all articles', err);
         this.isLoading = false;
         this.cdr.detectChanges();
       }

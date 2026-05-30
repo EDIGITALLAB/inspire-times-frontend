@@ -27,6 +27,7 @@ export const routes: Routes = [
   { path: 'admin-login', component: AdminLoginPage },
   { path: 'signup', component: SignupPage },
   { path: 'search', component: SearchPage },
+  { path: 'stories', component: SearchPage },
   { path: 'about', component: AboutPage },
   { path: 'contact', component: ContactPage },
   { path: 'privacy', component: PrivacyPage },

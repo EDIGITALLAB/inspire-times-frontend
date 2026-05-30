@@ -72,10 +72,10 @@
   </div>
   <!-- Social Share Sticky -->
   <div class="social-share-sticky d-none d-xl-flex flex-column gap-3 shadow-sm p-2 rounded-pill bg-white">
-    <a href="#" class="share-btn facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a href="#" class="share-btn twitter"><i class="fa-brands fa-x-twitter"></i></a>
-    <a href="#" class="share-btn whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-    <a href="#" class="share-btn link"><i class="fa-solid fa-link"></i></a>
+    <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook" title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter" title="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+    <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp" title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <button (click)="copyLink()" class="share-btn link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
   </div>
 
   <div class="container">
@@ -152,16 +152,39 @@
               View Original Source <i class="fa-solid fa-arrow-up-right-from-square small ms-1"></i>
             </a>
           </footer>
+
+          <!-- Bottom Share Bar (Visible on all screens/mobile) -->
+          <div class="mt-5 pt-4 border-top d-flex align-items-center flex-wrap gap-3">
+            <span class="fw-bold text-uppercase small text-muted">Share:</span>
+            <div class="d-flex gap-2">
+              <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook btn-sm" title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter btn-sm" title="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp btn-sm" title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+              <button (click)="copyLink()" class="share-btn link btn-sm" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+            </div>
+            <!-- Dynamic feedback when link copied -->
+            <span class="text-success small ms-md-2 animate-fade-in" *ngIf="showCopiedMsg">
+              <i class="fa-solid fa-circle-check me-1"></i> Link copied!
+            </span>
+          </div>
         </section>
+        
+        <!-- Comments System -->
+        <app-comments-section [articleId]="article.id"></app-comments-section>
       </article>
 
       <!-- Sidebar -->
       <div class="col-lg-4 mt-5 mt-lg-0">
-        <div class="sidebar-box p-4 rounded-4 mb-4" style="background: #f8f9fa;">
-          <h5 class="fw-bold mb-3">Newsletter</h5>
-          <p class="small text-muted">Get the best of Inspire Times delivered to your inbox.</p>
-          <input type="email" class="form-control mb-2" placeholder="Your email">
-          <button class="btn btn-dark w-100 fw-bold">SUBSCRIBE</button>
+        <div class="sidebar-box p-4 rounded-4 mb-4">
+          <h5 class="fw-bold">Newsletter</h5>
+          <div *ngIf="subscribedSidebar" class="alert alert-success py-2 rounded-3 border-0 small mb-0 animate-fade-in">
+            <i class="fa-solid fa-check-circle me-2"></i> Thanks for subscribing!
+          </div>
+          <ng-container *ngIf="!subscribedSidebar">
+            <p class="small text-muted">Get the best of Inspire Times delivered to your inbox.</p>
+            <input type="email" #emailInput class="form-control mb-2" placeholder="Your email" style="border-radius: 8px;">
+            <button class="btn btn-dark w-100 fw-bold" style="border-radius: 8px;" (click)="subscribeSidebar(emailInput.value); emailInput.value = ''">SUBSCRIBE</button>
+          </ng-container>
         </div>
 
         <!-- Related/Trending Stories -->
@@ -172,4 +195,9 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Custom premium floating toast message -->
+<div class="custom-toast" [class.show]="showCopiedMsg">
+  <i class="fa-solid fa-circle-check me-2 text-success"></i> Link copied to clipboard!
 </div>
