@@ -3,50 +3,46 @@
 
   <div class="row g-4">
     <!-- Left Column: Side Stories -->
-    <div class="col-lg-3 order-2 order-lg-1">
+    <div class="col-lg-3 order-2 order-lg-1" *ngIf="isLoading || leftSectionArticles.length > 0">
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 mb-4 side-story-card" *ngFor="let article of leftSectionArticles"
           [routerLink]="['/article', article.slug || article.id]">
-          <img [src]="getImageUrl(article.imageUrl)" class="card-img-top rounded-3"
-            style="height: 150px; object-fit: cover;" [alt]="article.title" loading="lazy">
-          <div class="card-body p-2">
-            <p class="text-muted small mb-1">By {{ article.author }}</p>
-            <h6 class="fw-bold mb-0 line-clamp-2">
-              {{ article.title }}
-            </h6>
+          <div class="d-flex flex-row flex-lg-column align-items-center align-items-lg-stretch gap-3 gap-lg-0 w-100">
+            <img [src]="getImageUrl(article.imageUrl)" class="rounded-3 side-story-img"
+              [alt]="article.title" loading="lazy">
+            <div class="card-body p-0 p-lg-2 flex-grow-1">
+              <p class="text-muted small mb-1">By {{ article.author }} • {{ getReadTime(article) }} min read</p>
+              <h6 class="fw-bold mb-0 line-clamp-2">
+                {{ article.title }}
+              </h6>
+            </div>
           </div>
-        </div>
-
-        <!-- Empty state if no left section articles -->
-        <div *ngIf="leftSectionArticles.length === 0" class="empty-state p-3">
-          <div class="empty-state-icon" style="width: 40px; height: 40px; font-size: 16px;">
-            <i class="fa-regular fa-newspaper"></i>
-          </div>
-          <p class="empty-state-text small">Assign articles to "LEFT_SECTION" in admin.</p>
         </div>
       </ng-container>
 
       <!-- Skeleton for left column -->
       <ng-container *ngIf="isLoading">
-        <div class="card border-0 mb-4" *ngFor="let i of [1,2,3]">
-          <div class="skeleton skeleton-image rounded-3" style="height: 150px;"></div>
-          <div class="card-body p-2">
-            <div class="skeleton skeleton-text" style="width: 40%;"></div>
-            <div class="skeleton skeleton-title" style="height: 16px;"></div>
+        <div class="card border-0 mb-4 side-story-card" *ngFor="let i of [1,2,3]">
+          <div class="d-flex flex-row flex-lg-column align-items-center align-items-lg-stretch gap-3 gap-lg-0 w-100">
+            <div class="skeleton skeleton-image rounded-3 side-story-img"></div>
+            <div class="card-body p-0 p-lg-2 flex-grow-1">
+              <div class="skeleton skeleton-text mb-1" style="width: 40%;"></div>
+              <div class="skeleton skeleton-title" style="height: 16px;"></div>
+            </div>
           </div>
         </div>
       </ng-container>
     </div>
 
     <!-- Center Column: Featured Story -->
-    <div class="col-lg-6 order-1 order-lg-2">
+    <div [ngClass]="(isLoading || leftSectionArticles.length > 0) ? 'col-lg-6 order-1 order-lg-2' : 'col-lg-9 order-1 order-lg-2'">
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 shadow-sm overflow-hidden h-100 featured-card" *ngIf="featuredArticle"
           [routerLink]="['/article', featuredArticle.slug || featuredArticle.id]">
           <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100 featured-img"
             [alt]="featuredArticle.title">
           <div class="card-body">
-            <p class="text-muted small mb-2">By {{ featuredArticle.author }}</p>
+            <p class="text-muted small mb-2">By {{ featuredArticle.author }} • {{ getReadTime(featuredArticle) }} min read</p>
             <h2 class="fw-bold mb-3">{{ featuredArticle.title }}</h2>
             <p class="text-secondary mb-2" *ngIf="featuredArticle.subtitle"><strong>{{ featuredArticle.subtitle
                 }}</strong></p>
@@ -109,7 +105,7 @@
 
     <div class="latest-stories-scroll-wrapper position-relative" (mouseenter)="stopAutoScroll()"
       (mouseleave)="startAutoScroll()">
-      <div id="latestStoriesContainer" class="latest-stories-container d-flex gap-4 overflow-auto pb-4 pt-2">
+      <div id="latestStoriesContainer" class="latest-stories-container d-flex gap-4 overflow-auto pb-4 pt-2" (scroll)="onStoriesScroll($event)">
         <!-- Latest Stories Loop -->
         <ng-container *ngIf="!isLoading">
           <div class="story-item" *ngFor="let item of latestStories">
@@ -128,7 +124,7 @@
                 </p>
                 <div class="mt-auto pt-2 border-top">
                   <p class="text-muted mb-0" style="font-size: 0.7rem;">By {{ item.author }} • {{ item.publishedAt |
-                    date:'MMM d' }}</p>
+                    date:'MMM d' }} • {{ getReadTime(item) }} min read</p>
                 </div>
               </div>
             </div>
@@ -162,6 +158,15 @@
             </div>
           </div>
         </ng-container>
+      </div>
+
+      <!-- Latest Stories Pagination Dots -->
+      <div class="stories-dots d-flex justify-content-center align-items-center gap-2 mt-2" *ngIf="!isLoading && latestStories.length > 1">
+        <span *ngFor="let item of latestStories; let i = index" 
+              class="story-dot" 
+              [class.active]="i === activeStoryIndex"
+              (click)="scrollToStoryIndex(i)">
+        </span>
       </div>
     </div>
   </div>
@@ -200,7 +205,7 @@
           <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-4">
             <span class="text-muted small">
               By <strong>{{ editorsPickArticle.author }}</strong> • {{ editorsPickArticle.publishedAt | date:'MMMM d,
-              yyyy' }}
+              yyyy' }} • {{ getReadTime(editorsPickArticle) }} min read
             </span>
             <button
               class="btn btn-dark btn-sm px-3 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2 hover-btn text-nowrap"
@@ -249,7 +254,7 @@
         <i class="fa-solid fa-chevron-left"></i>
       </button>
 
-      <div id="categoriesContainer" class="categories-container d-flex gap-3 overflow-auto pb-3 pt-1">
+      <div id="categoriesContainer" class="categories-container d-flex gap-3 overflow-auto pb-3 pt-1" (scroll)="onCategoriesScroll($event)">
         <div class="category-item" *ngFor="let cat of popularCategories">
           <div class="card border-0 shadow-sm category-card text-center p-4 rounded-4 cursor-pointer h-100"
             [routerLink]="['/category', cat.name]">
@@ -267,6 +272,15 @@
       <button class="btn rounded-circle shadow slider-btn next-btn" type="button" (click)="scrollCategories(1)">
         <i class="fa-solid fa-chevron-right"></i>
       </button>
+    </div>
+
+    <!-- Category Slider Pagination Dots -->
+    <div class="categories-dots d-flex justify-content-center align-items-center gap-2 mt-3">
+      <span *ngFor="let dot of categoryDots; let i = index" 
+            class="category-dot" 
+            [class.active]="i === activeCategoryIndex"
+            (click)="scrollToCategoryIndex(i)">
+      </span>
     </div>
   </div>
 </div>

@@ -98,6 +98,10 @@ export class ArticleDetail implements OnInit {
     return this.articleService.getImageUrl(url);
   }
 
+  getReadTime(article: any): number {
+    return this.articleService.getReadTime(article);
+  }
+
   showCopiedMsg = false;
   subscribedSidebar = false;
 

@@ -20,6 +20,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   editorsPickArticle: any = null;
   popularCategories: any[] = [];
   isLoading = true;
+  activeCategoryIndex = 0;
+  categoryDots = Array(7).fill(0);
+  activeStoryIndex = 0;
   private scrollInterval: any;
 
   constructor(
@@ -58,8 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.leftSectionArticles = allSorted.filter(a => a.sectionType === 'LEFT_SECTION').slice(0, 3);
           const leftIds = new Set(this.leftSectionArticles.map(a => a.id));
 
-          this.featuredArticle = allSorted.find(a => a.sectionType === 'FEATURED')
-            || allSorted.find(a => a.sectionType !== 'LEFT_SECTION');
+          this.featuredArticle = allSorted.find(a => a.sectionType === 'FEATURED');
 
           let editorsPick = allSorted.find(a => a.sectionType === 'EDITORS_PICK');
           if (!editorsPick) {
@@ -86,6 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             { name: 'ENVIRONMENT', displayName: 'Environment', icon: 'fa-leaf', count: getCount('ENVIRONMENT') },
             { name: 'INNOVATION', displayName: 'Innovation', icon: 'fa-lightbulb', count: getCount('INNOVATION') },
             { name: 'TECHNOLOGY', displayName: 'Technology', icon: 'fa-laptop-code', count: getCount('TECHNOLOGY') },
+            { name: 'AI', displayName: 'AI', icon: 'fa-robot', count: getCount('AI') },
             { name: 'EDUCATION', displayName: 'Education', icon: 'fa-graduation-cap', count: getCount('EDUCATION') },
             { name: 'FOOD & NUTRITION', displayName: 'Food & Nutrition', icon: 'fa-carrot', count: getCount('FOOD & NUTRITION') },
             { name: 'HEALTHY RECIPES', displayName: 'Healthy Recipes', icon: 'fa-utensils', count: getCount('HEALTHY RECIPES') },
@@ -134,8 +137,67 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  onCategoriesScroll(event: Event) {
+    const container = event.target as HTMLElement;
+    if (container) {
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      if (maxScrollLeft > 0) {
+        const scrollPercent = container.scrollLeft / maxScrollLeft;
+        this.activeCategoryIndex = Math.min(6, Math.max(0, Math.round(scrollPercent * 6)));
+      } else {
+        this.activeCategoryIndex = 0;
+      }
+    }
+  }
+
+  scrollToCategoryIndex(index: number) {
+    const container = document.getElementById('categoriesContainer');
+    if (container) {
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      const targetScrollLeft = (index / 6) * maxScrollLeft;
+      container.scrollTo({
+        left: targetScrollLeft,
+        behavior: 'smooth'
+      });
+      this.activeCategoryIndex = index;
+    }
+  }
+
+  onStoriesScroll(event: Event) {
+    const container = event.target as HTMLElement;
+    if (container) {
+      const card = container.querySelector('.story-item') as HTMLElement;
+      if (card) {
+        const cardWidth = card.offsetWidth + 24;
+        this.activeStoryIndex = Math.min(
+          this.latestStories.length - 1,
+          Math.max(0, Math.round(container.scrollLeft / cardWidth))
+        );
+      }
+    }
+  }
+
+  scrollToStoryIndex(index: number) {
+    const container = document.getElementById('latestStoriesContainer');
+    if (container) {
+      const card = container.querySelector('.story-item') as HTMLElement;
+      if (card) {
+        const cardWidth = card.offsetWidth + 24;
+        container.scrollTo({
+          left: index * cardWidth,
+          behavior: 'smooth'
+        });
+        this.activeStoryIndex = index;
+      }
+    }
+  }
+
   getImageUrl(url: string) {
     return this.articleService.getImageUrl(url);
+  }
+
+  getReadTime(article: any): number {
+    return this.articleService.getReadTime(article);
   }
 }
 

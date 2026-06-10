@@ -65,10 +65,120 @@
   font-size: 0.75rem;
 }
 
+.profile-sidebar {
+  padding: 3rem;
+}
+
+.profile-main {
+  padding: 3rem;
+}
+
 @media (max-width: 768px) {
+  .profile-container {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .glass-card {
+    min-height: auto;
+    border-radius: 1.5rem !important;
+  }
+
+  .profile-sidebar {
+    padding: 2rem 1.25rem !important;
+  }
+
+  .profile-main {
+    padding: 2rem 1.25rem !important;
+  }
+
   .profile-avatar-large {
-    width: 90px;
-    height: 90px;
-    font-size: 2.5rem;
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+    border-width: 3px;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .profile-sidebar h3 {
+    font-size: 1.35rem;
+  }
+
+  .profile-sidebar p.mb-4 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .stats-row {
+    margin-top: 1rem !important;
+    padding-top: 1rem !important;
+  }
+
+  .custom-pills {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .custom-input {
+    padding: 0.65rem 1rem !important;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  /* Form actions button spacing */
+  .col-12.mt-5 {
+    margin-top: 1.5rem !important;
+  }
+
+  .btn-lg {
+    padding-top: 0.8rem !important;
+    padding-bottom: 0.8rem !important;
+    font-size: 0.95rem;
   }
 }
+
+@media (max-width: 576px) {
+  .profile-sidebar {
+    padding: 1.75rem 1rem !important;
+  }
+
+  .profile-main {
+    padding: 1.75rem 1rem !important;
+  }
+
+  .custom-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f1f3f5;
+    padding: 4px;
+    border-radius: 30px;
+    gap: 0 !important;
+  }
+
+  .custom-pills .nav-item {
+    flex: 1;
+    margin: 0 !important;
+  }
+
+  .custom-pills .nav-link {
+    width: 100%;
+    margin-right: 0 !important;
+    text-align: center;
+    padding: 8px 16px !important;
+    font-size: 0.85rem;
+    border: none !important;
+    border-radius: 26px !important;
+    background: transparent;
+    color: #495057;
+  }
+
+  .custom-pills .nav-link.active {
+    background-color: #D28A23 !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(210, 138, 35, 0.25) !important;
+  }
+}
+

@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 export class ArticleManagement implements OnInit {
   articles: any[] = [];
   userRole = '';
+  currentPage = 1;
+  pageSize = 10;
 
   constructor(
     public articleService: ArticleService,
@@ -35,10 +37,38 @@ export class ArticleManagement implements OnInit {
     observable.subscribe({
       next: (data) => {
         this.articles = data;
+        const maxPage = Math.ceil(this.articles.length / this.pageSize) || 1;
+        if (this.currentPage > maxPage) {
+          this.currentPage = maxPage;
+        }
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading articles', err)
     });
+  }
+
+  get paginatedArticles() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.articles.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.articles.length / this.pageSize);
+  }
+
+  get pages() {
+    const pagesArray = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pagesArray.push(i);
+    }
+    return pagesArray;
+  }
+
+  setPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.cdr.detectChanges();
+    }
   }
 
   deleteArticle(id: number) {

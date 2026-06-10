@@ -1,0 +1,37 @@
+<div class="error-container min-vh-100 d-flex align-items-center justify-content-center px-3">
+  <div class="error-card text-center p-4 p-sm-5 rounded-4 shadow-lg border border-light-subtle bg-white">
+    <!-- Pulsing Server/Error Icon -->
+    <div class="icon-wrapper mb-4 position-relative d-inline-flex justify-content-center align-items-center">
+      <div class="pulse-ring"></div>
+      <i class="fa-solid fa-server fs-1 text-danger"></i>
+      <i
+        class="fa-solid fa-triangle-exclamation position-absolute bottom-0 end-0 fs-5 text-warning bg-white rounded-circle p-1"></i>
+    </div>
+
+    <!-- Page Heading -->
+    <h1 class="display-6 fw-bold text-dark mb-3" id="error-title">Server Connection Failed</h1>
+
+    <!-- Description -->
+    <p class="text-secondary mb-4 mx-auto" style="max-width: 420px; font-size: 1.05rem;">
+      We're having trouble connecting to our servers. The backend might be undergoing maintenance or is currently
+      unreachable.
+    </p>
+
+    <!-- Connection Status Info -->
+    <div *ngIf="statusMessage" class="status-alert alert py-2 px-3 rounded-3 mb-4 text-center"
+      [ngClass]="isChecking ? 'alert-info' : 'alert-warning'" role="status" id="status-msg">
+      <i class="fa-solid fa-circle-notch fa-spin me-2" *ngIf="isChecking"></i>
+      <span>{{ statusMessage }}</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
+      <button (click)="retry()"
+        class="btn btn-dark btn-lg rounded-pill px-4 fw-bold d-flex align-items-center justify-content-center gap-2 hover-scale w-100 w-sm-auto"
+        [disabled]="isChecking" id="retry-btn">
+        <i class="fa-solid fa-rotate" [class.fa-spin]="isChecking"></i>
+        {{ isChecking ? 'Retrying...' : 'Try Again' }}
+      </button>
+    </div>
+  </div>
+</div>

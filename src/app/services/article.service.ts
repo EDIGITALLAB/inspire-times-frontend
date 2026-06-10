@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private backendUrl = 'http://localhost:8080/api/articles';
+  private backendUrl = `${API_CONFIG.apiUrl}/articles`;
 
   constructor(private http: HttpClient) { }
 
@@ -99,8 +100,17 @@ export class ArticleService {
   }
 
   getImageUrl(url: string): string {
-    if (!url) return 'https://placehold.co/600x400';
+    if (!url || url.includes('default-article.png')) {
+      return 'https://placehold.co/600x400.png?text=Inspire%20Times';
+    }
     if (url.startsWith('http')) return url;
-    return `http://localhost:8080${url}`;
+    return `${API_CONFIG.baseUrl}${url}`;
+  }
+
+  getReadTime(article: any): number {
+    if (!article) return 0;
+    const content = (article.content || '') + ' ' + (article.content2 || '') + ' ' + (article.content3 || '');
+    const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+    return Math.max(1, Math.ceil(words / 200));
   }
 }

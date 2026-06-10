@@ -14,6 +14,8 @@ export class CategoryPage implements OnInit {
   categoryName: string = '';
   articles: any[] = [];
   isLoading = true;
+  currentPage = 1;
+  pageSize = 6;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +26,7 @@ export class CategoryPage implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.categoryName = params['name'];
+      this.currentPage = 1; // Reset to page 1 on category change
       this.fetchArticles();
     });
   }
@@ -34,16 +37,49 @@ export class CategoryPage implements OnInit {
       next: (data) => {
         this.articles = data;
         this.isLoading = false;
+        const maxPage = Math.ceil(this.articles.length / this.pageSize) || 1;
+        if (this.currentPage > maxPage) {
+          this.currentPage = maxPage;
+        }
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error fetching articles by category', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   getImageUrl(url: string) {
     return this.articleService.getImageUrl(url);
+  }
+
+  getReadTime(article: any): number {
+    return this.articleService.getReadTime(article);
+  }
+
+  get paginatedArticles() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.articles.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.articles.length / this.pageSize);
+  }
+
+  get pages() {
+    const pagesArray = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pagesArray.push(i);
+    }
+    return pagesArray;
+  }
+
+  setPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.cdr.detectChanges();
+    }
   }
 }

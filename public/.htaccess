@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # If an existing asset or directory is requested go to it directly
+  RewriteCond %{REQUEST_FILENAME} -s [OR]
+  RewriteCond %{REQUEST_FILENAME} -l [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^.*$ - [NC,L]
+
+  # Redirect all other URLs to index.html for Angular routing
+  RewriteRule ^(.*)$ index.html [NC,L]
+</IfModule>

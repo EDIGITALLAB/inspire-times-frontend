@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { API_CONFIG } from '../../config/api.config';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,7 +22,8 @@ export class ResetPasswordPage implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -34,6 +36,12 @@ export class ResetPasswordPage implements OnInit {
       return;
     }
 
+    const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+    if (!passwordPattern.test(this.password)) {
+      this.error = 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+      return;
+    }
+
     this.isLoading = true;
     this.message = '';
     this.error = '';
@@ -43,15 +51,17 @@ export class ResetPasswordPage implements OnInit {
       password: this.password
     };
 
-    this.http.post('http://localhost:8080/api/auth/reset-password', payload)
+    this.http.post(`${API_CONFIG.apiUrl}/auth/reset-password`, payload)
       .subscribe({
         next: (res: any) => {
           this.message = res.message;
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
         error: (err: any) => {
           this.error = err.error?.error || err.error?.message || 'Something went wrong. Please try again.';
           this.isLoading = false;
+          this.cdr.detectChanges();
         }
       });
   }

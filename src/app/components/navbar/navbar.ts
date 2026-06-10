@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,16 +17,23 @@ export class Navbar {
   searchQuery = '';
   currentUser: any = null;
 
-  constructor(public router: Router, public authService: AuthService) {
+  constructor(
+    public router: Router,
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
+      this.cdr.detectChanges();
     });
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
-    this.isMenuOpen = false;
+    if (confirm('Are you sure you want to log out?')) {
+      this.authService.logout();
+      this.router.navigate(['/']);
+      this.isMenuOpen = false;
+    }
   }
 
   categories = [
@@ -41,6 +48,7 @@ export class Navbar {
     'Environment',
     'Innovation',
     'Technology',
+    'AI',
     'Education',
     'Food & Nutrition',
     'Healthy Recipes',

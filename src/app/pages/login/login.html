@@ -15,11 +15,11 @@
 
       <form (submit)="onLogin()">
         <div class="mb-4">
-          <label class="form-label small fw-bold text-uppercase text-muted">Username</label>
+          <label class="form-label small fw-bold text-uppercase text-muted">Username or Email</label>
           <div class="input-group">
             <span class="input-group-text bg-light border-0 rounded-start-4"><i class="fa-solid fa-user"></i></span>
             <input type="text" class="form-control bg-light border-0 rounded-end-4 py-3" 
-                   name="username" [(ngModel)]="credentials.username" placeholder="Enter your username" required>
+                   name="username" [(ngModel)]="credentials.username" placeholder="Enter your username or email" required>
           </div>
         </div>
 
@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-dark w-100 py-3 rounded-4 fw-bold shadow-sm hover-up" [disabled]="isLoading">
+        <button type="submit" class="btn btn-dark w-100 py-3 px-2 rounded-4 fw-bold shadow-sm hover-up text-nowrap" [disabled]="isLoading">
           <span *ngIf="!isLoading">ENTER DASHBOARD</span>
           <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
         </button>

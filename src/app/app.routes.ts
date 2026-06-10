@@ -16,6 +16,7 @@ import { PrivacyPage } from './pages/privacy/privacy';
 import { TermsPage } from './pages/terms/terms';
 import { ForgotPasswordPage } from './pages/forgot-password/forgot-password';
 import { ResetPasswordPage } from './pages/reset-password/reset-password';
+import { ErrorPage } from './pages/error/error';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -37,4 +38,6 @@ export const routes: Routes = [
   { path: 'admin/users', component: UserManagement, canActivate: [authGuard] },
   { path: 'profile', component: ProfilePage, canActivate: [authGuard] },
   { path: 'category/:name', component: CategoryPage },
+  { path: 'error', component: ErrorPage },
+  { path: '**', redirectTo: '' }
 ];

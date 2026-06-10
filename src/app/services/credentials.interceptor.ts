@@ -34,6 +34,15 @@ export const credentialsInterceptor: HttpInterceptorFn = (req, next) => {
           })
         );
       }
+
+      // Redirect to /error on server-side issues (status 0 or 500+)
+      if (
+        (error.status === 0 || error.status >= 500) &&
+        !router.url.includes('/error')
+      ) {
+        router.navigate(['/error']);
+      }
+
       return throwError(() => error);
     })
   );

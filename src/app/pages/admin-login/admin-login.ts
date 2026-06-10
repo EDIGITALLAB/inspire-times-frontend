@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -21,7 +21,8 @@ export class AdminLoginPage {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   onLogin() {
@@ -35,11 +36,13 @@ export class AdminLoginPage {
           this.error = 'Access Denied: You are not an Admin.';
           this.authService.logout();
           this.isLoading = false;
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
         this.error = err.error?.error || err.error?.message || 'Invalid credentials';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

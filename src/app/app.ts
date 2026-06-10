@@ -25,6 +25,7 @@ export class App implements OnInit {
         event.url.includes('/admin-login') ||
         event.url.includes('/forgot-password') ||
         event.url.includes('/reset-password');
+      window.scrollTo(0, 0);
     });
   }
 

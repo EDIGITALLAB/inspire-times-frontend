@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../config/api.config';
 
 export interface UserSummary {
   id: number;
@@ -21,7 +22,7 @@ export interface Comment {
   providedIn: 'root'
 })
 export class CommentService {
-  private apiUrl = 'http://localhost:8080/api/comments';
+  private apiUrl = `${API_CONFIG.apiUrl}/comments`;
 
   constructor(private http: HttpClient) {}
 

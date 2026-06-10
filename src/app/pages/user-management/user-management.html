@@ -1,10 +1,11 @@
-<div class="container-fluid py-5 px-lg-5">
-  <div class="d-flex justify-content-between align-items-center mb-5">
+<div class="container-fluid py-4 py-md-5 px-3 px-lg-5">
+  <div
+    class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4 mb-sm-5">
     <div>
-      <h2 class="fw-bold mb-1">User Management</h2>
-      <p class="text-muted small">Manage authors, admins, and permissions</p>
+      <h2 class="fw-bold mb-1 fs-3 fs-sm-2">User Management</h2>
+      <p class="text-muted small mb-0">Manage authors, admins, and permissions</p>
     </div>
-    <div class="badge bg-dark px-3 py-2 rounded-pill">
+    <div class="badge bg-dark px-3 py-2 rounded-pill align-self-start align-self-sm-center">
       TOTAL USERS: {{users.length}}
     </div>
   </div>
@@ -24,11 +25,12 @@
             <th class="ps-4 py-3 text-muted small fw-bold">USER</th>
             <th class="py-3 text-muted small fw-bold">EMAIL</th>
             <th class="py-3 text-muted small fw-bold">ROLE</th>
+            <th class="py-3 text-muted small fw-bold">STATUS</th>
             <th class="py-3 text-muted small fw-bold text-end pe-4">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of paginatedUsers">
             <td class="ps-4 py-3">
               <div class="d-flex align-items-center">
                 <div class="user-avatar me-3">{{user.username.charAt(0).toUpperCase()}}</div>
@@ -40,15 +42,24 @@
             </td>
             <td class="py-3 small">{{user.email}}</td>
             <td class="py-3">
-              <span class="badge rounded-pill px-3" 
-                    [ngClass]="user.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
+              <span class="badge rounded-pill px-3" [ngClass]="user.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
                 {{user.role}}
+              </span>
+            </td>
+            <td class="py-3">
+              <span class="badge rounded-pill px-3" [ngClass]="user.enabled !== false ? 'bg-success' : 'bg-danger'">
+                {{user.enabled !== false ? 'Active' : 'Disabled'}}
               </span>
             </td>
             <td class="py-3 text-end pe-4">
               <ng-container *ngIf="user.username !== 'admin'">
                 <button class="btn btn-sm btn-outline-dark rounded-pill me-2" (click)="changeRole(user.id, user.role)">
                   Toggle Role
+                </button>
+                <button class="btn btn-sm rounded-pill me-2"
+                  [ngClass]="user.enabled !== false ? 'btn-outline-warning' : 'btn-outline-success'"
+                  (click)="toggleStatus(user.id)">
+                  {{user.enabled !== false ? 'Disable' : 'Enable'}}
                 </button>
                 <button class="btn btn-sm btn-outline-danger rounded-circle p-2" (click)="onDelete(user.id)">
                   <i class="fa-solid fa-trash-can"></i>
@@ -64,7 +75,7 @@
 
   <!-- Mobile Card List View -->
   <div class="d-md-none" *ngIf="!isLoading">
-    <div class="card border-0 shadow-sm rounded-4 mb-3 user-mobile-card" *ngFor="let user of users">
+    <div class="card border-0 shadow-sm rounded-4 mb-3 user-mobile-card" *ngFor="let user of paginatedUsers">
       <div class="card-body p-3">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div class="d-flex align-items-center">
@@ -74,21 +85,37 @@
               <div class="text-muted x-small">@{{user.username}}</div>
             </div>
           </div>
-          <span class="badge rounded-pill px-3" 
-                [ngClass]="user.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
+          <span class="badge rounded-pill px-3" [ngClass]="user.role === 'ADMIN' ? 'bg-primary' : 'bg-secondary'">
             {{user.role}}
           </span>
         </div>
-        <div class="mb-3">
-          <span class="text-muted x-small text-uppercase fw-bold d-block mb-1">Email</span>
-          <span class="small text-dark">{{user.email}}</span>
+
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-muted x-small text-uppercase fw-bold d-block mb-1">Email</span>
+            <span class="small text-dark">{{user.email}}</span>
+          </div>
+          <div>
+            <span class="text-muted x-small text-uppercase fw-bold d-block mb-1 text-end">Status</span>
+            <span class="badge rounded-pill px-3" [ngClass]="user.enabled !== false ? 'bg-success' : 'bg-danger'">
+              {{user.enabled !== false ? 'Active' : 'Disabled'}}
+            </span>
+          </div>
         </div>
+
         <div class="d-flex justify-content-end align-items-center gap-2 pt-2 border-top border-light">
           <ng-container *ngIf="user.username !== 'admin'">
             <button class="btn btn-sm btn-outline-dark rounded-pill px-3" (click)="changeRole(user.id, user.role)">
               Toggle Role
             </button>
-            <button class="btn btn-sm btn-outline-danger rounded-circle p-2 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" (click)="onDelete(user.id)">
+            <button class="btn btn-sm rounded-pill px-3"
+              [ngClass]="user.enabled !== false ? 'btn-outline-warning' : 'btn-outline-success'"
+              (click)="toggleStatus(user.id)">
+              {{user.enabled !== false ? 'Disable' : 'Enable'}}
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger rounded-circle p-2 d-inline-flex align-items-center justify-content-center"
+              style="width: 32px; height: 32px;" (click)="onDelete(user.id)">
               <i class="fa-solid fa-trash-can" style="font-size: 0.85rem;"></i>
             </button>
           </ng-container>
@@ -96,5 +123,25 @@
         </div>
       </div>
     </div>
+
   </div>
+
+  <!-- Simple Bootstrap Pagination -->
+  <nav aria-label="Page navigation" class="mt-4" *ngIf="!isLoading && totalPages > 1">
+    <ul class="pagination justify-content-center justify-content-md-end mb-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="setPage(currentPage - 1)" style="cursor: pointer;" aria-label="Previous">
+          <span aria-hidden="true">&laquo; Previous</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of pages" [class.active]="currentPage === page">
+        <a class="page-link" (click)="setPage(page)" style="cursor: pointer;">{{page}}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="setPage(currentPage + 1)" style="cursor: pointer;" aria-label="Next">
+          <span aria-hidden="true">Next &raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>

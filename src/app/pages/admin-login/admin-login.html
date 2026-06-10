@@ -11,10 +11,10 @@
     <div class="p-5">
       <form (submit)="onLogin()">
         <div class="mb-4">
-          <label class="form-label text-muted x-small fw-bold letter-spacing-1">ADMIN USERNAME</label>
+          <label class="form-label text-muted x-small fw-bold letter-spacing-1">ADMIN USERNAME OR EMAIL</label>
           <div class="input-group custom-group">
             <span class="input-group-text"><i class="fa-solid fa-user-shield"></i></span>
-            <input type="text" class="form-control" name="username" [(ngModel)]="credentials.username" placeholder="Username" required>
+            <input type="text" class="form-control" name="username" [(ngModel)]="credentials.username" placeholder="Username or Email" required>
           </div>
         </div>
 
@@ -29,7 +29,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold mt-2" [disabled]="isLoading">
+        <button type="submit" class="btn btn-primary w-100 py-3 px-2 rounded-pill fw-bold mt-2 text-nowrap" [disabled]="isLoading">
           <span *ngIf="!isLoading">AUTHORIZE ACCESS</span>
           <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>
         </button>

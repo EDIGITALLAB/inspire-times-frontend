@@ -103,3 +103,95 @@ app-navbar {
   position: relative !important;
   z-index: 2000 !important;
 }
+
+.admin-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1010 !important;
+}
+
+@media (min-width: 768px) {
+  .admin-header p {
+    white-space: nowrap !important;
+  }
+}
+
+app-navbar:has(.is-sticky)~* .admin-header {
+  top: 44px !important;
+}
+
+@media (max-width: 992px) {
+  .admin-header {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .admin-header h3 {
+    font-size: 1.15rem !important;
+  }
+
+  .admin-header p {
+    font-size: 0.75rem !important;
+  }
+
+  .admin-header .btn {
+    padding: 5px 12px !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-header {
+    padding: 4px 8px !important;
+  }
+
+  .admin-header .container-fluid {
+    flex-direction: column !important;
+    gap: 4px !important;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  .admin-header h3 {
+    font-size: 0.95rem !important;
+  }
+
+  .admin-header p {
+    display: none !important;
+  }
+
+  .admin-header .btn {
+    padding: 3px 8px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .admin-header .flex-wrap {
+    gap: 4px !important;
+  }
+}
+
+/* Custom Pagination Styling */
+.pagination .page-item.active .page-link {
+  background-color: #D28A23 !important;
+  border-color: #D28A23 !important;
+  color: #fff !important;
+}
+
+.pagination .page-link {
+  color: #333;
+  border-color: #dee2e6;
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  color: #D28A23;
+  background-color: rgba(210, 138, 35, 0.05);
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  background-color: #fff;
+  border-color: #dee2e6;
+}

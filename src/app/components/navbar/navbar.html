@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light bg-white modern-nav" [class.is-sticky]="isScrolled" data-bs-theme="light">
-  <div class="container d-flex justify-content-between align-items-center position-relative">
+  <div class="container d-flex flex-nowrap justify-content-between align-items-center position-relative">
 
     <!-- Left: Search Toggle -->
     <div class="d-flex align-items-center">
@@ -22,7 +22,8 @@
     </div>
 
     <!-- Center: Brand Text (Mobile Only, Shows on Scroll) -->
-    <div class="d-lg-none position-absolute start-50 translate-middle-x" [style.opacity]="isScrolled ? '1' : '0'"
+    <div class="d-xl-none position-absolute start-50 translate-middle-x" [class.d-none]="isSearchOpen"
+      [style.opacity]="isScrolled ? '1' : '0'"
       [style.transform]="isScrolled ? 'translate(-50%, 0)' : 'translate(-50%, 10px)'"
       style="transition: all 0.4s ease; pointer-events: none;">
       <span class="fw-bold text-dark cursor-pointer" style="font-size: 13px; letter-spacing: 2px;"
@@ -30,9 +31,15 @@
     </div>
 
     <!-- Center: Main Links (desktop) -->
-    <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+    <div class="d-none d-xl-flex flex-grow-1 justify-content-center">
       <div class="d-flex align-items-center gap-4">
-        <div *ngFor="let cat of categories.slice(0, 7)">
+        <div>
+          <a class="nav-link p-0 text-secondary fw-semibold small d-flex align-items-center gap-1" routerLink="/"
+            style="text-decoration: none;">
+            Home
+          </a>
+        </div>
+        <div *ngFor="let cat of categories.slice(0, 6)">
           <a class="nav-link p-0 text-secondary fw-semibold small" [routerLink]="['/category', cat]"
             style="text-decoration: none;">{{cat}}</a>
         </div>
@@ -63,7 +70,8 @@
     </div>
 
     <!-- Right: Profile Dropdown & Menu Toggle -->
-    <div class="d-flex align-items-center gap-2" style="position: relative; z-index: 1100;">
+    <div class="d-flex align-items-center gap-2" [class.d-none]="isSearchOpen"
+      style="position: relative; z-index: 1100;">
 
       <!-- User Profile Dropdown (Only if logged in) -->
       <div class="dropdown" *ngIf="authService.isLoggedIn()">
@@ -81,6 +89,11 @@
           <li>
             <a class="dropdown-item d-flex align-items-center py-2" routerLink="/admin">
               <i class="fa-solid fa-gauge me-3 text-muted"></i> Dashboard
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center py-2" routerLink="/admin/articles">
+              <i class="fa-solid fa-list-check me-3 text-muted"></i> Manage Articles
             </a>
           </li>
           <li *ngIf="currentUser?.role === 'ADMIN'">
@@ -138,35 +151,40 @@
   </div>
 
   <!-- Premium Account Links -->
-  <div class="mb-4 px-2 mt-3">
-    <div *ngIf="!authService.isLoggedIn()" class="d-flex flex-column gap-2">
-      <a [routerLink]="['/login']" [queryParams]="{ returnUrl: router.url }" class="btn btn-outline-dark rounded-pill fw-bold" (click)="toggleMenu()">LOGIN</a>
+  <div class="px-2 mt-3">
+    <div *ngIf="!authService.isLoggedIn()" class="d-flex flex-column gap-2 mb-3">
+      <a [routerLink]="['/login']" [queryParams]="{ returnUrl: router.url }"
+        class="btn btn-outline-dark rounded-pill fw-bold" (click)="toggleMenu()">LOGIN</a>
       <a routerLink="/signup" class="btn btn-dark rounded-pill fw-bold" (click)="toggleMenu()">BECOME AN AUTHOR</a>
     </div>
     <!-- Profile Info (Brief version for Sidebar) -->
     <div *ngIf="authService.isLoggedIn()"
-      class="user-profile-box p-3 rounded-4 mb-3 d-flex align-items-center shadow-sm">
-      <div class="avatar-circle me-3">{{(currentUser?.fullName || currentUser?.username ||
-        'U').charAt(0).toUpperCase()}}</div>
-      <div class="overflow-hidden">
-        <div class="text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">Logged in as</div>
-        <div class="fw-bold text-dark text-truncate" style="font-size: 14px;">{{currentUser?.fullName ||
-          currentUser?.username}}</div>
+      class="user-profile-box p-3 rounded-4 mb-2 d-flex align-items-center justify-content-between shadow-sm">
+      <div class="d-flex align-items-center overflow-hidden">
+        <div class="avatar-circle me-3">{{(currentUser?.fullName || currentUser?.username ||
+          'U').charAt(0).toUpperCase()}}</div>
+        <div class="overflow-hidden">
+          <div class="text-muted text-uppercase fw-bold ls-1" style="font-size: 9px;">Logged in as</div>
+          <div class="fw-bold text-dark text-truncate" style="font-size: 14px;">{{currentUser?.fullName ||
+            currentUser?.username}}</div>
+        </div>
       </div>
+      <button class="btn-logout-sidebar" (click)="logout()" title="Logout">
+        <i class="fa-solid fa-power-off"></i>
+      </button>
     </div>
   </div>
 
 
-  <div class="sidebar-content px-4 mt-3">
+  <div class="sidebar-content px-4 mt-2">
     <!-- Search Bar -->
     <div class="search-container mb-4">
       <div class="input-group premium-search-group">
-        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
         <input type="text" #sidebarSearch class="form-control" placeholder="Search stories..."
           (keyup.enter)="onSidebarSearch(sidebarSearch.value)" />
-        <button class="btn btn-dark rounded-pill px-3 py-1 ms-2" (click)="onSidebarSearch(sidebarSearch.value)"
-          style="font-size: 10px; font-weight: 700; letter-spacing: 1px;">
-          SEARCH
+        <button class="btn btn-dark rounded-circle search-submit-btn" (click)="onSidebarSearch(sidebarSearch.value)"
+          title="Search">
+          <i class="fa-solid fa-magnifying-glass" style="font-size: 13px;"></i>
         </button>
       </div>
     </div>
@@ -239,7 +257,7 @@
     <div class="pt-2 pb-1 text-center border-top border-light">
       <a routerLink="/admin-login" class="text-muted text-decoration-none x-small fw-bold letter-spacing-1 hover-gold"
         (click)="toggleMenu()">
-        <i class="fa-solid fa-lock me-1"></i> STAFF ONLY
+        <i class="fa-solid fa-lock me-1"></i> ADMIN ONLY
       </a>
     </div>
   </div>

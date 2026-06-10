@@ -60,7 +60,7 @@
   <div class="article-header-wrapper position-relative overflow-hidden mb-5">
     <img [src]="getImageUrl(article.imageUrl)" class="w-100 article-hero-img" [alt]="article.title" loading="lazy">
     <div class="header-overlay d-flex align-items-end p-4 p-md-5">
-      <div class="container">
+      <div class="container px-0">
         <span class="category-tag mb-2 d-inline-block text-uppercase">{{ article.category }}</span>
         <h1 class="article-main-title text-white fw-bold">{{ article.title }}</h1>
         <p class="article-subtitle text-white-50 fs-4 mb-0" *ngIf="article.subtitle">{{ article.subtitle }}</p>
@@ -72,9 +72,12 @@
   </div>
   <!-- Social Share Sticky -->
   <div class="social-share-sticky d-none d-xl-flex flex-column gap-3 shadow-sm p-2 rounded-pill bg-white">
-    <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook" title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-    <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter" title="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
-    <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp" title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook" title="Share on Facebook"><i
+        class="fa-brands fa-facebook-f"></i></a>
+    <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter" title="Share on X"><i
+        class="fa-brands fa-x-twitter"></i></a>
+    <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp" title="Share on WhatsApp"><i
+        class="fa-brands fa-whatsapp"></i></a>
     <button (click)="copyLink()" class="share-btn link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
   </div>
 
@@ -82,7 +85,7 @@
     <div class="row">
       <!-- Main Content -->
       <article class="col-lg-8">
-        <header class="article-meta d-flex align-items-center gap-3 mb-5 pb-4 border-bottom">
+        <header class="article-meta d-flex align-items-center gap-3 mb-1 pb-4 border-bottom">
           <div class="author-info d-flex align-items-center gap-3">
             <div
               class="author-avatar theme-bg text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm"
@@ -97,7 +100,7 @@
                 <span class="dot-separator">•</span>
                 <span><i class="fa-regular fa-eye me-1"></i> {{ article.viewCount || 0 }} views</span>
                 <span class="dot-separator">•</span>
-                <span><i class="fa-regular fa-clock me-1"></i> 5 min read</span>
+                <span><i class="fa-regular fa-clock me-1"></i> {{ getReadTime(article) }} min read</span>
               </div>
             </div>
           </div>
@@ -153,14 +156,18 @@
             </a>
           </footer>
 
-          <!-- Bottom Share Bar (Visible on all screens/mobile) -->
-          <div class="mt-5 pt-4 border-top d-flex align-items-center flex-wrap gap-3">
+          <!-- Bottom Share Bar (Visible only on mobile/tablet screens) -->
+          <div class="mobile-share-bar border-top d-flex d-md-none align-items-center flex-wrap gap-3">
             <span class="fw-bold text-uppercase small text-muted">Share:</span>
-            <div class="d-flex gap-2">
-              <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook btn-sm" title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-              <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter btn-sm" title="Share on X"><i class="fa-brands fa-x-twitter"></i></a>
-              <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp btn-sm" title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-              <button (click)="copyLink()" class="share-btn link btn-sm" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+            <div class="d-flex gap-3">
+              <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook btn-sm"
+                title="Share on Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a [href]="getTwitterShareUrl()" target="_blank" class="share-btn twitter btn-sm" title="Share on X"><i
+                  class="fa-brands fa-x-twitter"></i></a>
+              <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp btn-sm"
+                title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+              <button (click)="copyLink()" class="share-btn link btn-sm" title="Copy Link"><i
+                  class="fa-solid fa-link"></i></button>
             </div>
             <!-- Dynamic feedback when link copied -->
             <span class="text-success small ms-md-2 animate-fade-in" *ngIf="showCopiedMsg">
@@ -168,7 +175,7 @@
             </span>
           </div>
         </section>
-        
+
         <!-- Comments System -->
         <app-comments-section [articleId]="article.id"></app-comments-section>
       </article>
@@ -182,8 +189,10 @@
           </div>
           <ng-container *ngIf="!subscribedSidebar">
             <p class="small text-muted">Get the best of Inspire Times delivered to your inbox.</p>
-            <input type="email" #emailInput class="form-control mb-2" placeholder="Your email" style="border-radius: 8px;">
-            <button class="btn btn-dark w-100 fw-bold" style="border-radius: 8px;" (click)="subscribeSidebar(emailInput.value); emailInput.value = ''">SUBSCRIBE</button>
+            <input type="email" #emailInput class="form-control mb-2" placeholder="Your email"
+              style="border-radius: 8px;">
+            <button class="btn btn-dark w-100 fw-bold" style="border-radius: 8px;"
+              (click)="subscribeSidebar(emailInput.value); emailInput.value = ''">SUBSCRIBE</button>
           </ng-container>
         </div>
 

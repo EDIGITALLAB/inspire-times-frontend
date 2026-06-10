@@ -28,14 +28,18 @@
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">PASSWORD</label>
         <input type="password" class="form-control premium-input" [(ngModel)]="userData.password" name="password"
-          required placeholder="••••••••">
+          required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$" #passwordModel="ngModel"
+          placeholder="••••••••">
+        <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="form-text x-small text-danger mt-1" style="font-size: 0.75rem;">
+          Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.
+        </div>
       </div>
 
       <div *ngIf="error" class="alert alert-danger small py-2 mb-4">
         {{ error }}
       </div>
 
-      <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill mb-4"
+      <button type="submit" class="btn btn-dark w-100 py-3 px-2 fw-bold rounded-pill mb-4 text-nowrap"
         [disabled]="!signupForm.valid || isLoading">
         <span *ngIf="!isLoading">CREATE ACCOUNT</span>
         <div *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"></div>

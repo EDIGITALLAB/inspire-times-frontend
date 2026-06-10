@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
@@ -16,7 +16,7 @@ export class Admin {
   article = {
     title: '',
     subtitle: '',
-    category: 'HEALTH & FITNESS',
+    category: '',
     sectionType: '',
     author: '',
     heading1: '',
@@ -51,7 +51,8 @@ export class Admin {
     public articleService: ArticleService, 
     private route: ActivatedRoute,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   logout() {
@@ -64,10 +65,14 @@ export class Admin {
     this.route.queryParams.subscribe(params => {
       if (params['edit']) {
         this.articleService.getArticleById(params['edit']).subscribe({
-          next: (art) => this.editArticle(art),
+          next: (art) => {
+            this.editArticle(art);
+            this.cdr.detectChanges();
+          },
           error: (err) => console.error('Error loading article for edit', err)
         });
       }
+      this.cdr.detectChanges();
     });
     this.loadArticles();
     this.setDefaultAuthor();
@@ -86,7 +91,10 @@ export class Admin {
 
   loadArticles() {
     this.articleService.getAllArticles().subscribe({
-      next: (data) => this.articles = data,
+      next: (data) => {
+        this.articles = data;
+        this.cdr.detectChanges();
+      },
       error: (err) => console.error('Error loading articles', err)
     });
   }
@@ -107,7 +115,22 @@ export class Admin {
     this.selectedFile4 = event.target.files[0];
   }
 
+  clearFileSlot(event: Event, slotNum: number, input: HTMLInputElement) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (slotNum === 1) this.selectedFile = null;
+    else if (slotNum === 2) this.selectedFile2 = null;
+    else if (slotNum === 3) this.selectedFile3 = null;
+    else if (slotNum === 4) this.selectedFile4 = null;
+    input.value = '';
+    this.cdr.detectChanges();
+  }
+
   onSubmit() {
+    if (!this.article.category || !this.article.category.trim()) {
+      alert('Please select or enter a category.');
+      return;
+    }
     this.isPublishing = true;
     
     const formData = new FormData();
@@ -144,11 +167,13 @@ export class Admin {
         this.resetForm();
         this.loadArticles();
         this.isPublishing = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error saving article', error);
         alert('Error saving article. Make sure the backend is running.');
         this.isPublishing = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -175,6 +200,7 @@ export class Admin {
         next: () => {
           this.loadArticles();
           alert('Article deleted successfully');
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Error deleting article', err)
       });
@@ -236,7 +262,7 @@ export class Admin {
     this.article = {
       title: '',
       subtitle: '',
-      category: 'HEALTH & FITNESS',
+      category: '',
       sectionType: '',
       author: '',
       heading1: '',

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -26,7 +26,8 @@ export class SignupPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -34,6 +35,13 @@ export class SignupPage implements OnInit {
   }
 
   onSignup() {
+    const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+    if (!passwordPattern.test(this.userData.password)) {
+      this.error = 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.';
+      this.cdr.detectChanges();
+      return;
+    }
+
     this.isLoading = true;
     this.error = '';
     this.authService.signup(this.userData).subscribe({
@@ -44,6 +52,7 @@ export class SignupPage implements OnInit {
       error: (err) => {
         this.error = err.error || 'Failed to register. Please try again.';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }

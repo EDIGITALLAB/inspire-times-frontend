@@ -13,6 +13,8 @@ export class UserManagement implements OnInit {
   users: any[] = [];
   isLoading = true;
   error = '';
+  currentPage = 1;
+  pageSize = 10;
 
   constructor(
     private authService: AuthService,
@@ -32,6 +34,10 @@ export class UserManagement implements OnInit {
       next: (data) => {
         this.users = data;
         this.isLoading = false;
+        const maxPage = Math.ceil(this.users.length / this.pageSize) || 1;
+        if (this.currentPage > maxPage) {
+          this.currentPage = maxPage;
+        }
         this.cdr.detectChanges(); // Trigger UI update
       },
       error: (err) => {
@@ -100,5 +106,68 @@ export class UserManagement implements OnInit {
         alert("Failed to update user role on the server.");
       }
     });
+  }
+
+  toggleStatus(id: number) {
+    const currentUser = this.authService.getCurrentUser();
+    const userToUpdate = this.users.find(u => u.id === id);
+    
+    // Prevent disabling oneself to avoid lockout
+    if (currentUser && userToUpdate && currentUser.username === userToUpdate.username) {
+      alert("Security Alert: You cannot disable your own admin account.");
+      return;
+    }
+
+    const currentStatus = userToUpdate ? userToUpdate.enabled : true;
+    const newStatus = currentStatus === false ? true : false;
+
+    const actionText = newStatus ? 'enable' : 'disable';
+    if (!confirm(`Are you sure you want to ${actionText} this user?`)) {
+      return;
+    }
+
+    // Optimistic UI Update
+    if (userToUpdate) {
+      userToUpdate.enabled = newStatus;
+      this.cdr.detectChanges();
+    }
+
+    this.authService.toggleUserStatus(id).subscribe({
+      next: () => {
+        this.loadUsers(false); // Quietly sync with server
+      },
+      error: (err) => {
+        // Revert local changes on failure
+        if (userToUpdate) {
+          userToUpdate.enabled = currentStatus;
+          this.cdr.detectChanges();
+        }
+        alert(err.error?.error || "Failed to update user status on the server.");
+      }
+    });
+  }
+
+  get paginatedUsers() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.users.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.users.length / this.pageSize);
+  }
+
+  get pages() {
+    const pagesArray = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      pagesArray.push(i);
+    }
+    return pagesArray;
+  }
+
+  setPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.cdr.detectChanges();
+    }
   }
 }

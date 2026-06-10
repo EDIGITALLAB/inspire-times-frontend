@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -23,7 +23,8 @@ export class LoginPage {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin';
   }
@@ -37,6 +38,7 @@ export class LoginPage {
           this.error = 'Please use the Staff Login page for Admin access.';
           this.authService.logout();
           this.isLoading = false;
+          this.cdr.detectChanges();
         } else {
           this.router.navigateByUrl(this.returnUrl);
         }
@@ -44,6 +46,7 @@ export class LoginPage {
       error: (err) => {
         this.error = err.error?.error || err.error?.message || 'Invalid username or password';
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
