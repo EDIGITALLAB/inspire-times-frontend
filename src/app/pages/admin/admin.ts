@@ -19,18 +19,13 @@ export class Admin {
     category: '',
     sectionType: '',
     author: '',
-    heading1: '',
-    content: '',
-    heading2: '',
-    content2: '',
-    heading3: '',
-    content3: '',
     sourceLink: '',
     metaTitle: '',
     metaDescription: '',
     metaKeywords: '',
-    highlightQuote: '',
-    imageCaption: ''
+    imageUrl: '',
+    imageCaption: '',
+    sections: [] as any[]
   };
 
   currentUser: any;
@@ -39,13 +34,45 @@ export class Admin {
   currentArticleId: number | null = null;
   
   selectedFile: File | null = null;
-  selectedFile2: File | null = null;
-  selectedFile3: File | null = null;
-  selectedFile4: File | null = null;
   isPublishing = false;
   isMetaTitleCustomized = false;
   isMetaDescriptionCustomized = false;
   isMetaKeywordsCustomized = false;
+
+  // Modal and section editing variables
+  showSectionModal = false;
+  editingSectionIndex: number | null = null;
+  sectionForm = {
+    type: 'paragraph',
+    content: '',
+    caption: ''
+  };
+  isUploadingSectionImage = false;
+
+  // Drag and Drop variables
+  draggedIndex: number | null = null;
+
+  featuredImagePreviewUrl = '';
+
+  categories = [
+    'Inspiration',
+    'Health & Fitness',
+    'Spiritual',
+    'Travel',
+    'Relationship',
+    'Lifestyle',
+    'Fashion & Beauty',
+    'Pets & Animals',
+    'Environment',
+    'Innovation',
+    'Technology',
+    'AI',
+    'Education',
+    'Food & Nutrition',
+    'Healthy Recipes',
+    'Culture & Heritage',
+    'Social Impact'
+  ];
 
   constructor(
     public articleService: ArticleService, 
@@ -101,27 +128,21 @@ export class Admin {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
-  }
-
-  onFileSelected2(event: any) {
-    this.selectedFile2 = event.target.files[0];
-  }
-
-  onFileSelected3(event: any) {
-    this.selectedFile3 = event.target.files[0];
-  }
-
-  onFileSelected4(event: any) {
-    this.selectedFile4 = event.target.files[0];
+    if (this.selectedFile) {
+      this.featuredImagePreviewUrl = URL.createObjectURL(this.selectedFile);
+    } else {
+      this.featuredImagePreviewUrl = '';
+    }
   }
 
   clearFileSlot(event: Event, slotNum: number, input: HTMLInputElement) {
     event.stopPropagation();
     event.preventDefault();
-    if (slotNum === 1) this.selectedFile = null;
-    else if (slotNum === 2) this.selectedFile2 = null;
-    else if (slotNum === 3) this.selectedFile3 = null;
-    else if (slotNum === 4) this.selectedFile4 = null;
+    if (slotNum === 1) {
+      this.selectedFile = null;
+      this.featuredImagePreviewUrl = '';
+      this.article.imageUrl = '';
+    }
     input.value = '';
     this.cdr.detectChanges();
   }
@@ -132,30 +153,21 @@ export class Admin {
       return;
     }
     this.isPublishing = true;
-    
+
     const formData = new FormData();
     formData.append('title', this.article.title || '');
     formData.append('subtitle', this.article.subtitle || '');
-    formData.append('content', this.article.content || '');
     formData.append('author', this.article.author || '');
     formData.append('category', this.article.category || '');
     formData.append('sectionType', this.article.sectionType || '');
-    formData.append('heading1', this.article.heading1 || '');
     formData.append('sourceLink', this.article.sourceLink || '');
-    formData.append('heading2', this.article.heading2 || '');
-    formData.append('content2', this.article.content2 || '');
-    formData.append('heading3', this.article.heading3 || '');
-    formData.append('content3', this.article.content3 || '');
     formData.append('metaTitle', this.article.metaTitle || '');
     formData.append('metaDescription', this.article.metaDescription || '');
     formData.append('metaKeywords', this.article.metaKeywords || '');
-    formData.append('highlightQuote', this.article.highlightQuote || '');
     formData.append('imageCaption', this.article.imageCaption || '');
+    formData.append('sections', JSON.stringify(this.article.sections || []));
     
     if (this.selectedFile) formData.append('file', this.selectedFile);
-    if (this.selectedFile2) formData.append('file2', this.selectedFile2);
-    if (this.selectedFile3) formData.append('file3', this.selectedFile3);
-    if (this.selectedFile4) formData.append('file4', this.selectedFile4);
 
     const request = this.isEditing && this.currentArticleId 
       ? this.articleService.updateArticle(this.currentArticleId, formData)
@@ -181,7 +193,10 @@ export class Admin {
   editArticle(art: any) {
     this.isEditing = true;
     this.currentArticleId = art.id;
-    this.article = { ...art };
+    this.article = { 
+      ...art,
+      sections: this.initializeSections(art)
+    };
     
     // Set customization flags based on existing data
     this.isMetaTitleCustomized = !!art.metaTitle && art.metaTitle !== art.title;
@@ -220,12 +235,7 @@ export class Admin {
     }
   }
 
-  onContentChange() {
-    if (!this.isMetaDescriptionCustomized && !this.article.subtitle) {
-      const cleanContent = (this.article.content || '').replace(/<[^>]*>/g, '');
-      this.article.metaDescription = cleanContent.substring(0, 150) + (cleanContent.length > 150 ? '...' : '');
-    }
-  }
+
 
   onCategoryChange() {
     this.generateKeywords();
@@ -265,24 +275,142 @@ export class Admin {
       category: '',
       sectionType: '',
       author: '',
-      heading1: '',
-      content: '',
-      heading2: '',
-      content2: '',
-      heading3: '',
-      content3: '',
       sourceLink: '',
       metaTitle: '',
       metaDescription: '',
       metaKeywords: '',
-      highlightQuote: '',
-      imageCaption: ''
+      imageUrl: '',
+      imageCaption: '',
+      sections: [] as any[]
     };
     this.selectedFile = null;
-    this.selectedFile2 = null;
-    this.selectedFile3 = null;
-    this.selectedFile4 = null;
+    this.featuredImagePreviewUrl = '';
     this.setDefaultAuthor();
+  }
+
+  initializeSections(art: any) {
+    if (art.sections && art.sections.length > 0) {
+      return [...art.sections].sort((a, b) => a.sortOrder - b.sortOrder);
+    }
+    return [];
+  }
+
+  openAddSection(type: string) {
+    this.editingSectionIndex = null;
+    this.sectionForm = {
+      type: type,
+      content: '',
+      caption: ''
+    };
+    this.showSectionModal = true;
+  }
+
+  openEditSection(index: number) {
+    this.editingSectionIndex = index;
+    const sec = this.article.sections[index];
+    this.sectionForm = {
+      type: sec.type,
+      content: sec.content,
+      caption: sec.caption || ''
+    };
+    this.showSectionModal = true;
+  }
+
+  deleteSection(index: number) {
+    this.article.sections.splice(index, 1);
+    this.reorderSections();
+  }
+
+  saveSection() {
+    if (this.sectionForm.type !== 'image' && !this.sectionForm.content.trim()) {
+      alert('Section content cannot be empty.');
+      return;
+    }
+    if (this.sectionForm.type === 'image' && !this.sectionForm.content) {
+      alert('Please upload an image first.');
+      return;
+    }
+
+    const sectionData = {
+      type: this.sectionForm.type,
+      content: this.sectionForm.content,
+      caption: this.sectionForm.type === 'image' ? this.sectionForm.caption : '',
+      sortOrder: 0
+    };
+
+    if (this.editingSectionIndex !== null) {
+      this.article.sections[this.editingSectionIndex] = sectionData;
+    } else {
+      this.article.sections.push(sectionData);
+    }
+
+    this.reorderSections();
+    this.showSectionModal = false;
+  }
+
+  onSectionFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.isUploadingSectionImage = true;
+      this.articleService.uploadImage(file).subscribe({
+        next: (url) => {
+          this.sectionForm.content = url;
+          this.isUploadingSectionImage = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error uploading section image', err);
+          alert('Error uploading image.');
+          this.isUploadingSectionImage = false;
+          this.cdr.detectChanges();
+        }
+      });
+    }
+  }
+
+  onDragStart(index: number) {
+    this.draggedIndex = index;
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  onDrop(index: number) {
+    if (this.draggedIndex !== null && this.draggedIndex !== index) {
+      const draggedSection = this.article.sections[this.draggedIndex];
+      this.article.sections.splice(this.draggedIndex, 1);
+      this.article.sections.splice(index, 0, draggedSection);
+      this.reorderSections();
+    }
+    this.draggedIndex = null;
+  }
+
+  moveSectionUp(index: number, event: Event) {
+    event.stopPropagation();
+    if (index > 0) {
+      const temp = this.article.sections[index];
+      this.article.sections[index] = this.article.sections[index - 1];
+      this.article.sections[index - 1] = temp;
+      this.reorderSections();
+    }
+  }
+
+  moveSectionDown(index: number, event: Event) {
+    event.stopPropagation();
+    if (index < this.article.sections.length - 1) {
+      const temp = this.article.sections[index];
+      this.article.sections[index] = this.article.sections[index + 1];
+      this.article.sections[index + 1] = temp;
+      this.reorderSections();
+    }
+  }
+
+  reorderSections() {
+    this.article.sections.forEach((sec: any, idx: number) => {
+      sec.sortOrder = idx;
+    });
+    this.cdr.detectChanges();
   }
 }
 

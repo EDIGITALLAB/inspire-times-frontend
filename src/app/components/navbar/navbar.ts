@@ -56,6 +56,10 @@ export class Navbar {
     'Social Impact'
   ];
 
+  isHomePage(): boolean {
+    return this.router.url === '/' || this.router.url.split('?')[0] === '/';
+  }
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.isScrolled = window.scrollY > 150;

@@ -33,13 +33,12 @@
     <!-- Center: Main Links (desktop) -->
     <div class="d-none d-xl-flex flex-grow-1 justify-content-center">
       <div class="d-flex align-items-center gap-4">
-        <div>
-          <a class="nav-link p-0 text-secondary fw-semibold small d-flex align-items-center gap-1" routerLink="/"
-            style="text-decoration: none;">
-            Home
+        <div *ngIf="!isHomePage()">
+          <a class="home-pill-btn" routerLink="/">
+            <span>Home</span>
           </a>
         </div>
-        <div *ngFor="let cat of categories.slice(0, 6)">
+        <div *ngFor="let cat of (isHomePage() ? categories.slice(0, 7) : categories.slice(0, 6))">
           <a class="nav-link p-0 text-secondary fw-semibold small" [routerLink]="['/category', cat]"
             style="text-decoration: none;">{{cat}}</a>
         </div>

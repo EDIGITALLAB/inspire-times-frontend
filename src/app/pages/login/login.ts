@@ -19,6 +19,7 @@ export class LoginPage {
   error = '';
   isLoading = false;
   returnUrl: string = '/admin';
+  showPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -27,6 +28,10 @@ export class LoginPage {
     private cdr: ChangeDetectorRef
   ) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin';
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onLogin() {

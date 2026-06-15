@@ -82,9 +82,14 @@
 }
 
 @media (max-width: 576px) {
+  .error-container {
+    align-items: flex-start !important;
+    padding-top: 12vh !important;
+  }
+
   .error-card {
     max-width: 92% !important;
-    margin: auto;
+    margin: 0 auto !important;
   }
 
   .icon-wrapper {

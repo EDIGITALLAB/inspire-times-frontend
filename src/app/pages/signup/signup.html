@@ -27,9 +27,14 @@
 
       <div class="mb-4">
         <label class="form-label small fw-bold text-muted">PASSWORD</label>
-        <input type="password" class="form-control premium-input" [(ngModel)]="userData.password" name="password"
-          required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$" #passwordModel="ngModel"
-          placeholder="••••••••">
+        <div class="position-relative">
+          <input [type]="showPassword ? 'text' : 'password'" class="form-control premium-input pe-5" [(ngModel)]="userData.password" name="password"
+            required pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$" #passwordModel="ngModel"
+            placeholder="••••••••">
+          <span class="position-absolute end-0 top-50 translate-middle-y cursor-pointer pe-2" (click)="togglePassword()">
+            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </span>
+        </div>
         <div *ngIf="passwordModel.invalid && (passwordModel.dirty || passwordModel.touched)" class="form-text x-small text-danger mt-1" style="font-size: 0.75rem;">
           Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.
         </div>

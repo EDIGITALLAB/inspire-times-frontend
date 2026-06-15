@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticleService } from '../../services/article.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-trending-articles',
@@ -16,7 +16,8 @@ export class TrendingArticles implements OnInit {
 
   constructor(
     private articleService: ArticleService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -37,6 +38,14 @@ export class TrendingArticles implements OnInit {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  onCardClick(event: MouseEvent, slugOrId: string) {
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      return;
+    }
+    this.router.navigate(['/article', slugOrId]);
   }
 
   getImageUrl(url: string) {

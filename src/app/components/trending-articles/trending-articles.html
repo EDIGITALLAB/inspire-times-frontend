@@ -5,7 +5,7 @@
   </div>
 
   <div class="trending-list" *ngIf="!isLoading">
-    <div class="trending-item d-flex gap-3 mb-4 align-items-start" *ngFor="let article of trendingArticles; let i = index" [routerLink]="['/article', article.slug || article.id]" style="cursor: pointer;">
+    <div class="trending-item d-flex gap-3 mb-4 align-items-start" *ngFor="let article of trendingArticles; let i = index" (click)="onCardClick($event, article.slug || article.id)" style="cursor: pointer;">
       <div class="ranking-number">{{ i + 1 }}</div>
       <div class="content-wrapper flex-grow-1">
         <span class="category-badge mb-1 d-inline-block">{{ article.category }}</span>

@@ -27,8 +27,11 @@
           <label class="form-label small fw-bold text-uppercase text-muted">Password</label>
           <div class="input-group">
             <span class="input-group-text bg-light border-0 rounded-start-4"><i class="fa-solid fa-lock"></i></span>
-            <input type="password" class="form-control bg-light border-0 rounded-end-4 py-3" 
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control bg-light border-0 py-3" 
                    name="password" [(ngModel)]="credentials.password" placeholder="••••••••" required>
+            <span class="input-group-text bg-light border-0 rounded-end-4 cursor-pointer" (click)="togglePassword()">
+              <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </span>
           </div>
           <div *ngIf="error" class="text-danger x-small mt-2 ps-1">
             <i class="fa-solid fa-circle-exclamation me-1"></i> {{error}}

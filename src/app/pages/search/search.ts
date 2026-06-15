@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class SearchPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public articleService: ArticleService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -73,6 +74,14 @@ export class SearchPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  onCardClick(event: MouseEvent, slugOrId: string) {
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      return;
+    }
+    this.router.navigate(['/article', slugOrId]);
   }
 
   getImageUrl(url: string) {

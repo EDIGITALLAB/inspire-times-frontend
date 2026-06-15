@@ -27,7 +27,7 @@
   <div class="row g-4" *ngIf="!isLoading && articles.length > 0">
     <div class="col-md-4" *ngFor="let article of paginatedArticles">
       <div class="card border-0 shadow-sm h-100 search-result-card"
-        [routerLink]="['/article', article.slug || article.id]">
+        (click)="onCardClick($event, article.slug || article.id)" style="cursor: pointer;">
         <div class="overflow-hidden rounded-top">
           <img [src]="getImageUrl(article.imageUrl)" class="card-img-top"
             style="height: 200px; object-fit: cover; transition: transform 0.5s ease;" [alt]="article.title">

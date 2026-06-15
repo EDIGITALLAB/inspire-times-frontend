@@ -17,7 +17,7 @@
     <!-- Articles Grid -->
     <div class="row g-4" *ngIf="!isLoading">
       <div class="col-md-6 col-lg-4" *ngFor="let art of paginatedArticles">
-        <article class="article-card h-100 border-0 bg-transparent" [routerLink]="['/article', art.slug]">
+        <article class="article-card h-100 border-0 bg-transparent" (click)="onCardClick($event, art.slug)" style="cursor: pointer;">
           <div class="position-relative overflow-hidden rounded-4 mb-3" style="aspect-ratio: 16/10;">
             <img [src]="getImageUrl(art.imageUrl)" class="w-100 h-100 object-fit-cover transition-transform" [alt]="art.title" loading="lazy">
             <div class="badge-overlay position-absolute top-0 start-0 p-3">

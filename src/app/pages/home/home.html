@@ -6,7 +6,7 @@
     <div class="col-lg-3 order-2 order-lg-1" *ngIf="isLoading || leftSectionArticles.length > 0">
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 mb-4 side-story-card" *ngFor="let article of leftSectionArticles"
-          [routerLink]="['/article', article.slug || article.id]">
+          (click)="onCardClick($event, article.slug || article.id)" style="cursor: pointer;">
           <div class="d-flex flex-row flex-lg-column align-items-center align-items-lg-stretch gap-3 gap-lg-0 w-100">
             <img [src]="getImageUrl(article.imageUrl)" class="rounded-3 side-story-img"
               [alt]="article.title" loading="lazy">
@@ -38,7 +38,7 @@
     <div [ngClass]="(isLoading || leftSectionArticles.length > 0) ? 'col-lg-6 order-1 order-lg-2' : 'col-lg-9 order-1 order-lg-2'">
       <ng-container *ngIf="!isLoading">
         <div class="card border-0 shadow-sm overflow-hidden h-100 featured-card" *ngIf="featuredArticle"
-          [routerLink]="['/article', featuredArticle.slug || featuredArticle.id]">
+          (click)="onCardClick($event, featuredArticle.slug || featuredArticle.id)" style="cursor: pointer;">
           <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100 featured-img"
             [alt]="featuredArticle.title">
           <div class="card-body">
@@ -109,7 +109,7 @@
         <!-- Latest Stories Loop -->
         <ng-container *ngIf="!isLoading">
           <div class="story-item" *ngFor="let item of latestStories">
-            <div class="card border-0 shadow-sm h-100 story-card" [routerLink]="['/article', item.slug || item.id]">
+            <div class="card border-0 shadow-sm h-100 story-card" (click)="onCardClick($event, item.slug || item.id)" style="cursor: pointer;">
               <div class="overflow-hidden rounded-top">
                 <img [src]="getImageUrl(item.imageUrl)" class="card-img-top" style="height: 180px; object-fit: cover;"
                   [alt]="item.title" loading="lazy">
@@ -174,7 +174,7 @@
   <!-- Editor's Pick Featured Section -->
   <div class="editors-pick-section mb-4 pb-4" *ngIf="!isLoading && editorsPickArticle">
     <div class="card border-0 shadow-sm overflow-hidden editors-pick-card rounded-4"
-      [routerLink]="['/article', editorsPickArticle.slug || editorsPickArticle.id]" style="cursor: pointer;">
+      (click)="onCardClick($event, editorsPickArticle.slug || editorsPickArticle.id)" style="cursor: pointer;">
       <div class="row g-0 align-items-stretch">
         <!-- Big image left -->
         <div class="col-lg-5 position-relative editors-pick-img-col">

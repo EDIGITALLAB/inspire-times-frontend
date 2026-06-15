@@ -107,45 +107,34 @@
         </header>
 
         <section class="article-body">
-          <h2 class="fw-bold mb-3" *ngIf="article.heading1">{{ article.heading1 }}</h2>
-          <div class="article-content" [innerHTML]="article.content"></div>
-          <!-- Secondary Image -->
-          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image2Url">
-            <img [src]="getImageUrl(article.image2Url)" class="w-100" [alt]="article.heading2 || 'Secondary Image'"
-              loading="lazy">
-          </div>
+          <!-- Dynamic Sections (If available) -->
+          <ng-container *ngIf="article.sections && article.sections.length > 0">
+            <div *ngFor="let sec of article.sections" class="mb-4">
+              <!-- Sub Heading -->
+              <h2 class="fw-bold mt-5 mb-3 text-dark" *ngIf="sec.type === 'sub-heading'">{{ sec.content }}</h2>
+
+              <!-- Paragraph -->
+              <div class="article-content mb-3" *ngIf="sec.type === 'paragraph'" [innerHTML]="sec.content"></div>
+
+              <!-- Image -->
+              <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="sec.type === 'image'">
+                <img [src]="getImageUrl(sec.content)" class="w-100" [alt]="sec.caption || 'Article Image'"
+                  loading="lazy">
+                <div class="text-muted small text-center mt-2 fst-italic" *ngIf="sec.caption">
+                  <i class="fa-solid fa-camera me-1"></i> {{ sec.caption }}
+                </div>
+              </div>
+
+              <!-- Quote -->
+              <blockquote class="article-highlight-quote my-5 p-4 border-start border-5 theme-border"
+                *ngIf="sec.type === 'quote'">
+                <i class="fa-solid fa-quote-left fs-2 mb-3 theme-text opacity-50"></i>
+                <p class="fs-4 fw-bold fst-italic mb-0">{{ sec.content }}</p>
+              </blockquote>
+            </div>
+          </ng-container>
 
 
-          <!-- Section 2 -->
-          <div class="mt-5" *ngIf="article.heading2 || article.content2">
-            <h2 class="fw-bold mb-3" *ngIf="article.heading2">{{ article.heading2 }}</h2>
-            <div class="article-content" *ngIf="article.content2" [innerHTML]="article.content2"></div>
-          </div>
-
-
-
-          <!-- Highlight Quote -->
-          <blockquote class="article-highlight-quote my-5 p-4 border-start border-5 theme-border"
-            *ngIf="article.highlightQuote">
-            <i class="fa-solid fa-quote-left fs-2 mb-3 theme-text opacity-50"></i>
-            <p class="fs-4 fw-bold fst-italic mb-0">{{ article.highlightQuote }}</p>
-          </blockquote>
-
-          <!-- Section 3 -->
-          <div class="mt-5" *ngIf="article.heading3 || article.content3">
-            <h3 class="fw-bold mb-3" *ngIf="article.heading3">{{ article.heading3 }}</h3>
-            <div class="article-content" *ngIf="article.content3" [innerHTML]="article.content3"></div>
-          </div>
-
-          <!-- Image 3 -->
-          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image3Url">
-            <img [src]="getImageUrl(article.image3Url)" class="w-100" alt="Additional Image" loading="lazy">
-          </div>
-
-          <!-- Image 4 (Hidden for now)
-          <div class="my-5 rounded-4 overflow-hidden shadow-sm premium-img-wrapper" *ngIf="article.image4Url">
-            <img [src]="getImageUrl(article.image4Url)" class="w-100" alt="Gallery Image" loading="lazy">
-          </div> -->
 
           <footer class="source-link-container mt-5 p-3 rounded-3 bg-light border-start border-4 border-dark"
             *ngIf="article.sourceLink">

@@ -22,6 +22,7 @@ export class SignupPage implements OnInit {
   error = '';
   isLoading = false;
   returnUrl = '/admin';
+  showPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -32,6 +33,10 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin';
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onSignup() {

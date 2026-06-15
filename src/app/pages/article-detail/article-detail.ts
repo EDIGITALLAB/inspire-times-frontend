@@ -78,7 +78,7 @@ export class ArticleDetail implements OnInit {
   updateSEOTags() {
     if (this.article) {
       const title = this.article.metaTitle || `${this.article.title} | Inspire Times`;
-      const description = this.article.metaDescription || this.article.subtitle || this.article.content.substring(0, 160);
+      const description = this.article.metaDescription || this.article.subtitle || (this.article.content || '').substring(0, 160);
 
       this.titleService.setTitle(title);
       this.metaService.updateTag({ name: 'description', content: description });

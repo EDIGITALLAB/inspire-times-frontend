@@ -1,360 +1,425 @@
-<div class="admin-container min-vh-100 bg-light">
-  <!-- Top Navbar/Header -->
+<div class="admin-container min-vh-100 bg-light pb-5">
+  <!-- Top Header -->
   <header class="admin-header theme-bg text-white shadow-sm sticky-top py-3 px-3 px-md-4 mb-4">
-    <div
-      class="container-fluid d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+    <div class="container-fluid d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
       <div class="flex-grow-1">
-        <h3 class="mb-0 fw-bold fs-4 fs-md-3 text-nowrap"><i class="fa-solid fa-gauge-high me-2"></i>ARTICLE EDITOR</h3>
-        <p class="theme-light-text small mb-0">Craft your inspiring story for Inspire Times</p>
+        <h3 class="mb-0 fw-bold fs-4 text-white"><i class="fa-solid fa-pen-nib text-white me-2"></i>ARTICLE EDITOR</h3>
+        <p class="theme-light-text small mb-0">Create and manage inspiring stories</p>
       </div>
       <div class="d-flex flex-wrap gap-2 w-100 w-sm-auto ms-sm-auto justify-content-start justify-content-sm-end">
-        <button type="button" class="btn btn-outline-light fw-bold px-3 flex-grow-1 flex-md-grow-0"
+        <button type="button" class="btn btn-outline-light fw-semibold px-3 flex-grow-1 flex-md-grow-0 rounded-3"
           routerLink="/admin/articles">
-          <i class="fa-solid fa-list-check me-2"></i>MANAGE ALL
+          <i class="fa-solid fa-arrow-left me-2"></i>Back to Articles
         </button>
-        <button type="button" class="btn btn-light fw-bold px-3 flex-grow-1 flex-md-grow-0" (click)="resetForm()">
-          <i class="fa-solid fa-rotate-left me-2"></i>RESET
+        <button type="button" class="btn btn-outline-light fw-semibold px-3 flex-grow-1 flex-md-grow-0 rounded-3" (click)="resetForm()">
+          <i class="fa-solid fa-rotate-left me-2"></i>Reset
         </button>
-        <button type="button" class="btn btn-dark fw-bold px-4 flex-grow-1 flex-md-grow-0" (click)="onSubmit()"
+        <button type="button" class="btn btn-dark fw-bold px-4 flex-grow-1 flex-md-grow-0 rounded-3" (click)="onSubmit()"
           [disabled]="isPublishing">
           <i class="fa-solid fa-paper-plane me-2"></i>
-          {{ isPublishing ? 'SAVING...' : (isEditing ? 'UPDATE ARTICLE' : 'PUBLISH NOW') }}
+          {{ isPublishing ? 'Saving...' : (isEditing ? 'Update Article' : 'Publish Article') }}
         </button>
       </div>
     </div>
   </header>
 
   <div class="container-fluid px-3 px-md-4">
-    <form (submit)="onSubmit()" class="row g-4 mb-5">
-
-      <!-- Main Content Area (Left) -->
-      <div class="col-lg-8">
+    <div class="row g-4">
+      
+      <!-- Editor Column (Left) -->
+      <div class="col-xl-7 col-lg-6">
+        
+        <!-- Article Information -->
         <div class="card border-0 shadow-sm rounded-4 mb-4">
-          <div class="card-body p-3 p-md-4">
-            <h5 class="fw-bold mb-4 text-dark border-bottom pb-2">MAIN CONTENT</h5>
-
-            <!-- Article Title -->
-            <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Article Title</label>
-                <span class="text-muted small" style="font-size: 0.75rem;"
-                  [class.text-danger]="article.title.length >= 255">
-                  {{ article.title.length }}/255 <span *ngIf="article.title.length >= 255" class="fw-bold"> - Limit
-                    reached</span>
-                </span>
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 text-dark border-bottom pb-2"><i class="fa-solid fa-circle-info me-2 text-muted"></i>Article Information</h5>
+            
+            <div class="row g-3">
+              <!-- Title -->
+              <div class="col-md-8">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label fw-semibold small text-uppercase mb-0">Title <span class="text-danger">*</span></label>
+                  <span class="text-muted x-small">{{ article.title.length || 0 }}/150</span>
+                </div>
+                <input type="text" class="form-control custom-input" name="title" [(ngModel)]="article.title" required (input)="onTitleChange()" placeholder="Enter an inspiring title for your story..." maxlength="150">
               </div>
-              <input type="text" class="form-control form-control-lg custom-input title-input" name="title"
-                [(ngModel)]="article.title" required (input)="onTitleChange()" placeholder="Enter a catchy headline..."
-                maxlength="255">
-              <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> This is the main headline of your story. It appears at the very top of the article details page in a large, prominent font.</p>
+              
+              <!-- Category -->
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small text-uppercase">Category <span class="text-danger">*</span></label>
+                <select class="form-select custom-input" name="category" [(ngModel)]="article.category" (change)="onCategoryChange()" required>
+                  <option value="" disabled selected>Select category...</option>
+                  <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+                </select>
+              </div>
+              
+              <!-- Subtitle -->
+              <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label fw-semibold small text-uppercase mb-0">Subtitle</label>
+                  <span class="text-muted x-small">{{ article.subtitle.length || 0 }}/250</span>
+                </div>
+                <input type="text" class="form-control custom-input" name="subtitle" [(ngModel)]="article.subtitle" (input)="onSubtitleChange()" placeholder="Enter a brief subtitle or summary..." maxlength="250">
+              </div>
+
+              <!-- Featured Image Upload -->
+              <div class="col-12">
+                <label class="form-label fw-semibold small text-uppercase">Featured Image</label>
+                
+                <input type="file" #fileInput (change)="onFileSelected($event)" class="d-none" accept="image/*">
+
+                <!-- Display when image uploaded / selected -->
+                <div class="uploaded-image-preview-card d-flex align-items-center p-3 border rounded-4 bg-light mb-2" *ngIf="selectedFile || article.imageUrl">
+                  <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)" class="rounded-3 object-fit-cover me-3" style="width: 80px; height: 60px;">
+                  <div class="flex-grow-1 overflow-hidden">
+                    <div class="fw-bold text-dark text-truncate small">{{ selectedFile ? selectedFile.name : 'featured-image.jpg' }}</div>
+                    <div class="text-muted x-small">{{ selectedFile ? (selectedFile.size | number) + ' bytes' : 'Saved on server' }}</div>
+                  </div>
+                  <button type="button" class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="clearFileSlot($event, 1, fileInput)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+
+                <!-- Dropzone (Hidden when image shown) -->
+                <div class="upload-box border-dashed rounded-4 p-4 text-center cursor-pointer" *ngIf="!selectedFile && !article.imageUrl" (click)="fileInput.click()">
+                  <i class="fa-solid fa-cloud-arrow-up fs-3 mb-2 text-muted"></i>
+                  <p class="mb-0 small fw-semibold">Click to upload featured image</p>
+                  <p class="x-small text-muted mb-0">Recommended size: 1920 x 1080</p>
+                </div>
+              </div>
+
+              <!-- Featured Image Caption -->
+              <div class="col-12" *ngIf="selectedFile || article.imageUrl">
+                <label class="form-label fw-semibold small text-uppercase">Featured Image Caption</label>
+                <input type="text" class="form-control custom-input" name="imageCaption" [(ngModel)]="article.imageCaption" placeholder="Photo credits / description...">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Article Content sections -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom content-section-header">
+              <div>
+                <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-indent me-2 text-muted"></i>Article Content</h5>
+                <p class="text-muted small mb-0">Add and arrange sections to build your article.</p>
+              </div>
+              <button type="button" class="btn btn-theme btn-sm px-3 rounded-pill text-nowrap" (click)="openAddSection('paragraph')">
+                <i class="fa-solid fa-plus me-1"></i> Add Section
+              </button>
             </div>
 
+            <!-- Sections List -->
+            <div class="sections-list d-flex flex-column gap-3 mb-4">
+              <div *ngFor="let sec of article.sections; let i = index" 
+                   class="section-item-card d-flex align-items-center p-3 bg-white border rounded-4 shadow-sm"
+                   draggable="true" 
+                   (dragstart)="onDragStart(i)" 
+                   (dragover)="onDragOver($event)" 
+                   (drop)="onDrop(i)">
+                
+                <!-- Drag Handle -->
+                <div class="drag-handle text-muted px-2 me-2 cursor-grab">
+                  <i class="fa-solid fa-grip-vertical fs-5"></i>
+                </div>
+
+                <!-- Badge and Content Preview -->
+                <div class="flex-grow-1 min-w-0">
+                  <!-- Section Type Badge -->
+                  <span class="badge rounded-pill px-3 py-1 text-uppercase small mb-2 d-inline-block font-monospace shadow-xs" 
+                        [class.bg-subheading]="sec.type === 'sub-heading'"
+                        [class.bg-paragraph]="sec.type === 'paragraph'"
+                        [class.bg-image-sec]="sec.type === 'image'"
+                        [class.bg-quote]="sec.type === 'quote'">
+                    {{ sec.type === 'sub-heading' ? 'Sub Heading' : sec.type }}
+                  </span>
+                  
+                  <!-- Preview Text / Content -->
+                  <div class="section-content-preview text-muted small text-truncate" *ngIf="sec.type !== 'image'">
+                    {{ sec.content }}
+                  </div>
+                  <div class="section-content-preview d-flex align-items-center gap-2" *ngIf="sec.type === 'image'">
+                    <img [src]="articleService.getImageUrl(sec.content)" class="rounded object-fit-cover shadow-xs border" style="width: 45px; height: 35px;">
+                    <span class="text-muted small text-truncate">{{ sec.caption || 'Image content' }}</span>
+                  </div>
+                </div>
+
+                <!-- Section Actions -->
+                <div class="section-actions d-flex align-items-center gap-2 ms-3">
+                  <!-- Up/Down arrows -->
+                  <div class="d-flex flex-column gap-1">
+                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded" (click)="moveSectionUp(i, $event)" [disabled]="i === 0">
+                      <i class="fa-solid fa-chevron-up x-small"></i>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded" (click)="moveSectionDown(i, $event)" [disabled]="i === article.sections.length - 1">
+                      <i class="fa-solid fa-chevron-down x-small"></i>
+                    </button>
+                  </div>
+                  
+                  <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="openEditSection(i)">
+                    <i class="fa-solid fa-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="deleteSection(i)">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div class="empty-sections-placeholder text-center py-5 border border-dashed rounded-4 bg-light" *ngIf="!article.sections || article.sections.length === 0">
+                <i class="fa-solid fa-cubes fs-2 text-muted mb-3 opacity-50"></i>
+                <h6 class="fw-bold text-dark mb-1">No content sections yet</h6>
+                <p class="text-muted small mb-0 px-4">Start adding headings, paragraphs, images, or quotes to write your story.</p>
+              </div>
+            </div>
+
+            <!-- Section Types Shortcuts Legend -->
+            <div class="border-top pt-4">
+              <label class="form-label fw-bold small text-uppercase mb-3 text-muted">Section Types Shortcuts</label>
+              <div class="row g-2">
+                <!-- Sub Heading -->
+                <div class="col-md-3 col-6">
+                  <div class="legend-type-card bg-subheading-light border-subheading p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('sub-heading')">
+                    <span class="badge rounded-pill bg-subheading text-uppercase font-monospace mb-2 small shadow-xs">Sub Heading</span>
+                    <p class="mb-0 text-muted x-small lh-sm">For section headings and titles</p>
+                  </div>
+                </div>
+                <!-- Paragraph -->
+                <div class="col-md-3 col-6">
+                  <div class="legend-type-card bg-paragraph-light border-paragraph p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('paragraph')">
+                    <span class="badge rounded-pill bg-paragraph text-uppercase font-monospace mb-2 small shadow-xs">Paragraph</span>
+                    <p class="mb-0 text-muted x-small lh-sm">For normal text paragraphs</p>
+                  </div>
+                </div>
+                <!-- Image -->
+                <div class="col-md-3 col-6">
+                  <div class="legend-type-card bg-image-sec-light border-image-sec p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('image')">
+                    <span class="badge rounded-pill bg-image-sec text-uppercase font-monospace mb-2 small shadow-xs">Image</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Illustrations with captions</p>
+                  </div>
+                </div>
+                <!-- Quote -->
+                <div class="col-md-3 col-6">
+                  <div class="legend-type-card bg-quote-light border-quote p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('quote')">
+                    <span class="badge rounded-pill bg-quote text-uppercase font-monospace mb-2 small shadow-xs">Quote</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Highlight blockquotes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Metadata Fields -->
+            <div class="border-top pt-4 mt-4">
+              <div class="row g-3">
+                <!-- Author Name (Readonly) -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold small text-uppercase">Author Name</label>
+                  <input type="text" class="form-control custom-input bg-light-subtle" name="author" [(ngModel)]="article.author" readonly>
+                </div>
+                <!-- Placement / Section Type (Admin Only) -->
+                <div class="col-md-6" *ngIf="currentUser?.role === 'ADMIN'">
+                  <label class="form-label fw-semibold small text-uppercase">Section Placement</label>
+                  <select class="form-select custom-input" name="sectionType" [(ngModel)]="article.sectionType">
+                    <option value="">Standard Latest Stories</option>
+                    <option value="FEATURED">FEATURED HERO</option>
+                    <option value="LEFT_SECTION">LEFT COLUMN</option>
+                    <option value="EDITORS_PICK">EDITOR'S PICK (BOTTOM)</option>
+                  </select>
+                </div>
+                <!-- Verification Source Link -->
+                <div class="col-12">
+                  <label class="form-label fw-semibold small text-uppercase">Verification Source Link</label>
+                  <input type="url" class="form-control custom-input" name="sourceLink" [(ngModel)]="article.sourceLink" placeholder="Original article link...">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SEO & Metadata Accordion -->
+        <div class="accordion border-0 shadow-sm rounded-4 overflow-hidden mb-4" id="advancedAccordion">
+          <div class="accordion-item border-0 bg-white">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-bold text-dark py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings">
+                <i class="fa-solid fa-sliders me-2 text-muted"></i>SEO Configurations
+              </button>
+            </h2>
+            <div id="collapseSettings" class="accordion-collapse collapse" data-bs-parent="#advancedAccordion">
+              <div class="accordion-body p-4 border-top">
+                <div class="row g-3">
+                  <!-- Meta Title -->
+                  <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <label class="form-label fw-semibold small text-uppercase mb-0">Meta Title</label>
+                      <span class="text-muted x-small">{{ article.metaTitle.length || 0 }}/70</span>
+                    </div>
+                    <input type="text" class="form-control custom-input" name="metaTitle" [(ngModel)]="article.metaTitle" (input)="isMetaTitleCustomized = true" placeholder="Enter SEO Meta Title (max 70 characters)..." maxlength="70">
+                  </div>
+                  <!-- Meta Keywords -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold small text-uppercase">Meta Keywords</label>
+                    <input type="text" class="form-control custom-input" name="metaKeywords" [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true" placeholder="Enter keywords separated by commas (e.g. story, health, travel)...">
+                  </div>
+                  <!-- Meta Description -->
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <label class="form-label fw-semibold small text-uppercase mb-0">Meta Description</label>
+                      <span class="text-muted x-small">{{ article.metaDescription.length || 0 }}/160</span>
+                    </div>
+                    <textarea class="form-control custom-input" rows="3" name="metaDescription" [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true" placeholder="Enter SEO Meta Description for search results (max 160 characters)..." maxlength="160"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Preview Column (Right) -->
+      <div class="col-xl-5 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 sticky-preview-card">
+          <div class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-dark"><i class="fa-regular fa-eye me-2 text-muted"></i>Live Preview</h5>
+            <span class="badge bg-light text-muted border font-monospace">PREVIEW MODE</span>
+          </div>
+          <div class="card-body p-4 preview-scrollable-body bg-white">
+            
+            <!-- Article Main Title -->
+            <h1 class="preview-article-title fw-bold text-dark mb-2">
+              {{ article.title || 'Untitled Article' }}
+            </h1>
+            
             <!-- Article Subtitle -->
-            <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Article Subtitle</label>
-                <span class="text-muted small" style="font-size: 0.75rem;"
-                  [class.text-danger]="article.subtitle.length >= 255">
-                  {{ article.subtitle.length }}/255 <span *ngIf="article.subtitle.length >= 255" class="fw-bold"> -
-                    Limit reached</span>
-                </span>
-              </div>
-              <textarea class="form-control custom-input" rows="2" name="subtitle" [(ngModel)]="article.subtitle"
-                (input)="onSubtitleChange()" placeholder="Enter a brief summary or sub-headline..."
-                maxlength="255"></textarea>
-              <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> A brief summary that appears directly below the title. Helps readers quickly understand the story theme.</p>
-            </div>
+            <p class="preview-article-subtitle text-muted fs-5 mb-4" *ngIf="article.subtitle">
+              {{ article.subtitle }}
+            </p>
+            
+            <!-- Divider -->
+            <hr class="my-4 opacity-50" *ngIf="article.title || article.subtitle">
 
-            <hr class="my-4 opacity-50">
-
-            <!-- Content Editor Sections -->
-            <div class="content-sections">
-              <!-- Section 1 -->
-              <div class="section-box mb-4">
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label fw-bold small text-uppercase mb-0">Introduction Title</label>
-                    <span class="text-muted small" style="font-size: 0.75rem;"
-                      [class.text-danger]="article.heading1.length >= 255">
-                      {{ article.heading1.length }}/255
-                    </span>
-                  </div>
-                  <input type="text" class="form-control custom-input" name="heading1" [(ngModel)]="article.heading1"
-                    placeholder="First section heading..." maxlength="255">
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Section heading. Appears directly under author metadata.</p>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label fw-bold small text-uppercase">Main Article Body</label>
-                  <textarea class="form-control custom-input" rows="10" name="content" [(ngModel)]="article.content"
-                    required (input)="onContentChange()" placeholder="Tell your inspiring story here..."></textarea>
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> This is the main story introduction and first paragraph block of the published article.</p>
-                </div>
-              </div>
-
-              <!-- Highlight Quote -->
-              <div class="highlight-quote-box p-3 p-md-4 bg-light rounded-4 mb-5 border-start border-4 border-warning">
-                <label class="form-label fw-bold small text-uppercase text-warning"><i
-                    class="fa-solid fa-quote-left me-2"></i>Highlight Quote</label>
-                <textarea class="form-control custom-input quote-input border-0 bg-transparent" rows="2"
-                  name="highlightQuote" [(ngModel)]="article.highlightQuote"
-                  placeholder="Pull out a key quote from the article..."></textarea>
-                <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Displays as a premium styled pull-quote block with large fonts and a gold left border between paragraphs.</p>
-              </div>
-
-              <!-- Section 2 -->
-              <div class="section-box mb-4">
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label fw-bold small text-uppercase mb-0">Sub-heading 2</label>
-                    <span class="text-muted small" style="font-size: 0.75rem;"
-                      [class.text-danger]="article.heading2.length >= 255">
-                      {{ article.heading2.length }}/255
-                    </span>
-                  </div>
-                  <input type="text" class="form-control custom-input" name="heading2" [(ngModel)]="article.heading2"
-                    placeholder="Second section heading..." maxlength="255">
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Heading for the second section of the article (appears below the secondary image/quote).</p>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label fw-bold small text-uppercase">Body Content (Part 2)</label>
-                  <textarea class="form-control custom-input" rows="8" name="content2" [(ngModel)]="article.content2"
-                    placeholder="Continue your story..."></textarea>
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Second main paragraph block. Placed between the secondary image/quote and third section.</p>
-                </div>
-              </div>
-
-              <!-- Section 3 -->
-              <div class="section-box mb-4">
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label class="form-label fw-bold small text-uppercase mb-0">Sub-heading 3</label>
-                    <span class="text-muted small" style="font-size: 0.75rem;"
-                      [class.text-danger]="article.heading3.length >= 255">
-                      {{ article.heading3.length }}/255
-                    </span>
-                  </div>
-                  <input type="text" class="form-control custom-input" name="heading3" [(ngModel)]="article.heading3"
-                    placeholder="Final section heading..." maxlength="255">
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Subtitle for the final section / concluding section.</p>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label fw-bold small text-uppercase">Body Content (Part 3)</label>
-                  <textarea class="form-control custom-input" rows="8" name="content3" [(ngModel)]="article.content3"
-                    placeholder="Final part of your story..."></textarea>
-                  <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> The concluding paragraph block of the story, placed at the end before comments.</p>
-                </div>
+            <!-- Featured Banner (if selected) -->
+            <div class="preview-featured-banner rounded-4 overflow-hidden mb-4 shadow-sm" *ngIf="selectedFile || article.imageUrl">
+              <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)" class="w-100 object-fit-cover" style="max-height: 250px;">
+              <div class="text-muted small p-2 bg-light border-top border-light fst-italic" *ngIf="article.imageCaption">
+                <i class="fa-solid fa-camera me-1"></i> {{ article.imageCaption }}
               </div>
             </div>
+
+            <!-- Dynamic Sections Rendered in Preview -->
+            <div class="preview-sections-container">
+              <div *ngFor="let sec of article.sections" class="preview-section-block mb-4">
+                
+                <!-- Render Sub Heading -->
+                <h3 class="preview-heading fw-bold text-dark mt-4 mb-3" *ngIf="sec.type === 'sub-heading'">
+                  {{ sec.content }}
+                </h3>
+                
+                <!-- Render Paragraph -->
+                <p class="preview-paragraph lh-base mb-3 text-secondary" *ngIf="sec.type === 'paragraph'">
+                  {{ sec.content }}
+                </p>
+                
+                <!-- Render Image -->
+                <div class="preview-image-block rounded-3 overflow-hidden border my-4 shadow-xs text-center" *ngIf="sec.type === 'image'">
+                  <img [src]="articleService.getImageUrl(sec.content)" class="img-fluid">
+                  <div class="p-2 bg-light border-top text-muted small fst-italic" *ngIf="sec.caption">
+                    {{ sec.caption }}
+                  </div>
+                </div>
+
+                <!-- Render Quote -->
+                <blockquote class="preview-blockquote my-4 p-3 border-start border-4 theme-border bg-light rounded-end-3" *ngIf="sec.type === 'quote'">
+                  <p class="fs-5 fw-semibold fst-italic text-dark mb-0">"{{ sec.content }}"</p>
+                </blockquote>
+
+              </div>
+
+              <!-- Preview Empty State -->
+              <div class="text-center py-5 text-muted opacity-50" *ngIf="!article.sections || article.sections.length === 0">
+                <i class="fa-solid fa-feather-pointed fs-2 mb-3"></i>
+                <p class="small mb-0">Live layout preview will appear here as you add sections.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      <!-- Sidebar (Right) -->
-      <div class="col-lg-4">
+    </div>
+  </div>
+</div>
 
-        <!-- Metadata Box -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-          <div class="card-body p-3 p-md-4">
-            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Organization & Meta</h6>
+<!-- Add/Edit Section Modal Backdrop -->
+<div class="custom-modal-backdrop d-flex align-items-center justify-content-center" *ngIf="showSectionModal">
+  <div class="custom-modal-dialog bg-white rounded-4 shadow-lg p-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+      <h5 class="fw-bold mb-0 text-dark">
+        <i class="fa-solid fa-cube theme-text me-2"></i>{{ editingSectionIndex !== null ? 'Edit Section' : 'Add Section' }}
+      </h5>
+      <button type="button" class="btn-close" (click)="showSectionModal = false" aria-label="Close"></button>
+    </div>
+    
+    <div class="mb-4">
+      <label class="form-label fw-bold small text-uppercase">Section Type</label>
+      <select class="form-select custom-input" [(ngModel)]="sectionForm.type" name="secType" [disabled]="editingSectionIndex !== null">
+        <option value="sub-heading">Sub Heading</option>
+        <option value="paragraph">Paragraph</option>
+        <option value="image">Image</option>
+        <option value="quote">Quote</option>
+      </select>
+    </div>
 
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Category <span
-                    class="text-danger">*</span></label>
-              </div>
-              <input type="text" class="form-control" name="category" [(ngModel)]="article.category"
-                (ngModelChange)="onCategoryChange()" list="categoryOptions" placeholder="Select category..." required
-                maxlength="255">
-              <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Determines under which topic section your story is grouped.</p>
-              <datalist id="categoryOptions">
-
-                <option value="INSPIRATION">
-                <option value="HEALTH & FITNESS">
-                <option value="SPIRITUAL">
-                <option value="TRAVEL">
-                <option value="RELATIONSHIP">
-                <option value="LIFESTYLE">
-                <option value="FASHION & BEAUTY">
-                <option value="PETS & ANIMALS">
-                <option value="ENVIRONMENT">
-                <option value="INNOVATION">
-                <option value="TECHNOLOGY">
-                <option value="AI">
-                <option value="EDUCATION">
-                <option value="FOOD & NUTRITION">
-                <option value="HEALTHY RECIPES">
-                <option value="CULTURE & HERITAGE">
-                <option value="SOCIAL IMPACT">
-
-              </datalist>
-            </div>
-
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Author Name</label>
-              </div>
-              <input type="text" class="form-control custom-input" name="author" [(ngModel)]="article.author"
-                placeholder="e.g., Riya Kumari" maxlength="255" readonly>
-            </div>
-
-            <div class="mb-0" *ngIf="currentUser?.role === 'ADMIN'">
-              <label class="form-label fw-bold small text-uppercase">Placement / Section</label>
-              <select class="form-select custom-input" name="sectionType" [(ngModel)]="article.sectionType">
-                <option value="">None (Standard)</option>
-                <option value="FEATURED">FEATURED HERO</option>
-                <option value="LEFT_SECTION">LEFT COLUMN</option>
-                <option value="EDITORS_PICK">EDITOR'S PICK (BOTTOM FEATURED)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Media Box -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-          <div class="card-body p-3 p-md-4">
-            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Media & Gallery</h6>
-
-            <!-- Hero Image -->
-            <div class="mb-3">
-              <label class="form-label fw-bold small text-uppercase">Featured Image</label>
-              <div
-                class="upload-box small-upload border-dashed rounded-4 p-3 p-md-4 text-center position-relative mb-2">
-                <input type="file" #fileInput (change)="onFileSelected($event)"
-                  class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
-                <button type="button" *ngIf="selectedFile" (click)="clearFileSlot($event, 1, fileInput)"
-                  class="btn btn-sm btn-danger rounded-circle position-absolute d-flex align-items-center justify-content-center animate-fade-in"
-                  style="top: 10px; right: 10px; z-index: 10; width: 26px; height: 26px; padding: 0;">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-                <i class="fa-solid fa-camera fs-3 mb-2 text-muted"></i>
-                <p class="mb-0 small" *ngIf="!selectedFile">Click to upload hero</p>
-                <p class="mb-0 text-success fw-bold small" *ngIf="selectedFile">{{selectedFile.name}}</p>
-              </div>
-              <p class="text-muted x-small mt-1 mb-2"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Landscape banner image. Shows at the very top of the story page.</p>
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span></span>
-                <span class="text-muted small" style="font-size: 0.75rem;"
-                  [class.text-danger]="article.imageCaption.length >= 255">
-                  {{ article.imageCaption.length }}/255
-                </span>
-              </div>
-              <input type="text" class="form-control custom-input form-control-sm" name="imageCaption"
-                [(ngModel)]="article.imageCaption" placeholder="Hero image caption..." maxlength="255">
-              <p class="text-muted x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Describes the image content or gives photo credit.</p>
-            </div>
-
-            <hr class="my-3 opacity-50">
-
-            <!-- Secondary Images -->
-            <label class="form-label fw-bold small text-uppercase mb-1">Gallery Images</label>
-            <p class="text-muted x-small mt-0 mb-3"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Additional story illustrations placed between content blocks 1, 2, and 3.</p>
-            <div class="row g-2">
-              <div class="col-4">
-                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
-                  <input type="file" #fileInput2 (change)="onFileSelected2($event)"
-                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
-                  <button type="button" *ngIf="selectedFile2" (click)="clearFileSlot($event, 2, fileInput2)"
-                    class="btn btn-sm btn-danger rounded-circle position-absolute d-flex align-items-center justify-content-center animate-fade-in"
-                    style="top: 5px; right: 5px; z-index: 10; width: 20px; height: 20px; padding: 0; font-size: 0.65rem;">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                  <i class="fa-solid fa-image mb-1 text-muted"></i>
-                  <p class="x-small mb-0">{{selectedFile2 ? 'OK' : 'Img 2'}}</p>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
-                  <input type="file" #fileInput3 (change)="onFileSelected3($event)"
-                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
-                  <button type="button" *ngIf="selectedFile3" (click)="clearFileSlot($event, 3, fileInput3)"
-                    class="btn btn-sm btn-danger rounded-circle position-absolute d-flex align-items-center justify-content-center animate-fade-in"
-                    style="top: 5px; right: 5px; z-index: 10; width: 20px; height: 20px; padding: 0; font-size: 0.65rem;">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                  <i class="fa-solid fa-image mb-1 text-muted"></i>
-                  <p class="x-small mb-0">{{selectedFile3 ? 'OK' : 'Img 3'}}</p>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="upload-box mini-upload border-dashed rounded-3 p-2 text-center position-relative">
-                  <input type="file" #fileInput4 (change)="onFileSelected4($event)"
-                    class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
-                  <button type="button" *ngIf="selectedFile4" (click)="clearFileSlot($event, 4, fileInput4)"
-                    class="btn btn-sm btn-danger rounded-circle position-absolute d-flex align-items-center justify-content-center animate-fade-in"
-                    style="top: 5px; right: 5px; z-index: 10; width: 20px; height: 20px; padding: 0; font-size: 0.65rem;">
-                    <i class="fa-solid fa-xmark"></i>
-                  </button>
-                  <i class="fa-solid fa-image mb-1 text-muted"></i>
-                  <p class="x-small mb-0">{{selectedFile4 ? 'OK' : 'Img 4'}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SEO Box -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-          <div class="card-body p-3 p-md-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h6 class="fw-bold mb-0 text-uppercase small text-muted">Search Engine (SEO)</h6>
-              <i class="fa-solid fa-magnifying-glass text-muted small"></i>
-            </div>
-            <p class="text-muted x-small mt-0 mb-3"><i class="fa-solid fa-circle-info me-1 theme-text"></i> Optimizes how your article displays in search engines like Google.</p>
-
-            <div class="mb-3">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Meta Title</label>
-                <span class="text-muted small" style="font-size: 0.75rem;"
-                  [class.text-danger]="article.metaTitle.length >= 255">
-                  {{ article.metaTitle.length }}/255
-                </span>
-              </div>
-              <input type="text" class="form-control custom-input" name="metaTitle" [(ngModel)]="article.metaTitle"
-                (input)="isMetaTitleCustomized = true" placeholder="SEO title..." maxlength="255">
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold small text-uppercase">Meta Description</label>
-              <textarea class="form-control custom-input" rows="3" name="metaDescription"
-                [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true"
-                placeholder="SEO description..."></textarea>
-            </div>
-
-            <div class="mb-0">
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <label class="form-label fw-bold small text-uppercase mb-0">Meta Keywords</label>
-                <span class="text-muted small" style="font-size: 0.75rem;"
-                  [class.text-danger]="article.metaKeywords.length >= 255">
-                  {{ article.metaKeywords.length }}/255
-                </span>
-              </div>
-              <input type="text" class="form-control custom-input" name="metaKeywords"
-                [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true"
-                placeholder="keywords, comma, separated" maxlength="255">
-            </div>
-          </div>
-        </div>
-
-        <!-- Source Box -->
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-dark text-white">
-          <div class="card-body p-3 p-md-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h6 class="fw-bold mb-0 text-uppercase small">Verification Source</h6>
-              <span class="text-muted small" style="font-size: 0.75rem;"
-                [class.text-danger]="article.sourceLink.length >= 255">
-                {{ article.sourceLink.length }}/255
-              </span>
-            </div>
-            <div class="mb-0">
-              <input type="url" class="form-control bg-transparent border-secondary text-white" name="sourceLink"
-                [(ngModel)]="article.sourceLink" placeholder="Original source URL..." maxlength="255">
-              <p class="text-muted-50 x-small mt-1 mb-0"><i class="fa-solid fa-circle-info me-1 text-white-50"></i> If curated from another source, link to the original story page.</p>
-            </div>
-          </div>
-        </div>
-
+    <!-- Content fields for non-image -->
+    <div class="mb-4" *ngIf="sectionForm.type !== 'image'">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <label class="form-label fw-bold small text-uppercase mb-0">Content Text</label>
+        <span class="text-muted x-small">
+          {{ sectionForm.content.length || 0 }}/{{ sectionForm.type === 'sub-heading' ? 150 : (sectionForm.type === 'quote' ? 500 : 5000) }}
+        </span>
       </div>
+      <textarea class="form-control custom-input" rows="6" [(ngModel)]="sectionForm.content" name="secContent" [placeholder]="sectionForm.type === 'sub-heading' ? 'Enter sub-heading text...' : (sectionForm.type === 'quote' ? 'Enter quote message here...' : 'Write your paragraph body here...')" [maxlength]="sectionForm.type === 'sub-heading' ? 150 : (sectionForm.type === 'quote' ? 500 : 5000)"></textarea>
+    </div>
 
-    </form>
+    <!-- Content fields for image upload -->
+    <div class="mb-4" *ngIf="sectionForm.type === 'image'">
+      <label class="form-label fw-bold small text-uppercase">Upload Image File</label>
+      <div class="upload-box border-dashed rounded-4 p-4 text-center position-relative mb-3">
+        <input type="file" (change)="onSectionFileSelected($event)" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+        
+        <div *ngIf="isUploadingSectionImage" class="py-2">
+          <div class="spinner-border theme-text mb-2" role="status" style="width: 2rem; height: 2rem;">
+            <span class="visually-hidden">Uploading...</span>
+          </div>
+          <p class="mb-0 text-muted small fw-semibold">Uploading image to server...</p>
+        </div>
+
+        <div *ngIf="!isUploadingSectionImage">
+          <i class="fa-solid fa-images fs-2 mb-2 text-muted"></i>
+          <p class="mb-0 small fw-bold text-dark" *ngIf="!sectionForm.content">Click or Drag image file here</p>
+          <p class="mb-0 small text-success fw-bold" *ngIf="sectionForm.content">Image ready (replace by clicking again)</p>
+          <p class="x-small text-muted mb-0 mt-1">Accepts JPG, PNG, WebP up to 50MB</p>
+        </div>
+      </div>
+      
+      <!-- Loaded Image Preview inside Modal -->
+      <div class="text-center rounded-3 bg-light p-2 border mb-3" *ngIf="sectionForm.content && !isUploadingSectionImage">
+        <img [src]="articleService.getImageUrl(sectionForm.content)" class="img-fluid rounded border shadow-xs" style="max-height: 140px;">
+      </div>
+      
+      <!-- Caption -->
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <label class="form-label fw-bold small text-uppercase mb-0">Optional Image Caption</label>
+        <span class="text-muted x-small">{{ sectionForm.caption.length || 0 }}/150</span>
+      </div>
+      <input type="text" class="form-control custom-input" [(ngModel)]="sectionForm.caption" name="secCaption" placeholder="Enter a descriptive caption for this image..." maxlength="150">
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 border-top pt-3 mt-4">
+      <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" (click)="showSectionModal = false">Cancel</button>
+      <button type="button" class="btn btn-theme px-4 rounded-pill fw-bold" (click)="saveSection()">Save Section</button>
+    </div>
   </div>
 </div>

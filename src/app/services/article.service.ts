@@ -99,6 +99,12 @@ export class ArticleService {
     return this.http.delete(`${this.backendUrl}/${id}`, this.getHeaders());
   }
 
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${API_CONFIG.apiUrl}/images/upload`, formData, { responseType: 'text' });
+  }
+
   getImageUrl(url: string): string {
     if (!url || url.includes('default-article.png')) {
       return 'https://placehold.co/600x400.png?text=Inspire%20Times';
@@ -109,8 +115,16 @@ export class ArticleService {
 
   getReadTime(article: any): number {
     if (!article) return 0;
-    const content = (article.content || '') + ' ' + (article.content2 || '') + ' ' + (article.content3 || '');
-    const words = content.trim().split(/\s+/).filter(w => w.length > 0).length;
+    let textContent = '';
+    if (article.sections && article.sections.length > 0) {
+      textContent = article.sections
+        .filter((sec: any) => sec.type === 'paragraph' || sec.type === 'sub-heading' || sec.type === 'quote')
+        .map((sec: any) => sec.content || '')
+        .join(' ');
+    } else {
+      textContent = article.content || '';
+    }
+    const words = textContent.trim().split(/\s+/).filter(w => w.length > 0).length;
     return Math.max(1, Math.ceil(words / 200));
   }
 }

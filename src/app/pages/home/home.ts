@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ArticleService } from '../../services/article.service';
 
 import { TrendingArticles } from '../../components/trending-articles/trending-articles';
@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private articleService: ArticleService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -65,14 +66,30 @@ export class HomeComponent implements OnInit, OnDestroy {
 
           let editorsPick = allSorted.find(a => a.sectionType === 'EDITORS_PICK');
           if (!editorsPick) {
-            // Fallback: Find the absolute most viewed article from all articles (old and new), excluding only featuredArticle to prevent duplicates
-            const viewSorted = [...data].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-            editorsPick = viewSorted.find(a => a.id !== this.featuredArticle?.id) || viewSorted[0] || allSorted[0];
+            // Find most viewed article in the last 7 days, excluding the featured article
+            const now = new Date();
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(now.getDate() - 7);
+
+            const weeklyArticles = data.filter(a => {
+              if (!a.publishedAt) return false;
+              const pubDate = new Date(a.publishedAt);
+              return pubDate >= oneWeekAgo && pubDate <= now;
+            });
+
+            if (weeklyArticles.length > 0) {
+              weeklyArticles.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+              editorsPick = weeklyArticles[0];
+            } else {
+              // Fallback: Find the absolute most viewed article from all articles
+              const viewSorted = [...data].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+              editorsPick = viewSorted[0] || allSorted[0];
+            }
           }
           this.editorsPickArticle = editorsPick;
 
-          // Latest Stories will show ALL articles, latest first
-          this.latestStories = allSorted;
+          // Latest Stories will show a maximum of 10 articles, latest first
+          this.latestStories = allSorted.slice(0, 10);
 
           // Compute category counts for popular categories
           const getCount = (catName: string) => data.filter(a => a.category?.toUpperCase() === catName.toUpperCase()).length;
@@ -190,6 +207,14 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.activeStoryIndex = index;
       }
     }
+  }
+
+  onCardClick(event: MouseEvent, slugOrId: string) {
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim().length > 0) {
+      return;
+    }
+    this.router.navigate(['/article', slugOrId]);
   }
 
   getImageUrl(url: string) {

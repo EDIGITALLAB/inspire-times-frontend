@@ -18,12 +18,17 @@ export class AdminLoginPage {
   };
   error = '';
   isLoading = false;
+  showPassword = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   onLogin() {
     this.isLoading = true;
