@@ -79,6 +79,9 @@
     <a [href]="getWhatsappShareUrl()" target="_blank" class="share-btn whatsapp" title="Share on WhatsApp"><i
         class="fa-brands fa-whatsapp"></i></a>
     <button (click)="copyLink()" class="share-btn link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+    <button (click)="toggleBookmark()" class="share-btn bookmark" [class.active]="isBookmarked" [title]="isBookmarked ? 'Remove Bookmark' : 'Bookmark Story'">
+      <i [class]="isBookmarked ? 'fa-solid fa-bookmark theme-text' : 'fa-regular fa-bookmark'"></i>
+    </button>
   </div>
 
   <div class="container">
@@ -111,7 +114,10 @@
           <ng-container *ngIf="article.sections && article.sections.length > 0">
             <div *ngFor="let sec of article.sections" class="mb-4">
               <!-- Sub Heading -->
-              <h2 class="fw-bold mt-5 mb-3 text-dark" *ngIf="sec.type === 'sub-heading'">{{ sec.content }}</h2>
+              <h2 class="fw-bold mt-5 mb-3 text-dark" 
+                  *ngIf="sec.type === 'sub-heading'" 
+                  [class.hide-heading-line]="sec.caption === 'hide-line'" 
+                  [innerHTML]="sec.content"></h2>
 
               <!-- Paragraph -->
               <div class="article-content mb-3" *ngIf="sec.type === 'paragraph'" [innerHTML]="sec.content"></div>
@@ -129,8 +135,16 @@
               <blockquote class="article-highlight-quote my-5 p-4 border-start border-5 theme-border"
                 *ngIf="sec.type === 'quote'">
                 <i class="fa-solid fa-quote-left fs-2 mb-3 theme-text opacity-50"></i>
-                <p class="fs-4 fw-bold fst-italic mb-0">{{ sec.content }}</p>
+                <div class="fs-4 fw-bold fst-italic mb-0" [innerHTML]="sec.content"></div>
               </blockquote>
+
+              <!-- List -->
+              <div class="article-list-section mb-3" *ngIf="sec.type === 'list'" [innerHTML]="sec.content"></div>
+
+              <!-- Highlight -->
+              <div class="article-highlight-box my-4" *ngIf="sec.type === 'highlight'">
+                <p [innerHTML]="sec.content"></p>
+              </div>
             </div>
           </ng-container>
 
@@ -146,7 +160,7 @@
           </footer>
 
           <!-- Bottom Share Bar (Visible only on mobile/tablet screens) -->
-          <div class="mobile-share-bar border-top d-flex d-md-none align-items-center flex-wrap gap-3">
+          <div class="mobile-share-bar border-top d-flex d-xl-none align-items-center flex-wrap gap-3">
             <span class="fw-bold text-uppercase small text-muted">Share:</span>
             <div class="d-flex gap-3">
               <a [href]="getFacebookShareUrl()" target="_blank" class="share-btn facebook btn-sm"
@@ -157,10 +171,13 @@
                 title="Share on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
               <button (click)="copyLink()" class="share-btn link btn-sm" title="Copy Link"><i
                   class="fa-solid fa-link"></i></button>
+              <button (click)="toggleBookmark()" class="share-btn bookmark btn-sm" [class.active]="isBookmarked" [title]="isBookmarked ? 'Remove Bookmark' : 'Bookmark Story'">
+                <i [class]="isBookmarked ? 'fa-solid fa-bookmark theme-text' : 'fa-regular fa-bookmark'"></i>
+              </button>
             </div>
-            <!-- Dynamic feedback when link copied -->
-            <span class="text-success small ms-md-2 animate-fade-in" *ngIf="showCopiedMsg">
-              <i class="fa-solid fa-circle-check me-1"></i> Link copied!
+            <!-- Dynamic feedback when link copied / bookmarked -->
+            <span class="text-success small ms-md-2 animate-fade-in" *ngIf="showToast">
+              <i [class]="toastIcon" class="me-1"></i> {{ toastMessage }}
             </span>
           </div>
         </section>
@@ -185,10 +202,9 @@
           </ng-container>
         </div>
 
-        <!-- Related/Trending Stories -->
+        <!-- Related Stories -->
         <div class="sidebar-trending mt-5">
-          <h5 class="fw-bold mb-4 ps-2 border-start border-4 theme-border">Related Stories</h5>
-          <app-trending-articles></app-trending-articles>
+          <app-related-articles [category]="article.category" [currentArticleId]="article.id"></app-related-articles>
         </div>
       </div>
     </div>
@@ -196,6 +212,6 @@
 </div>
 
 <!-- Custom premium floating toast message -->
-<div class="custom-toast" [class.show]="showCopiedMsg">
-  <i class="fa-solid fa-circle-check me-2 text-success"></i> Link copied to clipboard!
+<div class="custom-toast" [class.show]="showToast">
+  <i [class]="toastIcon" class="me-2"></i> {{ toastMessage }}
 </div>

@@ -139,7 +139,13 @@ app-navbar {
 }
 
 app-navbar:has(.is-sticky)~* .admin-header {
-  top: 49px !important;
+  top: 50px !important;
+}
+
+@media (max-width: 1199.98px) {
+  app-navbar:has(.is-sticky)~* .admin-header {
+    top: 84px !important;
+  }
 }
 
 @media (max-width: 992px) {
@@ -216,4 +222,171 @@ app-navbar:has(.is-sticky)~* .admin-header {
   color: #6c757d;
   background-color: #fff;
   border-color: #dee2e6;
+}
+
+/* Responsive utility helpers */
+@media (min-width: 576px) {
+  .w-sm-auto {
+    width: auto !important;
+  }
+}
+
+/* Global Custom Pills Nav Styles */
+.custom-pills {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  background: #f1f3f5;
+  padding: 0;
+  border-radius: 30px;
+  gap: 0 !important;
+  margin-bottom: 2rem !important;
+}
+
+.custom-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-pills .nav-item {
+  flex: 1;
+  margin: 0 !important;
+  text-align: center;
+}
+
+.custom-pills .nav-link {
+  width: 100%;
+  min-width: max-content;
+  margin-right: 0 !important;
+  text-align: center;
+  padding: 12px 20px !important;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent;
+  color: #495057;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-pills .nav-item:first-child .nav-link {
+  border-top-left-radius: 30px !important;
+  border-bottom-left-radius: 30px !important;
+}
+
+.custom-pills .nav-item:last-child .nav-link {
+  border-top-right-radius: 30px !important;
+  border-bottom-right-radius: 30px !important;
+}
+
+.custom-pills .nav-link.active {
+  background-color: #D28A23 !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.custom-pills .nav-link:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .custom-pills {
+    margin-bottom: 1.5rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .custom-pills .nav-link {
+    padding: 8px 14px !important;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-pills .nav-link {
+    padding: 8px 10px !important;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .custom-pills .nav-link {
+    padding: 8px 8px !important;
+    font-size: 0.65rem;
+  }
+}
+
+/* Premium Custom Status Badge Styles */
+.badge-status {
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  display: inline-block;
+  text-align: center;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.badge-status-approved {
+  color: #198754 !important;
+}
+
+.badge-status-pending {
+  color: #d28a23 !important;
+}
+
+.badge-status-rejected {
+  color: #dc3545 !important;
+}
+
+/* Plagiarism Badge Styles */
+.badge-plag {
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  white-space: nowrap !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.badge-plag-unchecked {
+  color: #6c757d !important;
+}
+
+.badge-plag-clean {
+  color: #198754 !important;
+}
+
+.badge-plag-warning {
+  color: #dc3545 !important;
+}
+
+.status-divider {
+  width: 1px;
+  height: 14px;
+  background-color: #dbe2e8;
+  margin: 0 4px;
+  flex-shrink: 0;
+  display: inline-block;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+
+  .badge-status,
+  .badge-plag {
+    font-size: 0.75rem !important;
+  }
+
+  .status-divider {
+    height: 11px;
+    margin: 0 2px;
+  }
 }

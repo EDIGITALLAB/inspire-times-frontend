@@ -14,6 +14,7 @@ import { AboutPage } from './pages/about/about';
 import { ContactPage } from './pages/contact/contact';
 import { PrivacyPage } from './pages/privacy/privacy';
 import { TermsPage } from './pages/terms/terms';
+import { DisclaimerPage } from './pages/disclaimer/disclaimer';
 import { ForgotPasswordPage } from './pages/forgot-password/forgot-password';
 import { ResetPasswordPage } from './pages/reset-password/reset-password';
 import { ErrorPage } from './pages/error/error';
@@ -33,6 +34,7 @@ export const routes: Routes = [
   { path: 'contact', component: ContactPage },
   { path: 'privacy', component: PrivacyPage },
   { path: 'terms', component: TermsPage },
+  { path: 'disclaimer', component: DisclaimerPage },
   { path: 'admin', component: Admin, canActivate: [authGuard] },
   { path: 'admin/articles', component: ArticleManagement, canActivate: [authGuard] },
   { path: 'admin/users', component: UserManagement, canActivate: [authGuard] },

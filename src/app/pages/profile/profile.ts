@@ -1,13 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ArticleService } from '../../services/article.service';
+import { BookmarkService } from '../../services/bookmark.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -24,9 +26,14 @@ export class ProfilePage implements OnInit {
   articleCount = 0;
   totalViews = '0';
 
+  // Bookmark Properties
+  bookmarks: any[] = [];
+  isLoadingBookmarks = false;
+
   constructor(
     private authService: AuthService,
     private articleService: ArticleService,
+    private bookmarkService: BookmarkService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -35,7 +42,42 @@ export class ProfilePage implements OnInit {
     if (currentUser) {
       this.user = { ...currentUser };
       this.loadUserStats();
+      this.loadBookmarks();
     }
+  }
+
+  loadBookmarks() {
+    this.isLoadingBookmarks = true;
+    this.bookmarkService.getBookmarks().subscribe({
+      next: (data) => {
+        this.bookmarks = data;
+        this.isLoadingBookmarks = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading bookmarks', err);
+        this.isLoadingBookmarks = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  removeBookmark(articleId: number, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.bookmarkService.removeBookmark(articleId).subscribe({
+      next: () => {
+        this.bookmarks = this.bookmarks.filter(b => b.article.id !== articleId);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error removing bookmark', err);
+      }
+    });
+  }
+
+  getImageUrl(url: string): string {
+    return this.articleService.getImageUrl(url);
   }
 
   loadUserStats() {
@@ -65,7 +107,6 @@ export class ProfilePage implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-    // In a real app, this would call a backend API
     this.authService.updateProfile(this.user).subscribe({
       next: (updatedUser) => {
         this.successMessage = 'Profile updated successfully!';

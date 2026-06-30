@@ -224,6 +224,26 @@ export class HomeComponent implements OnInit, OnDestroy {
   getReadTime(article: any): number {
     return this.articleService.getReadTime(article);
   }
+
+  getArticleExcerpt(article: any): string {
+    if (!article) return '';
+    if (article.content && article.content.trim().length > 0) {
+      return article.content;
+    }
+    if (article.sections && article.sections.length > 0) {
+      // Find the first paragraph section
+      const firstParagraph = article.sections.find((s: any) => s.type === 'paragraph' && s.content && s.content.trim().length > 0);
+      if (firstParagraph) {
+        return firstParagraph.content;
+      }
+      // Fallback to any section with content
+      const anyContent = article.sections.find((s: any) => s.content && s.content.trim().length > 0);
+      if (anyContent) {
+        return anyContent.content;
+      }
+    }
+    return article.subtitle || '';
+  }
 }
 
 

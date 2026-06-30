@@ -1,7 +1,8 @@
 <div class="admin-container min-vh-100 bg-light pb-5">
   <!-- Top Header -->
   <header class="admin-header theme-bg text-white shadow-sm sticky-top py-3 px-3 px-md-4 mb-4">
-    <div class="container-fluid d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+    <div
+      class="container-fluid d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
       <div class="flex-grow-1">
         <h3 class="mb-0 fw-bold fs-4 text-white"><i class="fa-solid fa-pen-nib text-white me-2"></i>ARTICLE EDITOR</h3>
         <p class="theme-light-text small mb-0">Create and manage inspiring stories</p>
@@ -11,13 +12,14 @@
           routerLink="/admin/articles">
           <i class="fa-solid fa-arrow-left me-2"></i>Back to Articles
         </button>
-        <button type="button" class="btn btn-outline-light fw-semibold px-3 flex-grow-1 flex-md-grow-0 rounded-3" (click)="resetForm()">
+        <button type="button" class="btn btn-outline-light fw-semibold px-3 flex-grow-1 flex-md-grow-0 rounded-3"
+          (click)="resetForm()">
           <i class="fa-solid fa-rotate-left me-2"></i>Reset
         </button>
-        <button type="button" class="btn btn-dark fw-bold px-4 flex-grow-1 flex-md-grow-0 rounded-3" (click)="onSubmit()"
-          [disabled]="isPublishing">
+        <button type="button" class="btn btn-dark fw-bold px-4 flex-grow-1 flex-md-grow-0 rounded-3"
+          (click)="onSubmit()" [disabled]="isPublishing">
           <i class="fa-solid fa-paper-plane me-2"></i>
-          {{ isPublishing ? 'Saving...' : (isEditing ? 'Update Article' : 'Publish Article') }}
+          {{ submitButtonText }}
         </button>
       </div>
     </div>
@@ -25,73 +27,89 @@
 
   <div class="container-fluid px-3 px-md-4">
     <div class="row g-4">
-      
+
       <!-- Editor Column (Left) -->
       <div class="col-xl-7 col-lg-6">
-        
+
         <!-- Article Information -->
         <div class="card border-0 shadow-sm rounded-4 mb-4">
           <div class="card-body p-4">
-            <h5 class="fw-bold mb-4 text-dark border-bottom pb-2"><i class="fa-solid fa-circle-info me-2 text-muted"></i>Article Information</h5>
-            
+            <h5 class="fw-bold mb-4 text-dark border-bottom pb-2"><i
+                class="fa-solid fa-circle-info me-2 text-muted"></i>Article Information</h5>
+
             <div class="row g-3">
               <!-- Title -->
               <div class="col-md-8">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label class="form-label fw-semibold small text-uppercase mb-0">Title <span class="text-danger">*</span></label>
+                  <label class="form-label fw-semibold small text-uppercase mb-0">Title <span
+                      class="text-danger">*</span></label>
                   <span class="text-muted x-small">{{ article.title.length || 0 }}/150</span>
                 </div>
-                <input type="text" class="form-control custom-input" name="title" [(ngModel)]="article.title" required (input)="onTitleChange()" placeholder="Enter an inspiring title for your story..." maxlength="150">
+                <input type="text" class="form-control custom-input" name="title" [(ngModel)]="article.title" required
+                  (input)="onTitleChange()" placeholder="Enter an inspiring title for your story..." maxlength="150">
               </div>
-              
+
               <!-- Category -->
               <div class="col-md-4">
-                <label class="form-label fw-semibold small text-uppercase">Category <span class="text-danger">*</span></label>
-                <select class="form-select custom-input" name="category" [(ngModel)]="article.category" (change)="onCategoryChange()" required>
+                <label class="form-label fw-semibold small text-uppercase">Category <span
+                    class="text-danger">*</span></label>
+                <select class="form-select custom-input" name="category" [(ngModel)]="article.category"
+                  (change)="onCategoryChange()" required>
                   <option value="" disabled selected>Select category...</option>
                   <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
                 </select>
               </div>
-              
+
               <!-- Subtitle -->
               <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <label class="form-label fw-semibold small text-uppercase mb-0">Subtitle</label>
                   <span class="text-muted x-small">{{ article.subtitle.length || 0 }}/250</span>
                 </div>
-                <input type="text" class="form-control custom-input" name="subtitle" [(ngModel)]="article.subtitle" (input)="onSubtitleChange()" placeholder="Enter a brief subtitle or summary..." maxlength="250">
+                <input type="text" class="form-control custom-input" name="subtitle" [(ngModel)]="article.subtitle"
+                  (input)="onSubtitleChange()" placeholder="Enter a brief subtitle or summary..." maxlength="250">
               </div>
 
               <!-- Featured Image Upload -->
               <div class="col-12">
                 <label class="form-label fw-semibold small text-uppercase">Featured Image</label>
-                
+
                 <input type="file" #fileInput (change)="onFileSelected($event)" class="d-none" accept="image/*">
 
                 <!-- Display when image uploaded / selected -->
-                <div class="uploaded-image-preview-card d-flex align-items-center p-3 border rounded-4 bg-light mb-2" *ngIf="selectedFile || article.imageUrl">
-                  <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)" class="rounded-3 object-fit-cover me-3" style="width: 80px; height: 60px;">
+                <div class="uploaded-image-preview-card d-flex align-items-center p-3 border rounded-4 bg-light mb-2"
+                  *ngIf="selectedFile || article.imageUrl">
+                  <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)"
+                    class="rounded-3 object-fit-cover me-3" style="width: 80px; height: 60px;">
                   <div class="flex-grow-1 overflow-hidden">
-                    <div class="fw-bold text-dark text-truncate small">{{ selectedFile ? selectedFile.name : 'featured-image.jpg' }}</div>
-                    <div class="text-muted x-small">{{ selectedFile ? (selectedFile.size | number) + ' bytes' : 'Saved on server' }}</div>
+                    <div class="fw-bold text-dark text-truncate small">{{ selectedFile ? selectedFile.name :
+                      'featured-image.jpg' }}</div>
+                    <div class="text-muted x-small">{{ selectedFile ? (selectedFile.size | number) + ' bytes' : 'Saved
+                      on server' }}</div>
                   </div>
-                  <button type="button" class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="clearFileSlot($event, 1, fileInput)">
+                  <button type="button"
+                    class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 32px; height: 32px; padding:0;" (click)="clearFileSlot($event, 1, fileInput)">
                     <i class="fa-solid fa-trash"></i>
                   </button>
                 </div>
 
                 <!-- Dropzone (Hidden when image shown) -->
-                <div class="upload-box border-dashed rounded-4 p-4 text-center cursor-pointer" *ngIf="!selectedFile && !article.imageUrl" (click)="fileInput.click()">
+                <div class="upload-box border-dashed rounded-4 p-4 text-center cursor-pointer"
+                  *ngIf="!selectedFile && !article.imageUrl" [class.drag-over]="isDragOverFeatured"
+                  (click)="fileInput.click()" (dragover)="$event.preventDefault(); isDragOverFeatured = true"
+                  (dragleave)="isDragOverFeatured = false" (drop)="onFeaturedImageDrop($event)">
                   <i class="fa-solid fa-cloud-arrow-up fs-3 mb-2 text-muted"></i>
-                  <p class="mb-0 small fw-semibold">Click to upload featured image</p>
-                  <p class="x-small text-muted mb-0">Recommended size: 1920 x 1080</p>
+                  <p class="mb-0 small fw-semibold">Click or Drag to upload featured image</p>
+                  <p class="x-small text-muted mb-0 mt-1">Recommended size: 1920 x 1080</p>
                 </div>
               </div>
 
               <!-- Featured Image Caption -->
               <div class="col-12" *ngIf="selectedFile || article.imageUrl">
                 <label class="form-label fw-semibold small text-uppercase">Featured Image Caption</label>
-                <input type="text" class="form-control custom-input" name="imageCaption" [(ngModel)]="article.imageCaption" placeholder="Photo credits / description...">
+                <input type="text" class="form-control custom-input" name="imageCaption"
+                  [(ngModel)]="article.imageCaption" placeholder="Photo credits / description...">
               </div>
             </div>
           </div>
@@ -100,25 +118,26 @@
         <!-- Article Content sections -->
         <div class="card border-0 shadow-sm rounded-4 mb-4">
           <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom content-section-header">
+            <div
+              class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom content-section-header">
               <div>
-                <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-indent me-2 text-muted"></i>Article Content</h5>
+                <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-indent me-2 text-muted"></i>Article Content
+                </h5>
                 <p class="text-muted small mb-0">Add and arrange sections to build your article.</p>
               </div>
-              <button type="button" class="btn btn-theme btn-sm px-3 rounded-pill text-nowrap" (click)="openAddSection('paragraph')">
+              <button type="button" class="btn btn-theme btn-sm px-3 rounded-pill text-nowrap"
+                (click)="openAddSection('paragraph')">
                 <i class="fa-solid fa-plus me-1"></i> Add Section
               </button>
             </div>
 
             <!-- Sections List -->
             <div class="sections-list d-flex flex-column gap-3 mb-4">
-              <div *ngFor="let sec of article.sections; let i = index" 
-                   class="section-item-card d-flex align-items-center p-3 bg-white border rounded-4 shadow-sm"
-                   draggable="true" 
-                   (dragstart)="onDragStart(i)" 
-                   (dragover)="onDragOver($event)" 
-                   (drop)="onDrop(i)">
-                
+              <div *ngFor="let sec of article.sections; let i = index"
+                class="section-item-card d-flex align-items-center p-3 bg-white border rounded-4 shadow-sm"
+                [class.active-section-card]="editingSectionIndex === i" draggable="true" (dragstart)="onDragStart(i)"
+                (dragover)="onDragOver($event)" (drop)="onDrop(i)">
+
                 <!-- Drag Handle -->
                 <div class="drag-handle text-muted px-2 me-2 cursor-grab">
                   <i class="fa-solid fa-grip-vertical fs-5"></i>
@@ -127,20 +146,21 @@
                 <!-- Badge and Content Preview -->
                 <div class="flex-grow-1 min-w-0">
                   <!-- Section Type Badge -->
-                  <span class="badge rounded-pill px-3 py-1 text-uppercase small mb-2 d-inline-block font-monospace shadow-xs" 
-                        [class.bg-subheading]="sec.type === 'sub-heading'"
-                        [class.bg-paragraph]="sec.type === 'paragraph'"
-                        [class.bg-image-sec]="sec.type === 'image'"
-                        [class.bg-quote]="sec.type === 'quote'">
+                  <span
+                    class="badge rounded-pill px-3 py-1 text-uppercase small mb-2 d-inline-block font-monospace shadow-xs"
+                    [class.bg-subheading]="sec.type === 'sub-heading'" [class.bg-paragraph]="sec.type === 'paragraph'"
+                    [class.bg-image-sec]="sec.type === 'image'" [class.bg-quote]="sec.type === 'quote'"
+                    [class.bg-list]="sec.type === 'list'" [class.bg-highlight]="sec.type === 'highlight'">
                     {{ sec.type === 'sub-heading' ? 'Sub Heading' : sec.type }}
                   </span>
-                  
+
                   <!-- Preview Text / Content -->
-                  <div class="section-content-preview text-muted small text-truncate" *ngIf="sec.type !== 'image'">
-                    {{ sec.content }}
+                  <div class="section-content-preview text-muted small text-truncate" *ngIf="sec.type !== 'image'"
+                    [innerHTML]="sec.content">
                   </div>
                   <div class="section-content-preview d-flex align-items-center gap-2" *ngIf="sec.type === 'image'">
-                    <img [src]="articleService.getImageUrl(sec.content)" class="rounded object-fit-cover shadow-xs border" style="width: 45px; height: 35px;">
+                    <img [src]="articleService.getImageUrl(sec.content)"
+                      class="rounded object-fit-cover shadow-xs border" style="width: 45px; height: 35px;">
                     <span class="text-muted small text-truncate">{{ sec.caption || 'Image content' }}</span>
                   </div>
                 </div>
@@ -149,61 +169,348 @@
                 <div class="section-actions d-flex align-items-center gap-2 ms-3">
                   <!-- Up/Down arrows -->
                   <div class="d-flex flex-column gap-1">
-                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded" (click)="moveSectionUp(i, $event)" [disabled]="i === 0">
+                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded"
+                      (click)="moveSectionUp(i, $event)" [disabled]="i === 0">
                       <i class="fa-solid fa-chevron-up x-small"></i>
                     </button>
-                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded" (click)="moveSectionDown(i, $event)" [disabled]="i === article.sections.length - 1">
+                    <button type="button" class="btn btn-xs btn-light border py-0 px-1 rounded"
+                      (click)="moveSectionDown(i, $event)" [disabled]="i === article.sections.length - 1">
                       <i class="fa-solid fa-chevron-down x-small"></i>
                     </button>
                   </div>
-                  
-                  <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="openEditSection(i)">
+
+                  <button type="button"
+                    class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                    style="width: 32px; height: 32px; padding:0;" (click)="openEditSection(i)">
                     <i class="fa-solid fa-pencil"></i>
                   </button>
-                  <button type="button" class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; padding:0;" (click)="deleteSection(i)">
+                  <button type="button"
+                    class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                    style="width: 32px; height: 32px; padding:0;" (click)="deleteSection(i)">
                     <i class="fa-solid fa-trash-can"></i>
                   </button>
                 </div>
               </div>
 
               <!-- Empty State -->
-              <div class="empty-sections-placeholder text-center py-5 border border-dashed rounded-4 bg-light" *ngIf="!article.sections || article.sections.length === 0">
+              <div class="empty-sections-placeholder text-center py-5 border border-dashed rounded-4 bg-light"
+                *ngIf="!article.sections || article.sections.length === 0">
                 <i class="fa-solid fa-cubes fs-2 text-muted mb-3 opacity-50"></i>
                 <h6 class="fw-bold text-dark mb-1">No content sections yet</h6>
-                <p class="text-muted small mb-0 px-4">Start adding headings, paragraphs, images, or quotes to write your story.</p>
+                <p class="text-muted small mb-0 px-4">Start adding headings, paragraphs, images, or quotes to write your
+                  story.</p>
               </div>
             </div>
 
-            <!-- Section Types Shortcuts Legend -->
-            <div class="border-top pt-4">
-              <label class="form-label fw-bold small text-uppercase mb-3 text-muted">Section Types Shortcuts</label>
+            <!-- Inline Section Editor Card -->
+            <div id="inline-editor-card" class="card border-0 shadow-sm rounded-4 mb-4 animate-fade-in"
+              *ngIf="editingSectionIndex !== null" style="border: 1px solid rgba(0,0,0,0.08) !important;">
+              <div
+                class="card-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-pen-nib theme-text fs-5"></i>
+                  <h5 class="fw-bold mb-0 text-dark">
+                    Edit {{ sectionForm.type === 'sub-heading' ? 'Heading' : (sectionForm.type | titlecase) }}
+                  </h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-muted small me-2 fw-semibold bg-light px-2 py-1 rounded">
+                    <span class="d-none d-sm-inline">Section </span>#{{ editingSectionIndex + 1 }}
+                  </span>
+                  <div class="d-flex gap-1">
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-2 rounded-3"
+                      (click)="prevSection()" [disabled]="editingSectionIndex === 0">
+                      <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-2 rounded-3"
+                      (click)="nextSection()" [disabled]="editingSectionIndex === article.sections.length - 1">
+                      <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                  </div>
+                  <button type="button"
+                    class="btn btn-outline-danger btn-sm rounded-3 px-2 px-sm-3 ms-2 d-flex align-items-center gap-1"
+                    (click)="deleteSection(editingSectionIndex)">
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span class="d-none d-sm-inline">Delete Section</span>
+                    <span class="d-inline d-sm-none">Delete</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-body p-4">
+                <!-- If type is NOT image: Rich Text Editor -->
+                <div *ngIf="sectionForm.type !== 'image'">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="form-label fw-bold small text-uppercase mb-0">Content *</label>
+                    <span class="text-muted x-small fw-semibold">
+                      {{ getPlainLength(article.sections[editingSectionIndex].content) }}/{{ sectionForm.type ===
+                      'sub-heading' ? 150 : (sectionForm.type === 'quote' ? 500 : 2000) }}
+                    </span>
+                  </div>
+
+                  <!-- Rich Text Editor Container -->
+                  <div class="rich-editor-container border rounded-4 overflow-hidden mb-4 bg-white">
+                    <!-- Toolbar -->
+                    <div class="editor-toolbar d-flex align-items-center gap-1 p-2 border-bottom bg-light flex-wrap">
+                      <!-- Dropdown for Section block style selection -->
+                      <select class="form-select border-0 bg-transparent fw-bold text-dark py-1 px-2 me-2"
+                        style="width: 140px; min-width: 140px; flex-shrink: 0; font-size: 0.9rem; cursor: pointer; outline: none; box-shadow: none;"
+                        [ngModel]="sectionForm.type" (ngModelChange)="changeSectionType($event)">
+                        <option value="paragraph">Paragraph</option>
+                        <option value="sub-heading">Heading</option>
+                        <option value="list">List</option>
+                        <option value="quote">Quote</option>
+                        <option value="highlight">Highlight</option>
+                      </select>
+
+                      <div class="editor-toolbar-separator border-end h-100 mx-2" style="width: 1px; min-height: 24px;">
+                      </div>
+
+                      <!-- Formatting Buttons -->
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isBold"
+                        (mousedown)="formatDoc('bold'); $event.preventDefault()" title="Bold">
+                        <i class="fa-solid fa-bold"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isItalic"
+                        (mousedown)="formatDoc('italic'); $event.preventDefault()" title="Italic">
+                        <i class="fa-solid fa-italic"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isUnderline"
+                        (mousedown)="formatDoc('underline'); $event.preventDefault()" title="Underline">
+                        <i class="fa-solid fa-underline"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" (mousedown)="addLink(); $event.preventDefault()" title="Insert Link">
+                        <i class="fa-solid fa-link"></i>
+                      </button>
+
+                      <div class="editor-toolbar-separator border-end h-100 mx-2" style="width: 1px; min-height: 24px;">
+                      </div>
+
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isBulletList"
+                        (mousedown)="formatDoc('insertUnorderedList'); $event.preventDefault()" title="Bullet List">
+                        <i class="fa-solid fa-list-ul"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isOrderedList"
+                        (mousedown)="formatDoc('insertOrderedList'); $event.preventDefault()" title="Numbered List">
+                        <i class="fa-solid fa-list-ol"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" [class.active-tool]="isBlockQuote"
+                        (mousedown)="formatDoc('formatBlock', '<blockquote>'); $event.preventDefault()" title="Block Quote">
+                        <i class="fa-solid fa-quote-left"></i>
+                      </button>
+
+                      <div class="editor-toolbar-separator border-end h-100 mx-2" style="width: 1px; min-height: 24px;">
+                      </div>
+
+                      <button type="button" class="btn btn-sm btn-editor-tool" (mousedown)="formatDoc('undo'); $event.preventDefault()" title="Undo">
+                        <i class="fa-solid fa-rotate-left"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-editor-tool" (mousedown)="formatDoc('redo'); $event.preventDefault()" title="Redo">
+                        <i class="fa-solid fa-rotate-right"></i>
+                      </button>
+                    </div>
+
+                    <!-- Heading Options Toggle -->
+                    <div
+                      class="d-flex align-items-center gap-2 p-2 px-3 border-bottom bg-light heading-toggle-container"
+                      *ngIf="sectionForm.type === 'sub-heading'" style="border-top: 1px solid rgba(0,0,0,0.08);">
+                      <div class="form-check form-switch mb-0 d-flex align-items-center gap-2">
+                        <input class="form-check-input cursor-pointer" type="checkbox" role="switch"
+                          id="toggleHeadingLine" [checked]="sectionForm.caption !== 'hide-line'"
+                          (change)="toggleHeadingLine($event)">
+                        <label class="form-check-label small fw-bold text-secondary cursor-pointer heading-toggle-label"
+                          for="toggleHeadingLine">
+                          Show Bottom Separator Line
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- Contenteditable Div -->
+                    <div class="editor-content-editable p-3 bg-white" contenteditable="true"
+                      [attr.data-index]="editingSectionIndex" (input)="updateActiveSectionContentFromDOM($event)"
+                      (blur)="updateActiveSectionContentFromDOM($event)" (click)="saveSelection(); checkActiveFormats()"
+                      (keyup)="saveSelection(); checkActiveFormats()" (mouseup)="saveSelection()" (keydown)="onEditorKeyDown($event)" (paste)="onEditorPaste($event)"
+                      style="min-height: 180px; max-height: 400px; overflow-y: auto; outline: none; line-height: 1.6; font-size: 1rem; color: #333;"
+                      placeholder="Start writing section content...">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- If type is Image: File Upload / Caption -->
+                <div *ngIf="sectionForm.type === 'image'">
+                  <label class="form-label fw-bold small text-uppercase">Upload Section Image</label>
+                  <div class="upload-box border-dashed rounded-4 p-4 text-center position-relative mb-3"
+                    [class.drag-over]="isDragOverSection" (dragover)="$event.preventDefault(); isDragOverSection = true"
+                    (dragleave)="isDragOverSection = false" (drop)="onSectionImageDrop($event)">
+                    <input type="file" (change)="onSectionFileSelected($event)" (click)="$event.target.value = ''"
+                      class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
+
+                    <div *ngIf="isUploadingSectionImage" class="py-2">
+                      <div class="spinner-border theme-text mb-2" role="status" style="width: 2rem; height: 2rem;">
+                        <span class="visually-hidden">Uploading...</span>
+                      </div>
+                      <p class="mb-0 text-muted small fw-semibold">Uploading image to server...</p>
+                    </div>
+
+                    <div *ngIf="!isUploadingSectionImage">
+                      <i class="fa-solid fa-images fs-2 mb-2 text-muted"></i>
+                      <p class="mb-0 small fw-bold text-dark" *ngIf="!sectionForm.content">Click or Drag image file here
+                      </p>
+                      <p class="mb-0 small text-success fw-bold" *ngIf="sectionForm.content">Image ready (replace by
+                        clicking again)</p>
+                      <p class="x-small text-muted mb-0 mt-1">Accepts JPG, PNG, WebP up to 50MB</p>
+                    </div>
+                  </div>
+
+                  <!-- Preview with Remove Action -->
+                  <div class="d-flex align-items-center p-3 border rounded-4 bg-light mb-3"
+                    *ngIf="sectionForm.content && !isUploadingSectionImage">
+                    <img [src]="articleService.getImageUrl(sectionForm.content)" class="rounded-3 object-fit-cover me-3"
+                      style="width: 80px; height: 60px;">
+                    <div class="flex-grow-1 overflow-hidden">
+                      <div class="fw-bold text-dark text-truncate small">section-image.jpg</div>
+                      <div class="text-muted x-small">Uploaded image URL</div>
+                    </div>
+                    <button type="button"
+                      class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                      style="width: 32px; height: 32px; padding:0;" (click)="clearSectionImage()">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+
+                  <!-- Caption -->
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label fw-bold small text-uppercase mb-0">Optional Image Caption</label>
+                    <span class="text-muted x-small">{{ (sectionForm.caption || '').length }}/150</span>
+                  </div>
+                  <input type="text" class="form-control custom-input" [(ngModel)]="sectionForm.caption"
+                    (input)="onCaptionChange()" name="secCaption"
+                    placeholder="Enter a descriptive caption for this image..." maxlength="150">
+                </div>
+
+                <!-- Done Editing Button -->
+                <div class="d-flex justify-content-center justify-content-sm-end gap-2 border-top pt-3 mt-4 w-100">
+                  <button type="button" class="btn btn-theme w-100 w-sm-auto px-4 rounded-pill fw-bold"
+                    (click)="closeEditor()">
+                    <i class="fa-solid fa-check me-2"></i> Done Editing
+                  </button>
+                </div>
+
+                <!-- Text Formatting Options (Cards at the bottom) -->
+                <div class="border-top pt-4 mt-4" *ngIf="sectionForm.type !== 'image'">
+                  <label class="form-label fw-bold small text-uppercase mb-3 text-muted">Text Formatting</label>
+                  <div class="row g-2">
+                    <!-- Heading -->
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-6">
+                      <div
+                        class="legend-type-card bg-subheading-light border-subheading p-3 rounded-4 cursor-pointer text-center"
+                        [class.active-card-type]="sectionForm.type === 'sub-heading'"
+                        (click)="changeSectionType('sub-heading')">
+                        <div class="badge-circle bg-subheading text-uppercase font-monospace mb-2 mx-auto shadow-xs">H
+                        </div>
+                        <div class="fw-bold text-dark small mb-1">Sub Heading</div>
+                        <p class="mb-0 text-muted x-small lh-sm">H2 Section Heading</p>
+                      </div>
+                    </div>
+                    <!-- List -->
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-6">
+                      <div
+                        class="legend-type-card bg-paragraph-light border-paragraph p-3 rounded-4 cursor-pointer text-center"
+                        [class.active-card-type]="sectionForm.type === 'list'" (click)="changeSectionType('list')">
+                        <div class="badge-circle bg-paragraph mb-2 mx-auto shadow-xs"><i
+                            class="fa-solid fa-list-ul"></i></div>
+                        <div class="fw-bold text-dark small mb-1">List</div>
+                        <p class="mb-0 text-muted x-small lh-sm">Bullet or Numbered</p>
+                      </div>
+                    </div>
+                    <!-- Quote -->
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-6">
+                      <div class="legend-type-card bg-quote-light border-quote p-3 rounded-4 cursor-pointer text-center"
+                        [class.active-card-type]="sectionForm.type === 'quote'" (click)="changeSectionType('quote')">
+                        <div class="badge-circle bg-quote mb-2 mx-auto shadow-xs"><i class="fa-solid fa-quote-left"></i>
+                        </div>
+                        <div class="fw-bold text-dark small mb-1">Quote</div>
+                        <p class="mb-0 text-muted x-small lh-sm">Block Quote</p>
+                      </div>
+                    </div>
+                    <!-- Highlight -->
+                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-6">
+                      <div
+                        class="legend-type-card bg-highlight-light border-highlight p-3 rounded-4 cursor-pointer text-center"
+                        [class.active-card-type]="sectionForm.type === 'highlight'"
+                        (click)="changeSectionType('highlight')">
+                        <div class="badge-circle bg-highlight mb-2 mx-auto shadow-xs"><i
+                            class="fa-solid fa-lightbulb"></i></div>
+                        <div class="fw-bold text-dark small mb-1">Highlight</div>
+                        <p class="mb-0 text-muted x-small lh-sm">Important text</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section Types Shortcuts Legend (Only shown when not editing) -->
+            <div class="border-top pt-4" *ngIf="editingSectionIndex === null">
+              <label class="form-label fw-bold small text-uppercase mb-3 text-muted">Add Section Content</label>
               <div class="row g-2">
                 <!-- Sub Heading -->
-                <div class="col-md-3 col-6">
-                  <div class="legend-type-card bg-subheading-light border-subheading p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('sub-heading')">
-                    <span class="badge rounded-pill bg-subheading text-uppercase font-monospace mb-2 small shadow-xs">Sub Heading</span>
-                    <p class="mb-0 text-muted x-small lh-sm">For section headings and titles</p>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div
+                    class="legend-type-card bg-subheading-light border-subheading p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('sub-heading')">
+                    <span
+                      class="badge rounded-pill bg-subheading text-uppercase font-monospace mb-2 small shadow-xs">Heading</span>
+                    <p class="mb-0 text-muted x-small lh-sm">H2 Sub-Heading</p>
                   </div>
                 </div>
                 <!-- Paragraph -->
-                <div class="col-md-3 col-6">
-                  <div class="legend-type-card bg-paragraph-light border-paragraph p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('paragraph')">
-                    <span class="badge rounded-pill bg-paragraph text-uppercase font-monospace mb-2 small shadow-xs">Paragraph</span>
-                    <p class="mb-0 text-muted x-small lh-sm">For normal text paragraphs</p>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div
+                    class="legend-type-card bg-paragraph-light border-paragraph p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('paragraph')">
+                    <span
+                      class="badge rounded-pill bg-paragraph text-uppercase font-monospace mb-2 small shadow-xs">Paragraph</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Normal body text</p>
                   </div>
                 </div>
-                <!-- Image -->
-                <div class="col-md-3 col-6">
-                  <div class="legend-type-card bg-image-sec-light border-image-sec p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('image')">
-                    <span class="badge rounded-pill bg-image-sec text-uppercase font-monospace mb-2 small shadow-xs">Image</span>
-                    <p class="mb-0 text-muted x-small lh-sm">Illustrations with captions</p>
+                <!-- List -->
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div
+                    class="legend-type-card bg-paragraph-light border-paragraph p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('list')">
+                    <span class="badge rounded-pill bg-paragraph text-uppercase font-monospace mb-2 small shadow-xs"
+                      style="background-color: #E0F2F1 !important; color: #00796B !important; border: 1px solid rgba(0, 121, 107, 0.15);">List</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Bullet or numbered</p>
                   </div>
                 </div>
                 <!-- Quote -->
-                <div class="col-md-3 col-6">
-                  <div class="legend-type-card bg-quote-light border-quote p-3 rounded-4 cursor-pointer text-center" (click)="openAddSection('quote')">
-                    <span class="badge rounded-pill bg-quote text-uppercase font-monospace mb-2 small shadow-xs">Quote</span>
-                    <p class="mb-0 text-muted x-small lh-sm">Highlight blockquotes</p>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div class="legend-type-card bg-quote-light border-quote p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('quote')">
+                    <span
+                      class="badge rounded-pill bg-quote text-uppercase font-monospace mb-2 small shadow-xs">Quote</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Highlight quotes</p>
+                  </div>
+                </div>
+                <!-- Highlight -->
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div
+                    class="legend-type-card bg-image-sec-light border-image-sec p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('highlight')">
+                    <span class="badge rounded-pill bg-image-sec text-uppercase font-monospace mb-2 small shadow-xs"
+                      style="background-color: #FFFDE7 !important; color: #F57F17 !important; border: 1px solid rgba(245, 127, 23, 0.15);">Highlight</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Important callouts</p>
+                  </div>
+                </div>
+                <!-- Image -->
+                <div class="col-lg-2 col-md-4 col-6">
+                  <div
+                    class="legend-type-card bg-image-sec-light border-image-sec p-3 rounded-4 cursor-pointer text-center"
+                    (click)="openAddSection('image')">
+                    <span
+                      class="badge rounded-pill bg-image-sec text-uppercase font-monospace mb-2 small shadow-xs">Image</span>
+                    <p class="mb-0 text-muted x-small lh-sm">Images & Captions</p>
                   </div>
                 </div>
               </div>
@@ -215,7 +522,8 @@
                 <!-- Author Name (Readonly) -->
                 <div class="col-md-6">
                   <label class="form-label fw-semibold small text-uppercase">Author Name</label>
-                  <input type="text" class="form-control custom-input bg-light-subtle" name="author" [(ngModel)]="article.author" readonly>
+                  <input type="text" class="form-control custom-input bg-light-subtle" name="author"
+                    [(ngModel)]="article.author" readonly>
                 </div>
                 <!-- Placement / Section Type (Admin Only) -->
                 <div class="col-md-6" *ngIf="currentUser?.role === 'ADMIN'">
@@ -230,7 +538,8 @@
                 <!-- Verification Source Link -->
                 <div class="col-12">
                   <label class="form-label fw-semibold small text-uppercase">Verification Source Link</label>
-                  <input type="url" class="form-control custom-input" name="sourceLink" [(ngModel)]="article.sourceLink" placeholder="Original article link...">
+                  <input type="url" class="form-control custom-input" name="sourceLink" [(ngModel)]="article.sourceLink"
+                    placeholder="Original article link...">
                 </div>
               </div>
             </div>
@@ -242,7 +551,8 @@
         <div class="accordion border-0 shadow-sm rounded-4 overflow-hidden mb-4" id="advancedAccordion">
           <div class="accordion-item border-0 bg-white">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed fw-bold text-dark py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings">
+              <button class="accordion-button collapsed fw-bold text-dark py-3 px-4" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseSettings">
                 <i class="fa-solid fa-sliders me-2 text-muted"></i>SEO Configurations
               </button>
             </h2>
@@ -255,12 +565,16 @@
                       <label class="form-label fw-semibold small text-uppercase mb-0">Meta Title</label>
                       <span class="text-muted x-small">{{ article.metaTitle.length || 0 }}/70</span>
                     </div>
-                    <input type="text" class="form-control custom-input" name="metaTitle" [(ngModel)]="article.metaTitle" (input)="isMetaTitleCustomized = true" placeholder="Enter SEO Meta Title (max 70 characters)..." maxlength="70">
+                    <input type="text" class="form-control custom-input" name="metaTitle"
+                      [(ngModel)]="article.metaTitle" (input)="isMetaTitleCustomized = true"
+                      placeholder="Enter SEO Meta Title (max 70 characters)..." maxlength="70">
                   </div>
                   <!-- Meta Keywords -->
                   <div class="col-md-6">
                     <label class="form-label fw-semibold small text-uppercase">Meta Keywords</label>
-                    <input type="text" class="form-control custom-input" name="metaKeywords" [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true" placeholder="Enter keywords separated by commas (e.g. story, health, travel)...">
+                    <input type="text" class="form-control custom-input" name="metaKeywords"
+                      [(ngModel)]="article.metaKeywords" (input)="isMetaKeywordsCustomized = true"
+                      placeholder="Enter keywords separated by commas (e.g. story, health, travel)...">
                   </div>
                   <!-- Meta Description -->
                   <div class="col-12">
@@ -268,7 +582,10 @@
                       <label class="form-label fw-semibold small text-uppercase mb-0">Meta Description</label>
                       <span class="text-muted x-small">{{ article.metaDescription.length || 0 }}/160</span>
                     </div>
-                    <textarea class="form-control custom-input" rows="3" name="metaDescription" [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true" placeholder="Enter SEO Meta Description for search results (max 160 characters)..." maxlength="160"></textarea>
+                    <textarea class="form-control custom-input" rows="3" name="metaDescription"
+                      [(ngModel)]="article.metaDescription" (input)="isMetaDescriptionCustomized = true"
+                      placeholder="Enter SEO Meta Description for search results (max 160 characters)..."
+                      maxlength="160"></textarea>
                   </div>
                 </div>
               </div>
@@ -286,24 +603,27 @@
             <span class="badge bg-light text-muted border font-monospace">PREVIEW MODE</span>
           </div>
           <div class="card-body p-4 preview-scrollable-body bg-white">
-            
+
             <!-- Article Main Title -->
             <h1 class="preview-article-title fw-bold text-dark mb-2">
               {{ article.title || 'Untitled Article' }}
             </h1>
-            
+
             <!-- Article Subtitle -->
             <p class="preview-article-subtitle text-muted fs-5 mb-4" *ngIf="article.subtitle">
               {{ article.subtitle }}
             </p>
-            
+
             <!-- Divider -->
             <hr class="my-4 opacity-50" *ngIf="article.title || article.subtitle">
 
             <!-- Featured Banner (if selected) -->
-            <div class="preview-featured-banner rounded-4 overflow-hidden mb-4 shadow-sm" *ngIf="selectedFile || article.imageUrl">
-              <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)" class="w-100 object-fit-cover" style="max-height: 250px;">
-              <div class="text-muted small p-2 bg-light border-top border-light fst-italic" *ngIf="article.imageCaption">
+            <div class="preview-featured-banner rounded-4 overflow-hidden mb-4 shadow-sm"
+              *ngIf="selectedFile || article.imageUrl">
+              <img [src]="selectedFile ? featuredImagePreviewUrl : articleService.getImageUrl(article.imageUrl)"
+                class="w-100 object-fit-cover" style="max-height: 250px;">
+              <div class="text-muted small p-2 bg-light border-top border-light fst-italic"
+                *ngIf="article.imageCaption">
                 <i class="fa-solid fa-camera me-1"></i> {{ article.imageCaption }}
               </div>
             </div>
@@ -311,19 +631,23 @@
             <!-- Dynamic Sections Rendered in Preview -->
             <div class="preview-sections-container">
               <div *ngFor="let sec of article.sections" class="preview-section-block mb-4">
-                
+
                 <!-- Render Sub Heading -->
-                <h3 class="preview-heading fw-bold text-dark mt-4 mb-3" *ngIf="sec.type === 'sub-heading'">
-                  {{ sec.content }}
+                <h3 class="preview-heading fw-bold text-dark mt-4 mb-3" *ngIf="sec.type === 'sub-heading'"
+                  [class.hide-heading-line]="sec.caption === 'hide-line'" [innerHTML]="sec.content">
                 </h3>
-                
+
                 <!-- Render Paragraph -->
-                <p class="preview-paragraph lh-base mb-3 text-secondary" *ngIf="sec.type === 'paragraph'">
-                  {{ sec.content }}
-                </p>
-                
+                <div class="preview-paragraph lh-base mb-3 text-secondary" *ngIf="sec.type === 'paragraph'"
+                  [innerHTML]="sec.content"></div>
+
+                <!-- Render List -->
+                <div class="preview-paragraph lh-base mb-3 text-secondary ps-3" *ngIf="sec.type === 'list'"
+                  [innerHTML]="sec.content"></div>
+
                 <!-- Render Image -->
-                <div class="preview-image-block rounded-3 overflow-hidden border my-4 shadow-xs text-center" *ngIf="sec.type === 'image'">
+                <div class="preview-image-block rounded-3 overflow-hidden border my-4 shadow-xs text-center"
+                  *ngIf="sec.type === 'image'">
                   <img [src]="articleService.getImageUrl(sec.content)" class="img-fluid">
                   <div class="p-2 bg-light border-top text-muted small fst-italic" *ngIf="sec.caption">
                     {{ sec.caption }}
@@ -331,14 +655,23 @@
                 </div>
 
                 <!-- Render Quote -->
-                <blockquote class="preview-blockquote my-4 p-3 border-start border-4 theme-border bg-light rounded-end-3" *ngIf="sec.type === 'quote'">
-                  <p class="fs-5 fw-semibold fst-italic text-dark mb-0">"{{ sec.content }}"</p>
+                <blockquote
+                  class="preview-blockquote my-4 p-3 border-start border-4 theme-border bg-light rounded-end-3"
+                  *ngIf="sec.type === 'quote'">
+                  <div class="fs-5 fw-semibold fst-italic text-dark mb-0" [innerHTML]="sec.content"></div>
                 </blockquote>
+
+                <!-- Render Highlight -->
+                <div class="preview-highlight my-4 p-3 border-start border-4 border-warning bg-light rounded-end-3"
+                  *ngIf="sec.type === 'highlight'">
+                  <div class="mb-0 text-dark fw-medium" [innerHTML]="sec.content"></div>
+                </div>
 
               </div>
 
               <!-- Preview Empty State -->
-              <div class="text-center py-5 text-muted opacity-50" *ngIf="!article.sections || article.sections.length === 0">
+              <div class="text-center py-5 text-muted opacity-50"
+                *ngIf="!article.sections || article.sections.length === 0">
                 <i class="fa-solid fa-feather-pointed fs-2 mb-3"></i>
                 <p class="small mb-0">Live layout preview will appear here as you add sections.</p>
               </div>
@@ -348,78 +681,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
-
-<!-- Add/Edit Section Modal Backdrop -->
-<div class="custom-modal-backdrop d-flex align-items-center justify-content-center" *ngIf="showSectionModal">
-  <div class="custom-modal-dialog bg-white rounded-4 shadow-lg p-4 animate-fade-in">
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-      <h5 class="fw-bold mb-0 text-dark">
-        <i class="fa-solid fa-cube theme-text me-2"></i>{{ editingSectionIndex !== null ? 'Edit Section' : 'Add Section' }}
-      </h5>
-      <button type="button" class="btn-close" (click)="showSectionModal = false" aria-label="Close"></button>
-    </div>
-    
-    <div class="mb-4">
-      <label class="form-label fw-bold small text-uppercase">Section Type</label>
-      <select class="form-select custom-input" [(ngModel)]="sectionForm.type" name="secType" [disabled]="editingSectionIndex !== null">
-        <option value="sub-heading">Sub Heading</option>
-        <option value="paragraph">Paragraph</option>
-        <option value="image">Image</option>
-        <option value="quote">Quote</option>
-      </select>
-    </div>
-
-    <!-- Content fields for non-image -->
-    <div class="mb-4" *ngIf="sectionForm.type !== 'image'">
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <label class="form-label fw-bold small text-uppercase mb-0">Content Text</label>
-        <span class="text-muted x-small">
-          {{ sectionForm.content.length || 0 }}/{{ sectionForm.type === 'sub-heading' ? 150 : (sectionForm.type === 'quote' ? 500 : 5000) }}
-        </span>
-      </div>
-      <textarea class="form-control custom-input" rows="6" [(ngModel)]="sectionForm.content" name="secContent" [placeholder]="sectionForm.type === 'sub-heading' ? 'Enter sub-heading text...' : (sectionForm.type === 'quote' ? 'Enter quote message here...' : 'Write your paragraph body here...')" [maxlength]="sectionForm.type === 'sub-heading' ? 150 : (sectionForm.type === 'quote' ? 500 : 5000)"></textarea>
-    </div>
-
-    <!-- Content fields for image upload -->
-    <div class="mb-4" *ngIf="sectionForm.type === 'image'">
-      <label class="form-label fw-bold small text-uppercase">Upload Image File</label>
-      <div class="upload-box border-dashed rounded-4 p-4 text-center position-relative mb-3">
-        <input type="file" (change)="onSectionFileSelected($event)" class="position-absolute top-0 start-0 w-100 h-100 opacity-0 cursor-pointer" accept="image/*">
-        
-        <div *ngIf="isUploadingSectionImage" class="py-2">
-          <div class="spinner-border theme-text mb-2" role="status" style="width: 2rem; height: 2rem;">
-            <span class="visually-hidden">Uploading...</span>
-          </div>
-          <p class="mb-0 text-muted small fw-semibold">Uploading image to server...</p>
-        </div>
-
-        <div *ngIf="!isUploadingSectionImage">
-          <i class="fa-solid fa-images fs-2 mb-2 text-muted"></i>
-          <p class="mb-0 small fw-bold text-dark" *ngIf="!sectionForm.content">Click or Drag image file here</p>
-          <p class="mb-0 small text-success fw-bold" *ngIf="sectionForm.content">Image ready (replace by clicking again)</p>
-          <p class="x-small text-muted mb-0 mt-1">Accepts JPG, PNG, WebP up to 50MB</p>
-        </div>
-      </div>
-      
-      <!-- Loaded Image Preview inside Modal -->
-      <div class="text-center rounded-3 bg-light p-2 border mb-3" *ngIf="sectionForm.content && !isUploadingSectionImage">
-        <img [src]="articleService.getImageUrl(sectionForm.content)" class="img-fluid rounded border shadow-xs" style="max-height: 140px;">
-      </div>
-      
-      <!-- Caption -->
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <label class="form-label fw-bold small text-uppercase mb-0">Optional Image Caption</label>
-        <span class="text-muted x-small">{{ sectionForm.caption.length || 0 }}/150</span>
-      </div>
-      <input type="text" class="form-control custom-input" [(ngModel)]="sectionForm.caption" name="secCaption" placeholder="Enter a descriptive caption for this image..." maxlength="150">
-    </div>
-
-    <div class="d-flex justify-content-end gap-2 border-top pt-3 mt-4">
-      <button type="button" class="btn btn-outline-secondary px-4 rounded-pill fw-semibold" (click)="showSectionModal = false">Cancel</button>
-      <button type="button" class="btn btn-theme px-4 rounded-pill fw-bold" (click)="saveSection()">Save Section</button>
     </div>
   </div>
 </div>

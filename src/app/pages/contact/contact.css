@@ -59,3 +59,11 @@
 @media (max-width: 991px) {
   .contact-info-card { margin-bottom: 30px; }
 }
+
+.contact-info-card a {
+  transition: color 0.2s ease;
+}
+
+.contact-info-card a:hover {
+  color: #a86b1b !important;
+}

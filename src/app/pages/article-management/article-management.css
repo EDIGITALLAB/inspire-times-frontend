@@ -38,3 +38,139 @@
 .badge {
   font-weight: 500;
 }
+
+@media (max-width: 768px) {
+  .d-md-none .card-body .btn {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* Custom Premium Modal Styles */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.custom-modal-card {
+  background: #fff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-modal-header {
+  background: #f8d7da;
+  color: #842029;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f5c2c7;
+}
+
+.custom-modal-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+}
+
+.custom-modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #842029;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.custom-modal-close-btn:hover {
+  opacity: 1;
+}
+
+.custom-modal-body {
+  padding: 24px 20px;
+  color: #212529;
+  font-size: 0.95rem;
+}
+
+.custom-modal-reason-text {
+  font-size: 1.05rem;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.custom-modal-footer {
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.custom-modal-btn-close {
+  background: #212529;
+  color: #fff;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.custom-modal-btn-close:hover {
+  background: #000;
+  transform: translateY(-1px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.hover-gold {
+  transition: color 0.2s ease;
+}
+
+.hover-gold:hover {
+  color: #D28A23 !important;
+  text-decoration: underline;
+}

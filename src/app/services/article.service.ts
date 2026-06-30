@@ -37,6 +37,12 @@ export class ArticleService {
     );
   }
 
+  getAllArticlesAdmin(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.backendUrl}/admin`, this.getHeaders()).pipe(
+      map(arts => this.sanitizeArticles(arts))
+    );
+  }
+
   getMyArticles(): Observable<any[]> {
     return this.http.get<any[]>(`${this.backendUrl}/my`, this.getHeaders()).pipe(
       map(arts => this.sanitizeArticles(arts))
@@ -99,6 +105,24 @@ export class ArticleService {
     return this.http.delete(`${this.backendUrl}/${id}`, this.getHeaders());
   }
 
+  approveArticle(id: number): Observable<any> {
+    return this.http.put(`${this.backendUrl}/${id}/approve`, {}, this.getHeaders()).pipe(
+      map(art => this.sanitizeArticle(art))
+    );
+  }
+
+  rejectArticle(id: number, reason: string): Observable<any> {
+    return this.http.put(`${this.backendUrl}/${id}/reject`, { reason }, this.getHeaders()).pipe(
+      map(art => this.sanitizeArticle(art))
+    );
+  }
+
+  checkPlagiarism(id: number): Observable<any> {
+    return this.http.post(`${this.backendUrl}/${id}/check-plagiarism`, {}, this.getHeaders()).pipe(
+      map(art => this.sanitizeArticle(art))
+    );
+  }
+
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
@@ -118,7 +142,7 @@ export class ArticleService {
     let textContent = '';
     if (article.sections && article.sections.length > 0) {
       textContent = article.sections
-        .filter((sec: any) => sec.type === 'paragraph' || sec.type === 'sub-heading' || sec.type === 'quote')
+        .filter((sec: any) => sec.type === 'paragraph' || sec.type === 'sub-heading' || sec.type === 'quote' || sec.type === 'list' || sec.type === 'highlight')
         .map((sec: any) => sec.content || '')
         .join(' ');
     } else {

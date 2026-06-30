@@ -207,6 +207,17 @@
   }
 }
 
+@media (max-width: 576px) {
+  .editors-pick-card .img-wrapper {
+    height: 160px;
+  }
+
+  .editors-pick-skeleton-img {
+    min-height: 160px !important;
+    height: 160px !important;
+  }
+}
+
 .editors-pick-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.85rem;
@@ -507,4 +518,18 @@
   height: 8px;
   background-color: #111827;
   border-radius: 4px;
+}
+
+/* Responsive excerpt/content display for featured story card */
+.featured-excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 4; /* 4 lines on desktop */
+}
+
+@media (max-width: 768px) {
+  .featured-excerpt {
+    -webkit-line-clamp: 3 !important; /* 3 lines on mobile/tablet */
+  }
 }

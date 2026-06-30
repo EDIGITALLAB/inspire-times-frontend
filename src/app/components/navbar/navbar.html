@@ -25,7 +25,8 @@
     <div class="d-xl-none position-absolute start-50 translate-middle-x" [class.d-none]="isSearchOpen"
       [style.opacity]="isScrolled ? '1' : '0'"
       [style.transform]="isScrolled ? 'translate(-50%, 0)' : 'translate(-50%, 10px)'"
-      style="transition: all 0.4s ease; pointer-events: none;">
+      [style.pointer-events]="isScrolled ? 'auto' : 'none'"
+      style="transition: all 0.4s ease;">
       <span class="fw-bold text-dark cursor-pointer" style="font-size: 13px; letter-spacing: 2px;"
         routerLink="/">INSPIRE TIMES</span>
     </div>
@@ -126,9 +127,21 @@
     </div>
 
   </div>
+
+  <!-- Category subnav inside nav for mobile/tablet -->
+  <div class="category-subnav d-xl-none border-top mt-2 pt-2 pb-1 w-100">
+    <div class="container">
+      <div class="d-flex flex-nowrap align-items-center gap-3 overflow-auto scrollbar-hidden">
+        <div *ngFor="let cat of categories" class="flex-shrink-0">
+          <a class="nav-link p-0 text-secondary fw-semibold small text-nowrap" [routerLink]="['/category', cat]"
+            style="text-decoration: none; font-size: 13.5px;">{{cat}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
 
-<div class="nav-spacer" *ngIf="isScrolled" style="height: 64px;"></div>
+<div class="nav-spacer" *ngIf="isScrolled"></div>
 
 <!-- Sidebar Overlay -->
 <div class="sidebar-overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
@@ -239,15 +252,14 @@
 
   <!-- Sidebar Footer -->
   <div class="sidebar-footer mt-auto p-3 bg-light bg-opacity-10 text-center">
-    <div class="mb-3 d-flex justify-content-center gap-3">
-      <a routerLink="/contact" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
-        style="font-size: 10px; letter-spacing: 1px;">CONTACT</a>
-      <span class="text-muted opacity-25">|</span>
-      <a routerLink="/privacy" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
-        style="font-size: 10px; letter-spacing: 1px;">PRIVACY</a>
-      <span class="text-muted opacity-25">|</span>
-      <a routerLink="/terms" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold"
-        style="font-size: 10px; letter-spacing: 1px;">TERMS</a>
+    <div class="mb-3 d-flex flex-wrap justify-content-center align-items-center gap-2 gap-sm-3">
+      <a routerLink="/contact" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold sidebar-footer-link">CONTACT</a>
+      <span class="text-muted opacity-25 sidebar-footer-sep">|</span>
+      <a routerLink="/privacy" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold sidebar-footer-link">PRIVACY</a>
+      <span class="text-muted opacity-25 sidebar-footer-sep">|</span>
+      <a routerLink="/terms" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold sidebar-footer-link">TERMS</a>
+      <span class="text-muted opacity-25 sidebar-footer-sep">|</span>
+      <a routerLink="/disclaimer" (click)="toggleMenu()" class="text-muted text-decoration-none fw-bold hover-gold sidebar-footer-link">DISCLAIMER</a>
     </div>
     <div class="pt-2 border-top">
       <p class="text-muted mb-0" style="font-size: 9px;">&copy; 2026 INSPIRE TIMES. ALL RIGHTS RESERVED.</p>

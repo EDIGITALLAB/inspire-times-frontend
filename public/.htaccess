@@ -7,6 +7,10 @@
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^.*$ - [NC,L]
 
+  # Redirect social media bot and sharing crawler requests to the Spring Boot share endpoint
+  RewriteCond %{HTTP_USER_AGENT} (facebookexternalhit|Facebot|Twitterbot|LinkedInBot|Pinterest|WhatsApp|TelegramBot|Slackbot) [NC]
+  RewriteRule ^article/([^/]+)$ /api/articles/share/$1 [R=302,L]
+
   # Redirect all other URLs to index.html for Angular routing
   RewriteRule ^(.*)$ index.html [NC,L]
 </IfModule>

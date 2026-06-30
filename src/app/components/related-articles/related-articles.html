@@ -1,0 +1,42 @@
+<div class="related-container p-4">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h5 class="section-title mb-0">RELATED STORIES</h5>
+    <div class="related-dot"></div>
+  </div>
+
+  <div class="related-list" *ngIf="!isLoading">
+    <div class="related-item d-flex gap-3 mb-4 align-items-start" *ngFor="let article of relatedArticles" (click)="onCardClick($event, article.slug || article.id)" style="cursor: pointer;">
+      <div class="content-wrapper flex-grow-1">
+        <span class="category-badge mb-1 d-inline-block">{{ article.category }}</span>
+        <h6 class="article-title fw-bold line-clamp-2">
+          {{ article.title }}
+        </h6>
+        <div class="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2">
+          <p class="author-name text-muted small mb-0">By {{ article.author || 'Inspire Times Editorial Team' }}</p>
+          <span class="read-more-btn">Read More <i class="fa-solid fa-chevron-right ms-1" style="font-size: 8px;"></i></span>
+        </div>
+      </div>
+      <div class="image-wrapper">
+        <img [src]="getImageUrl(article.imageUrl)" class="rounded-2" alt="Related thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+      </div>
+    </div>
+    
+    <div *ngIf="relatedArticles.length === 0" class="empty-state p-4 text-center">
+      <div class="empty-state-icon mb-2" style="width: 48px; height: 48px; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.05); border-radius: 50%;">
+        <i class="fa-solid fa-book-open"></i>
+      </div>
+      <p class="empty-state-text small text-muted">No related stories found.</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading">
+    <div class="related-item d-flex gap-3 mb-4 align-items-start" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="content-wrapper flex-grow-1">
+        <div class="skeleton skeleton-badge mb-1" style="width: 60px; height: 16px;"></div>
+        <div class="skeleton skeleton-title mb-2" style="height: 14px; width: 90%;"></div>
+        <div class="skeleton skeleton-text" style="width: 40%; height: 10px;"></div>
+      </div>
+      <div class="skeleton rounded-2" style="width: 60px; height: 60px;"></div>
+    </div>
+  </div>
+</div>

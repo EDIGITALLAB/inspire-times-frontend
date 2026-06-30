@@ -258,13 +258,16 @@ textarea.custom-input {
     padding-top: 1.5rem !important;
     padding-bottom: 1.5rem !important;
   }
+
   .empty-sections-placeholder i {
     font-size: 1.5rem !important;
     margin-bottom: 0.5rem !important;
   }
+
   .empty-sections-placeholder h6 {
     font-size: 0.85rem !important;
   }
+
   .empty-sections-placeholder p {
     font-size: 0.75rem !important;
     padding-left: 0.5rem !important;
@@ -275,20 +278,24 @@ textarea.custom-input {
   .section-item-card {
     padding: 10px !important;
   }
+
   .section-item-card .drag-handle {
     margin-right: 4px !important;
     padding-left: 2px !important;
     padding-right: 2px !important;
   }
+
   .section-actions {
     margin-left: 8px !important;
     gap: 4px !important;
   }
+
   .section-actions button.btn-outline-secondary,
   .section-actions button.btn-outline-danger {
     width: 28px !important;
     height: 28px !important;
   }
+
   .section-actions button i {
     font-size: 0.75rem !important;
   }
@@ -298,10 +305,12 @@ textarea.custom-input {
     padding: 8px 6px !important;
     border-radius: 8px !important;
   }
+
   .legend-type-card span.badge {
     font-size: 0.65rem !important;
     padding: 2px 6px !important;
   }
+
   .legend-type-card p {
     font-size: 0.65rem !important;
   }
@@ -311,12 +320,15 @@ textarea.custom-input {
     align-items: flex-start !important;
     gap: 8px !important;
   }
+
   .content-section-header h5 {
     font-size: 0.9rem !important;
   }
+
   .content-section-header p {
     font-size: 0.72rem !important;
   }
+
   .content-section-header button {
     font-size: 0.72rem !important;
     padding: 4px 8px !important;
@@ -334,6 +346,7 @@ textarea.custom-input {
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -346,37 +359,65 @@ textarea.custom-input {
   color: #2E7D32 !important;
   border: 1px solid rgba(46, 125, 50, 0.15);
 }
+
 .bg-paragraph {
   background-color: #E3F2FD !important;
   color: #1565C0 !important;
   border: 1px solid rgba(21, 101, 192, 0.15);
 }
+
 .bg-image-sec {
   background-color: #FFF3E0 !important;
   color: #E65100 !important;
   border: 1px solid rgba(230, 81, 0, 0.15);
 }
+
 .bg-quote {
   background-color: #F3E5F5 !important;
   color: #6A1B9A !important;
   border: 1px solid rgba(106, 27, 154, 0.15);
 }
 
-.bg-subheading-light { background-color: #F1F9F1; }
-.bg-paragraph-light { background-color: #F5FAFE; }
-.bg-image-sec-light { background-color: #FFFDF9; }
-.bg-quote-light { background-color: #FAF6FC; }
+.bg-subheading-light {
+  background-color: #F1F9F1;
+}
 
-.border-subheading { border: 1px dashed #A5D6A7; }
-.border-paragraph { border: 1px dashed #90CAF9; }
-.border-image-sec { border: 1px dashed #FFCC80; }
-.border-quote { border: 1px dashed #E1BEE7; }
+.bg-paragraph-light {
+  background-color: #F5FAFE;
+}
+
+.bg-image-sec-light {
+  background-color: #FFFDF9;
+}
+
+.bg-quote-light {
+  background-color: #FAF6FC;
+}
+
+.border-subheading {
+  border: 1px dashed #A5D6A7;
+}
+
+.border-paragraph {
+  border: 1px dashed #90CAF9;
+}
+
+.border-image-sec {
+  border: 1px dashed #FFCC80;
+}
+
+.border-quote {
+  border: 1px dashed #E1BEE7;
+}
 
 /* Drag and Drop list styling */
 .section-item-card {
   transition: all 0.2s ease;
   user-select: none;
+  overflow: hidden;
+  /* Clips the left active stripe to card's rounded corners */
 }
+
 .section-item-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
@@ -386,6 +427,7 @@ textarea.custom-input {
 .cursor-grab {
   cursor: grab;
 }
+
 .cursor-grab:active {
   cursor: grabbing;
 }
@@ -393,9 +435,10 @@ textarea.custom-input {
 .legend-type-card {
   transition: all 0.2s ease;
 }
+
 .legend-type-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
   border-style: solid !important;
   border-color: #D28A23 !important;
 }
@@ -429,6 +472,7 @@ textarea.custom-input {
     opacity: 0;
     transform: translateY(30px) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -491,7 +535,7 @@ textarea.custom-input {
 }
 
 .shadow-xs {
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .uploaded-image-preview-card {
@@ -509,6 +553,7 @@ textarea.custom-input {
   color: #ffffff !important;
   transition: all 0.25s ease;
 }
+
 .btn-theme:hover {
   background-color: #b5761d !important;
   border-color: #b5761d !important;
@@ -516,6 +561,7 @@ textarea.custom-input {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(210, 138, 35, 0.25);
 }
+
 .btn-theme:disabled {
   background-color: #e0b06b !important;
   border-color: #e0b06b !important;
@@ -528,4 +574,298 @@ textarea.custom-input {
 
 .min-width-0 {
   min-width: 0 !important;
+}
+
+/* Active Section Highlight Card */
+.section-item-card.active-section-card {
+  border: 1px solid #D28A23 !important;
+  box-shadow: 0 4px 15px rgba(210, 138, 35, 0.12) !important;
+  background-color: rgba(210, 138, 35, 0.01) !important;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px !important;
+  /* Matches rounded-4 */
+}
+
+.section-item-card.active-section-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background-color: #D28A23;
+  border-radius: 15px 0 0 15px;
+  /* Matches card left rounded corners */
+}
+
+/* Colors for List and Highlight badges */
+.bg-list {
+  background-color: #E0F2F1 !important;
+  color: #00796B !important;
+  border: 1px solid rgba(0, 121, 107, 0.15);
+}
+
+.bg-highlight {
+  background-color: #FFFDE7 !important;
+  color: #F57F17 !important;
+  border: 1px solid rgba(245, 127, 23, 0.15);
+}
+
+.bg-list-light {
+  background-color: #F4FBFB;
+}
+
+.bg-highlight-light {
+  background-color: #FFFDF4;
+}
+
+.border-list {
+  border: 1px dashed #80CBC4;
+}
+
+.border-highlight {
+  border: 1px dashed #FFF59D;
+}
+
+/* Inline Editor Styling */
+.rich-editor-container {
+  border: 1px solid #e2e8f0 !important;
+}
+
+.editor-toolbar {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.btn-editor-tool {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-editor-tool:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-editor-tool:active {
+  background-color: #cbd5e1;
+}
+
+.editor-content-editable:empty:before {
+  content: attr(placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+  display: block;
+}
+
+/* Text Formatting Badge Circles */
+.badge-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Active formatting choice card */
+.legend-type-card.active-card-type {
+  border-style: solid !important;
+  border-color: #D28A23 !important;
+  box-shadow: 0 4px 15px rgba(210, 138, 35, 0.15) !important;
+  transform: translateY(-2px);
+  background-color: #fffefb !important;
+}
+
+/* Live Preview styling for Highlight sections */
+.preview-highlight {
+  background: linear-gradient(135deg, rgba(210, 138, 35, 0.08) 0%, rgba(210, 138, 35, 0.02) 100%);
+  border-left: 4px solid #D28A23 !important;
+  border-radius: 0 12px 12px 0;
+}
+
+.preview-highlight div {
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* Live Preview blockquote innerHTML */
+.preview-blockquote div {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Active state for editor toolbar buttons */
+.btn-editor-tool.active-tool {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  border: 1px solid #94a3b8 !important;
+}
+
+/* Styling for Drag and Drop dropzone hover states */
+.upload-box.drag-over {
+  border-color: #D28A23 !important;
+  background-color: rgba(210, 138, 35, 0.05) !important;
+  transform: scale(1.01);
+  box-shadow: 0 4px 15px rgba(210, 138, 35, 0.1) !important;
+}
+
+/* Custom class to hide separator line under heading */
+.hide-heading-line {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 576px) {
+
+  /* Containers and general card layout */
+  .admin-container {
+    padding-bottom: 2rem !important;
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  /* Top admin header styling */
+  .admin-header {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .admin-header h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .admin-header p {
+    font-size: 0.75rem !important;
+  }
+
+  /* Inline editor card header styling */
+  #inline-editor-card .card-header {
+    padding: 10px 12px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  #inline-editor-card .card-header>div:first-child {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: 8px !important;
+  }
+
+  #inline-editor-card .card-header>div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px !important;
+    margin-left: 0 !important;
+  }
+
+  #inline-editor-card .card-header h5 {
+    font-size: 1.05rem !important;
+  }
+
+  /* Badges and buttons size */
+  #inline-editor-card .card-header .bg-light {
+    font-size: 0.75rem !important;
+    padding: 3px 6px !important;
+  }
+
+  #inline-editor-card .card-header .btn {
+    padding: 3px 8px !important;
+    font-size: 0.75rem !important;
+  }
+
+  #inline-editor-card .card-header .btn-outline-danger {
+    padding: 3px 8px !important;
+    margin-left: 0 !important;
+  }
+
+  /* Wrap editor toolbar on mobile so all tools are visible */
+  .editor-toolbar {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    padding: 6px 8px !important;
+    gap: 4px !important;
+  }
+
+  .editor-toolbar select {
+    width: 105px !important;
+    min-width: 105px !important;
+    font-size: 0.8rem !important;
+    padding-right: 12px !important;
+    margin-right: 4px !important;
+  }
+
+  .btn-editor-tool {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+    flex-shrink: 0;
+  }
+
+  .editor-toolbar-separator {
+    display: none !important;
+  }
+
+  /* Contenteditable and options */
+  .editor-content-editable {
+    min-height: 140px !important;
+    padding: 10px !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Text formatting options at the bottom */
+  .legend-type-card {
+    padding: 8px !important;
+  }
+
+  .badge-circle {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .legend-type-card .fw-bold {
+    font-size: 0.75rem !important;
+  }
+
+  .legend-type-card p {
+    font-size: 0.6rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Heading bottom separator toggle mobile styles */
+  .heading-toggle-container {
+    padding: 6px 10px !important;
+  }
+
+  .heading-toggle-label {
+    font-size: 0.72rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .heading-toggle-container .form-check-input {
+    width: 1.8em !important;
+    height: 0.9em !important;
+    margin-top: 0.1em !important;
+  }
 }

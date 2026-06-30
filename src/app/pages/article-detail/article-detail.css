@@ -163,6 +163,21 @@ button.share-btn {
   background: #D28A23;
 }
 
+.share-btn.bookmark:hover {
+  background: #c27d1a;
+  border-color: #c27d1a;
+}
+
+.share-btn.bookmark.active {
+  background: rgba(210, 138, 35, 0.15);
+  border: 1px solid rgba(210, 138, 35, 0.3);
+}
+
+.share-btn.bookmark.active:hover {
+  background: #a66d1b;
+  border-color: #a66d1b;
+}
+
 /* Mobile Optimizations */
 @media (max-width: 768px) {
   .article-header-wrapper {
@@ -236,20 +251,6 @@ button.share-btn {
 
   .social-share-sticky {
     display: none !important;
-  }
-
-  .mobile-share-bar {
-    margin-top: 2.5rem !important;
-    margin-bottom: 2rem !important;
-    padding: 1.25rem 1.5rem !important;
-    background: #fdfcfb;
-    border: 1px solid rgba(210, 138, 35, 0.08) !important;
-    border-radius: 16px;
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
   }
 
   .article-meta {
@@ -404,4 +405,88 @@ button.share-btn {
 .sidebar-box button.btn-dark:hover {
   background-color: #D28A23;
   border-color: #D28A23;
+}
+
+/* Premium Highlight Box Section */
+.article-highlight-box {
+  background: linear-gradient(135deg, rgba(210, 138, 35, 0.08) 0%, rgba(210, 138, 35, 0.02) 100%);
+  border-left: 5px solid #D28A23;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
+  border-radius: 0 16px 16px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+}
+
+.article-highlight-box p {
+  margin-bottom: 0 !important;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Premium List Section */
+.article-list-section {
+  margin: 1.75rem 0;
+  padding-left: 2rem;
+  color: #4b5563;
+}
+
+.article-list-section ul, 
+.article-list-section ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+}
+
+.article-list-section li {
+  margin-bottom: 0.75rem;
+  line-height: 1.75;
+}
+
+.article-list-section li:last-child {
+  margin-bottom: 0;
+}
+
+/* Custom class to hide separator line under heading */
+.hide-heading-line {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* Bottom Share Bar Style (Visible on screens < 1200px) */
+.mobile-share-bar {
+  margin-top: 2.5rem !important;
+  margin-bottom: 2rem !important;
+  padding: 1.25rem 1.5rem !important;
+  background: #fdfcfb;
+  border: 1px solid rgba(210, 138, 35, 0.08) !important;
+  border-radius: 16px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Centering layout on small screen sizes to fix layout issues and empty spaces */
+@media (max-width: 576px) {
+  .mobile-share-bar {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 1.25rem 1rem !important;
+    gap: 10px !important;
+  }
+  
+  .mobile-share-bar span {
+    width: 100%;
+    text-align: center !important;
+    margin-bottom: 2px;
+  }
+  
+  .mobile-share-bar .d-flex {
+    justify-content: center !important;
+    width: 100%;
+  }
 }

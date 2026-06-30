@@ -37,17 +37,17 @@
     <!-- Center Column: Featured Story -->
     <div [ngClass]="(isLoading || leftSectionArticles.length > 0) ? 'col-lg-6 order-1 order-lg-2' : 'col-lg-9 order-1 order-lg-2'">
       <ng-container *ngIf="!isLoading">
-        <div class="card border-0 shadow-sm overflow-hidden h-100 featured-card" *ngIf="featuredArticle"
+        <div class="card border-0 shadow-sm overflow-hidden featured-card" *ngIf="featuredArticle"
           (click)="onCardClick($event, featuredArticle.slug || featuredArticle.id)" style="cursor: pointer;">
           <img [src]="getImageUrl(featuredArticle.imageUrl)" class="card-img-top w-100 featured-img"
             [alt]="featuredArticle.title">
           <div class="card-body">
             <p class="text-muted small mb-2">By {{ featuredArticle.author }} • {{ getReadTime(featuredArticle) }} min read</p>
-            <h2 class="fw-bold mb-3">{{ featuredArticle.title }}</h2>
-            <p class="text-secondary mb-2" *ngIf="featuredArticle.subtitle"><strong>{{ featuredArticle.subtitle
+            <h2 class="fw-bold mb-2 mb-sm-3">{{ featuredArticle.title }}</h2>
+            <p class="text-secondary mb-3 line-clamp-2" *ngIf="featuredArticle.subtitle" style="font-size: 1.05rem;"><strong>{{ featuredArticle.subtitle
                 }}</strong></p>
-            <p class="text-secondary small line-clamp-3">
-              {{ featuredArticle.content }}
+            <p class="text-secondary featured-excerpt" style="font-size: 0.95rem; line-height: 1.6;">
+              {{ getArticleExcerpt(featuredArticle) }}
             </p>
           </div>
         </div>
@@ -63,14 +63,14 @@
       </ng-container>
 
       <!-- Skeleton for featured story -->
-      <div class="card border-0 shadow-sm h-100" *ngIf="isLoading">
+      <div class="card border-0 shadow-sm" *ngIf="isLoading">
         <div class="skeleton skeleton-image featured-skeleton-img"></div>
         <div class="card-body">
           <div class="skeleton skeleton-text" style="width: 30%;"></div>
-          <div class="skeleton skeleton-title" style="height: 40px; width: 90%;"></div>
-          <div class="skeleton skeleton-text"></div>
-          <div class="skeleton skeleton-text"></div>
-          <div class="skeleton skeleton-text" style="width: 70%;"></div>
+          <div class="skeleton skeleton-title" style="height: 30px; width: 90%;"></div>
+          <div class="skeleton skeleton-text" style="width: 80%;"></div>
+          <div class="skeleton skeleton-text d-none d-md-block"></div>
+          <div class="skeleton skeleton-text d-none d-md-block" style="width: 70%;"></div>
         </div>
       </div>
     </div>
@@ -189,26 +189,25 @@
           </div>
         </div>
         <!-- Content right -->
-        <div class="col-lg-7 d-flex flex-column justify-content-center p-4 p-md-5 editors-pick-content-col">
+        <div class="col-lg-7 d-flex flex-column justify-content-center p-3 p-sm-4 p-md-5 editors-pick-content-col">
           <span class="category-tag mb-2 d-inline-block small text-uppercase fw-bold text-muted"
             style="letter-spacing: 1.5px; font-size: 0.75rem;">
             {{ editorsPickArticle.category }}
           </span>
-          <h2 class="fw-bold mb-3 text-dark editors-pick-title">{{ editorsPickArticle.title }}</h2>
-          <p class="text-secondary mb-3 fs-6 fw-semibold" *ngIf="editorsPickArticle.subtitle">
+          <h2 class="fw-bold mb-2 mb-sm-3 text-dark editors-pick-title">{{ editorsPickArticle.title }}</h2>
+          <p class="text-secondary mb-2 mb-sm-3 fs-6 fw-semibold" *ngIf="editorsPickArticle.subtitle">
             {{ editorsPickArticle.subtitle }}
           </p>
-          <p class="text-secondary small line-clamp-3 mb-4 d-none d-md-block">
-            {{ editorsPickArticle.content || editorsPickArticle.subtitle || 'Discover the full inspiring story,
-            insights, and key takeaways in this featured article. Click below to read more.' }}
+          <p class="text-secondary small line-clamp-3 mb-3 mb-sm-4">
+            {{ getArticleExcerpt(editorsPickArticle) || 'Discover the full inspiring story, insights, and key takeaways in this featured article. Click below to read more.' }}
           </p>
-          <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-4">
+          <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 pt-3 border-top mt-3 mt-sm-4">
             <span class="text-muted small">
               By <strong>{{ editorsPickArticle.author }}</strong> • {{ editorsPickArticle.publishedAt | date:'MMMM d,
               yyyy' }} • {{ getReadTime(editorsPickArticle) }} min read
             </span>
             <button
-              class="btn btn-dark btn-sm px-3 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2 hover-btn text-nowrap"
+              class="btn btn-dark btn-sm px-4 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 hover-btn text-nowrap w-100 w-sm-auto"
               style="font-size: 0.8rem; white-space: nowrap;">
               Read More <i class="fa-solid fa-arrow-right" style="font-size: 0.75rem;"></i>
             </button>
@@ -227,15 +226,15 @@
             <div class="skeleton h-100 editors-pick-skeleton-img" style="min-height: 450px;"></div>
           </div>
         </div>
-        <div class="col-lg-7 d-flex flex-column justify-content-center p-4 p-md-5 editors-pick-content-col">
+        <div class="col-lg-7 d-flex flex-column justify-content-center p-3 p-sm-4 p-md-5 editors-pick-content-col">
           <div class="skeleton skeleton-badge mb-2" style="width: 80px;"></div>
-          <div class="skeleton skeleton-title mb-3" style="height: 40px; width: 90%;"></div>
+          <div class="skeleton skeleton-title mb-2 mb-sm-3" style="height: 40px; width: 90%;"></div>
           <div class="skeleton skeleton-text mb-2" style="height: 20px; width: 70%;"></div>
           <div class="skeleton skeleton-text mb-2"></div>
           <div class="skeleton skeleton-text mb-4" style="width: 80%;"></div>
-          <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-4">
-            <div class="skeleton skeleton-text" style="width: 40%; height: 15px;"></div>
-            <div class="skeleton skeleton-button" style="width: 100px; height: 32px; border-radius: 20px;"></div>
+          <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 pt-3 border-top mt-3 mt-sm-4">
+            <div class="skeleton skeleton-text w-75 w-sm-50" style="height: 15px;"></div>
+            <div class="skeleton skeleton-button w-100 w-sm-auto" style="height: 32px; border-radius: 20px;"></div>
           </div>
         </div>
       </div>

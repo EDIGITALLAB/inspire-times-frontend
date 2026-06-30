@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
@@ -49,6 +49,18 @@ export class Admin {
   };
   isUploadingSectionImage = false;
 
+  // Formatting active states variables
+  isBold = false;
+  isItalic = false;
+  isUnderline = false;
+  isBulletList = false;
+  isOrderedList = false;
+  isBlockQuote = false;
+
+  // Drag and drop image upload states
+  isDragOverFeatured = false;
+  isDragOverSection = false;
+
   // Drag and Drop variables
   draggedIndex: number | null = null;
 
@@ -74,12 +86,24 @@ export class Admin {
     'Social Impact'
   ];
 
+  get submitButtonText(): string {
+    const isAdmin = this.currentUser?.role === 'ADMIN';
+    if (this.isPublishing) {
+      return isAdmin ? 'Saving...' : 'Submitting...';
+    }
+    if (this.isEditing) {
+      return isAdmin ? 'Update Article' : 'Submit Update';
+    }
+    return isAdmin ? 'Publish Article' : 'Submit for Review';
+  }
+
   constructor(
     public articleService: ArticleService, 
     private route: ActivatedRoute,
     public authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
   ) {}
 
   logout() {
@@ -117,7 +141,7 @@ export class Admin {
   }
 
   loadArticles() {
-    this.articleService.getAllArticles().subscribe({
+    this.articleService.getAllArticlesAdmin().subscribe({
       next: (data) => {
         this.articles = data;
         this.cdr.detectChanges();
@@ -132,6 +156,23 @@ export class Admin {
       this.featuredImagePreviewUrl = URL.createObjectURL(this.selectedFile);
     } else {
       this.featuredImagePreviewUrl = '';
+    }
+  }
+
+  onFeaturedImageDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOverFeatured = false;
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        this.selectedFile = file;
+        this.featuredImagePreviewUrl = URL.createObjectURL(file);
+        this.cdr.detectChanges();
+      } else {
+        alert('Please drop an image file.');
+      }
     }
   }
 
@@ -175,7 +216,11 @@ export class Admin {
 
     request.subscribe({
       next: (response) => {
-        alert(this.isEditing ? 'Article updated successfully!' : 'Article published successfully!');
+        const isAdmin = this.currentUser?.role === 'ADMIN';
+        const msg = isAdmin 
+          ? (this.isEditing ? 'Article updated successfully!' : 'Article published successfully!')
+          : (this.isEditing ? 'Article update submitted for review successfully!' : 'Article submitted for review successfully!');
+        alert(msg);
         this.resetForm();
         this.loadArticles();
         this.isPublishing = false;
@@ -296,13 +341,35 @@ export class Admin {
   }
 
   openAddSection(type: string) {
-    this.editingSectionIndex = null;
+    const newSection = {
+      type: type,
+      content: '',
+      caption: '',
+      sortOrder: this.article.sections.length
+    };
+    this.article.sections.push(newSection);
+    this.editingSectionIndex = this.article.sections.length - 1;
     this.sectionForm = {
       type: type,
       content: '',
       caption: ''
     };
-    this.showSectionModal = true;
+    
+    this.reorderSections();
+    this.showSectionModal = false;
+
+    // Update DOM contenteditable directly and scroll to editor
+    setTimeout(() => {
+      const editorEl = document.querySelector('.editor-content-editable');
+      if (editorEl) {
+        editorEl.innerHTML = '';
+      }
+      this.checkActiveFormats();
+      const el = document.getElementById('inline-editor-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
   }
 
   openEditSection(index: number) {
@@ -313,39 +380,293 @@ export class Admin {
       content: sec.content,
       caption: sec.caption || ''
     };
-    this.showSectionModal = true;
+    this.showSectionModal = false;
+
+    // Update DOM contenteditable directly and scroll to editor
+    setTimeout(() => {
+      const editorEl = document.querySelector('.editor-content-editable');
+      if (editorEl) {
+        editorEl.innerHTML = sec.content || '';
+      }
+      this.checkActiveFormats();
+      const el = document.getElementById('inline-editor-card');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
   }
 
   deleteSection(index: number) {
     this.article.sections.splice(index, 1);
     this.reorderSections();
+    if (this.article.sections.length === 0) {
+      this.editingSectionIndex = null;
+    } else {
+      if (this.editingSectionIndex === index) {
+        this.editingSectionIndex = Math.min(index, this.article.sections.length - 1);
+        this.openEditSection(this.editingSectionIndex);
+      } else if (this.editingSectionIndex !== null && this.editingSectionIndex > index) {
+        this.editingSectionIndex--;
+      }
+    }
   }
 
-  saveSection() {
-    if (this.sectionForm.type !== 'image' && !this.sectionForm.content.trim()) {
-      alert('Section content cannot be empty.');
-      return;
+  prevSection() {
+    if (this.editingSectionIndex !== null && this.editingSectionIndex > 0) {
+      this.openEditSection(this.editingSectionIndex - 1);
     }
-    if (this.sectionForm.type === 'image' && !this.sectionForm.content) {
-      alert('Please upload an image first.');
-      return;
+  }
+
+  nextSection() {
+    if (this.editingSectionIndex !== null && this.editingSectionIndex < this.article.sections.length - 1) {
+      this.openEditSection(this.editingSectionIndex + 1);
     }
+  }
 
-    const sectionData = {
-      type: this.sectionForm.type,
-      content: this.sectionForm.content,
-      caption: this.sectionForm.type === 'image' ? this.sectionForm.caption : '',
-      sortOrder: 0
-    };
+  closeEditor() {
+    this.editingSectionIndex = null;
+    this.cdr.detectChanges();
+  }
 
+  changeSectionType(newType: string) {
     if (this.editingSectionIndex !== null) {
-      this.article.sections[this.editingSectionIndex] = sectionData;
-    } else {
-      this.article.sections.push(sectionData);
+      const sec = this.article.sections[this.editingSectionIndex];
+      const oldType = sec.type;
+      sec.type = newType;
+      this.sectionForm.type = newType;
+      
+      if (oldType === 'image' && newType !== 'image') {
+        sec.content = '';
+        this.sectionForm.content = '';
+        setTimeout(() => {
+          const editorEl = document.querySelector('.editor-content-editable');
+          if (editorEl) editorEl.innerHTML = '';
+        }, 50);
+      } else if (oldType !== 'image' && newType === 'image') {
+        sec.content = '';
+        this.sectionForm.content = '';
+        sec.caption = '';
+        this.sectionForm.caption = '';
+      } else if (oldType !== 'image' && newType !== 'image') {
+        // Enforce the new limit immediately by truncating plain text
+        const limit = this.getLimitForActiveSection();
+        const currentLength = this.getPlainLength(sec.content);
+        if (currentLength > limit) {
+          if (typeof document !== 'undefined') {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = sec.content;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+            const truncatedText = plainText.substring(0, limit);
+            sec.content = truncatedText;
+            this.sectionForm.content = truncatedText;
+            setTimeout(() => {
+              const editorEl = document.querySelector('.editor-content-editable');
+              if (editorEl) {
+                editorEl.innerHTML = truncatedText;
+              }
+            }, 50);
+          }
+        }
+      }
+      
+      this.cdr.detectChanges();
+    }
+  }
+
+  savedRange: Range | null = null;
+
+  saveSelection() {
+    if (typeof window !== 'undefined') {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const editorEl = document.querySelector('.editor-content-editable');
+        if (editorEl && editorEl.contains(range.commonAncestorContainer)) {
+          this.savedRange = range.cloneRange();
+        }
+      }
+    }
+  }
+
+  restoreSelection() {
+    if (typeof window !== 'undefined' && this.savedRange) {
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(this.savedRange);
+        
+        const editorEl = document.querySelector('.editor-content-editable') as HTMLElement;
+        if (editorEl) {
+          editorEl.focus();
+        }
+      }
+    }
+  }
+
+  formatDoc(command: string, value: string = '') {
+    this.restoreSelection();
+    const editorEl = document.querySelector('.editor-content-editable') as HTMLElement;
+    if (editorEl && document.activeElement !== editorEl) {
+      editorEl.focus();
+    }
+    document.execCommand(command, false, value);
+    this.saveSelection();
+    this.updateActiveSectionContentDirectly();
+    this.checkActiveFormats();
+  }
+
+  addLink() {
+    const url = prompt('Enter URL (e.g. https://example.com):');
+    if (url) {
+      this.formatDoc('createLink', url);
+    }
+  }
+
+  updateActiveSectionContentFromDOM(event: Event) {
+    const editorEl = event.target as HTMLElement;
+    if (editorEl) {
+      const indexAttr = editorEl.getAttribute('data-index');
+      if (indexAttr !== null) {
+        const index = parseInt(indexAttr, 10);
+        if (index === this.editingSectionIndex) {
+          const content = editorEl.innerHTML;
+          this.article.sections[index].content = content;
+          this.sectionForm.content = content;
+        }
+      }
+    }
+  }
+
+  updateActiveSectionContentDirectly() {
+    if (this.editingSectionIndex !== null) {
+      const editorEl = document.querySelector('.editor-content-editable');
+      if (editorEl) {
+        const content = editorEl.innerHTML;
+        this.article.sections[this.editingSectionIndex].content = content;
+        this.sectionForm.content = content;
+      }
+    }
+  }
+
+  checkActiveFormats() {
+    if (typeof document !== 'undefined') {
+      this.isBold = document.queryCommandState('bold');
+      this.isItalic = document.queryCommandState('italic');
+      this.isUnderline = document.queryCommandState('underline');
+      this.isBulletList = document.queryCommandState('insertUnorderedList');
+      this.isOrderedList = document.queryCommandState('insertOrderedList');
+      
+      try {
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          let node: any = selection.getRangeAt(0).startContainer;
+          let isQuote = false;
+          while (node && node.nodeName !== 'DIV' && node.className !== 'editor-content-editable') {
+            if (node.nodeName === 'BLOCKQUOTE') {
+              isQuote = true;
+              break;
+            }
+            node = node.parentNode;
+          }
+          this.isBlockQuote = isQuote;
+        } else {
+          this.isBlockQuote = false;
+        }
+      } catch (e) {
+        this.isBlockQuote = false;
+      }
+      
+      this.cdr.detectChanges();
+    }
+  }
+
+  onCaptionChange() {
+    if (this.editingSectionIndex !== null) {
+      this.article.sections[this.editingSectionIndex].caption = this.sectionForm.caption;
+      this.cdr.detectChanges();
+    }
+  }
+
+  toggleHeadingLine(event: any) {
+    const show = event.target.checked;
+    this.sectionForm.caption = show ? '' : 'hide-line';
+    if (this.editingSectionIndex !== null) {
+      this.article.sections[this.editingSectionIndex].caption = this.sectionForm.caption;
+    }
+    this.cdr.detectChanges();
+  }
+
+  getPlainLength(html: string): number {
+    if (!html) return 0;
+    if (typeof document !== 'undefined') {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      return (tempDiv.textContent || tempDiv.innerText || '').length;
+    }
+    const plainText = html.replace(/<[^>]*>/g, '');
+    return plainText.length;
+  }
+
+  getLimitForActiveSection(): number {
+    if (!this.sectionForm.type) return 2000;
+    if (this.sectionForm.type === 'sub-heading') return 150;
+    if (this.sectionForm.type === 'quote') return 500;
+    return 2000;
+  }
+
+  onEditorKeyDown(event: KeyboardEvent) {
+    const editorEl = event.target as HTMLElement;
+    if (!editorEl) return;
+
+    // Sanitize trailing newline added by browsers in contenteditable
+    const plainText = (editorEl.innerText || '').replace(/\r?\n$/, '');
+    const limit = this.getLimitForActiveSection();
+
+    // Allow navigation keys, backspace, delete, Ctrl combinations, etc.
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+      'Tab', 'Escape', 'Enter', 'Home', 'End', 'PageUp', 'PageDown'
+    ];
+
+    const isControlKey = event.ctrlKey || event.metaKey;
+
+    if (plainText.length >= limit && !allowedKeys.includes(event.key) && !isControlKey) {
+      event.preventDefault();
+    }
+  }
+
+  onEditorPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const editorEl = event.target as HTMLElement;
+    if (!editorEl) return;
+
+    // Sanitize trailing newline added by browsers in contenteditable
+    const plainText = (editorEl.innerText || '').replace(/\r?\n$/, '');
+    const limit = this.getLimitForActiveSection();
+    const remaining = limit - plainText.length;
+
+    if (remaining <= 0) {
+      return;
     }
 
-    this.reorderSections();
-    this.showSectionModal = false;
+    const pastedText = event.clipboardData?.getData('text/plain') || '';
+    const truncatedText = pastedText.substring(0, remaining);
+
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+
+      const textNode = document.createTextNode(truncatedText);
+      range.insertNode(textNode);
+
+      range.setStartAfter(textNode);
+      range.setEndAfter(textNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      this.updateActiveSectionContentDirectly();
+    }
   }
 
   onSectionFileSelected(event: any) {
@@ -354,17 +675,75 @@ export class Admin {
       this.isUploadingSectionImage = true;
       this.articleService.uploadImage(file).subscribe({
         next: (url) => {
-          this.sectionForm.content = url;
-          this.isUploadingSectionImage = false;
-          this.cdr.detectChanges();
+          this.ngZone.run(() => {
+            setTimeout(() => {
+              this.sectionForm.content = url;
+              if (this.editingSectionIndex !== null) {
+                this.article.sections[this.editingSectionIndex].content = url;
+              }
+              this.isUploadingSectionImage = false;
+              this.cdr.detectChanges();
+            }, 150);
+          });
         },
         error: (err) => {
-          console.error('Error uploading section image', err);
-          alert('Error uploading image.');
-          this.isUploadingSectionImage = false;
-          this.cdr.detectChanges();
+          this.ngZone.run(() => {
+            setTimeout(() => {
+              console.error('Error uploading section image', err);
+              alert('Error uploading image.');
+              this.isUploadingSectionImage = false;
+              this.cdr.detectChanges();
+            }, 150);
+          });
         }
       });
+    }
+  }
+
+  clearSectionImage() {
+    this.sectionForm.content = '';
+    if (this.editingSectionIndex !== null) {
+      this.article.sections[this.editingSectionIndex].content = '';
+    }
+    this.cdr.detectChanges();
+  }
+
+  onSectionImageDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOverSection = false;
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        this.isUploadingSectionImage = true;
+        this.articleService.uploadImage(file).subscribe({
+          next: (url) => {
+            this.ngZone.run(() => {
+              setTimeout(() => {
+                this.sectionForm.content = url;
+                if (this.editingSectionIndex !== null) {
+                  this.article.sections[this.editingSectionIndex].content = url;
+                }
+                this.isUploadingSectionImage = false;
+                this.cdr.detectChanges();
+              }, 150);
+            });
+          },
+          error: (err) => {
+            this.ngZone.run(() => {
+              setTimeout(() => {
+                console.error('Error uploading section image', err);
+                alert('Error uploading image.');
+                this.isUploadingSectionImage = false;
+                this.cdr.detectChanges();
+              }, 150);
+            });
+          }
+        });
+      } else {
+        alert('Please drop an image file.');
+      }
     }
   }
 

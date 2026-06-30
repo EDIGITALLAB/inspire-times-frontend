@@ -38,3 +38,10 @@
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
 }
+
+@media (max-width: 768px) {
+  .d-md-none .user-mobile-card .btn {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+  }
+}
